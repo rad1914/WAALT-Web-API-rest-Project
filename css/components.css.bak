@@ -1,0 +1,60 @@
+/* Bot Image Styling */
+.bot-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 10px;
+    background-color: #2C2C2C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bot-image img {
+    width: 60px;
+    height: auto;
+}
+
+/* Help Title and Buttons */
+.help-title {
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: #ffffff;
+}
+
+.help-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.help-button {
+    font-family: 'metropolis', sans-serif;
+    font-size: 14px;
+    color: #999999;
+    background-color: #1D1D1D;
+    border: none;
+    border-radius: 25px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+}
+
+.help-button:hover {
+    background-color: #fff;
+    transform: scale(1.05);
+}
+
+.help-button:focus {
+    outline: 2px dashed #fff;
+    outline-offset: 4px;
+}
+
+code {
+    background-color: #000000;
+    color: #DBDBDB;
+    padding: 0.3px 3px;
+    border-radius: 2px;
+    font-family: monospace;
+}

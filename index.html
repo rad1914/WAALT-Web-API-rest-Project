@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallt Project</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/animations.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/messages.css">
+    <link rel="stylesheet" href="/css/input-output.css">
+    <link rel="stylesheet" href="/css/buttons.css">
+</head>
+<body>
+    <div class="container">
+        <section class="welcome-section" id="welcomeSection" aria-labelledby="writingTitle">
+            <div class="bot-image animate-image">
+                <img src="bot.webp" alt="Bot" />
+            </div>
+            <h2 class="help-title animate-title" id="writingTitle">✦ </h2>
+            <div class="help-buttons">
+                <button id="sendButton" class="help-button animate-button">Send</button>
+                <button class="help-button animate-button button-message" data-message="Adios">🧮 Adios</button>
+                <button class="help-button animate-button button-message" data-message="Viajes a Cranbrook">🧭 Viajes a Cranbrook</button>
+                <button class="help-button animate-button button-message" data-message="Ayúdame a programar">🧑‍💻 Coding Advice</button>
+                <button class="help-button animate-button button-message" data-message="¿Quién te creó?">🧐 ¿Quién te creó?</button>
+                <button class="help-button animate-button button-message" data-message="Juguemos a algo">🕹️ Juguemos a algo</button>
+                <button class="help-button animate-button button-message" data-message="¿Que puedes hacer?">💬 Más</button>
+            </div>
+        </section>
+
+        <div class="conversation" id="conversation" aria-live="polite"></div>
+        <button class="new-chat-button show-button" onclick="startNewChat()" aria-label="Start a new chat">☉</button>
+
+        <div class="input-container">
+            <input type="text" id="messageInput" class="input-field" placeholder="Escribe aquí..." aria-label="Message input" />
+        </div>
+
+        <footer>
+            <div class="caption">WebV Branch debug Artifact (68cadb) BETA<br />Created by Sr. RAD - TECNM</div>
+            <div id="responseOutput" aria-live="polite"></div>
+        </footer>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+</body>
+</html>
