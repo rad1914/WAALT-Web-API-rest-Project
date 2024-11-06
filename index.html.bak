@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>W.A.A.L.T Project</title>
 
-    <link rel="stylesheet" href="./global.css">
-    <link rel="stylesheet" href="./animations.css">
-    <link rel="stylesheet" href="./responsive.css">
-    <link rel="stylesheet" href="./layout.css">
-    <link rel="stylesheet" href="./components.css">
-    <link rel="stylesheet" href="./messages.css">
-    <link rel="stylesheet" href="./input-output.css">
-    <link rel="stylesheet" href="./buttons.css">
+    <link rel="stylesheet" href="./css/global.css">
+    <link rel="stylesheet" href="./css/animations.css">
+    <link rel="stylesheet" href="./css/responsive.css">
+    <link rel="stylesheet" href="./css/layout.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="./css/messages.css">
+    <link rel="stylesheet" href="./css/input-output.css">
+    <link rel="stylesheet" href="./css/buttons.css">
 </head>
 <body>
 

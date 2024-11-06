@@ -1,0 +1,55 @@
+/* Input Field */
+.input-field {
+    font-family: 'metropolis', sans-serif;
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    border-radius: 25px;
+    border: none;
+    background-color: #222222;
+    color: #ffffff;
+    outline: none;
+    font-size: 14px;
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.input-field:focus {
+    box-shadow: 0px 0px 10px rgba(0, 30, 30, 0.6);
+    transform: scale(1.02);
+}
+
+/* Caption */
+.caption {
+    font-size: 0.8em;
+    color: #888;
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 3px;
+    animation: fadeIn 0.5s ease forwards; /* Adjust duration as needed */
+    opacity: 0; /* Start hidden */
+}
+
+/* Input Field and Caption simultaneous focus effect */
+.input-field:focus + .caption {
+    animation-delay: 0.3s; /* Start animation after input field focus */
+    opacity: 1; /* Fade in effect */
+}
+
+/* Response Output */
+#responseOutput {
+    color: #DBFF9E;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 5px;
+}
+
+/* Fade In Keyframes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
