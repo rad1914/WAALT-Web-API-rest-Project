@@ -25,6 +25,8 @@ export async function sendMessage() {
         return;
     }
 
+    console.log("Sending message:", message);
+
     const sendButton = document.getElementById('sendButton');
     sendButton.disabled = true; // Disable button while sending
 
@@ -38,19 +40,21 @@ export async function sendMessage() {
     try {
         // Format message and send it to the server
         const formattedMessage = formatMessageForServer(message);
+        console.log("Formatted message for server:", formattedMessage);
         const responseText = await sendMessageToServers(formattedMessage);
 
         // Handle server response
         if (responseText) {
+            console.log("Received response from server:", responseText);
             updateWithBotResponse(responseText);
         } else {
+            console.warn("No response received from server.");
             updateWithBotResponse('Error: Respuesta no recibida. Inténtalo más tarde.');
         }
     } catch (error) {
         console.error('Error with sendMessageToServers:', error);
         updateWithBotResponse('Error: No se pudo enviar el mensaje. Inténtalo más tarde.');
     } finally {
-        // Re-enable the send button after the message is sent
-        sendButton.disabled = false;
+        sendButton.disabled = false; // Re-enable the send button after the message is sent
     }
 }

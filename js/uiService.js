@@ -1,5 +1,4 @@
 // uiService.js
-
 /**
  * Adds a message to the conversation.
  * @param {string} content - The message content.

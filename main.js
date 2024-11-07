@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const attachButton = document.querySelector('.attach-button');
     const newChatButton = document.querySelector('.new-chat-button');
 
-    // Verificación de elementos cargados correctamente
     console.log("Verificación de elementos:", { messageInput, sendButton, helpButtons, attachButton, newChatButton });
 
     // Listener del botón de envío
@@ -47,20 +46,22 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.warn("El campo de entrada de mensaje no se encontró en el DOM.");
     }
 
-    // Listener para los botones de ayuda
+    // Listener para los botones de ayuda (evitar doble mensaje con data-initialized)
     helpButtons.forEach(button => {
-        button.addEventListener('click', (event) => {
-            const message = button.getAttribute('data-message');
-            console.log("Botón de ayuda presionado con mensaje:", message);
-            if (message) {
-                sendButtonMessage(message);
-            } else {
-                console.warn("Advertencia: Botón de ayuda sin el atributo 'data-message'.");
-            }
-        });
+        if (!button.getAttribute('data-initialized')) {
+            button.setAttribute('data-initialized', 'true');
+            button.addEventListener('click', () => {
+                const message = button.getAttribute('data-message');
+                console.log("Botón de ayuda presionado con mensaje:", message);
+                if (message) {
+                    sendButtonMessage(message);
+                } else {
+                    console.warn("Advertencia: Botón de ayuda sin el atributo 'data-message'.");
+                }
+            });
+        }
     });
 
-    // Listener para el botón de adjuntar
     if (attachButton) {
         attachButton.addEventListener('click', handleAttach);
         console.log("Listener de botón de adjuntar agregado.");
@@ -68,7 +69,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.warn("Botón de adjuntar no encontrado en el DOM.");
     }
 
-    // Listener para el botón de nueva conversación
+    // Define handleAttach function
+    function handleAttach() {
+        console.log("Attach button clicked. Define your file attachment logic here.");
+        // Add your actual attachment logic here, such as opening a file dialog.
+    }
+
     if (newChatButton) {
         newChatButton.addEventListener('click', () => {
             console.log("Botón de nueva conversación presionado.");
@@ -80,8 +86,3 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     console.log("Script configurado y ejecutado.");
 });
-
-function handleAttach() {
-    console.log("Attach button clicked");
-    // Implement your attach functionality here
-}

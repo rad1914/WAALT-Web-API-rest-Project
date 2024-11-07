@@ -43,11 +43,14 @@ document.addEventListener("DOMContentLoaded", () => {
     elementsToAnimate.forEach(({ el, class: animationClass }) => {
         if (el && el.length !== 0) {
             if (el instanceof NodeList) {
-                el.forEach((element, idx) => setTimeout(() => element.classList.add(animationClass), idx * 200));
+                el.forEach((element, idx) => setTimeout(() => {
+                    if (!element.classList.contains(animationClass)) {
+                        element.classList.add(animationClass);
+                    }
+                }, idx * 200));
             } else {
-                el.classList.add(animationClass);
-                if (animationClass === 'fadeInInput') {
-                    setTimeout(() => el.classList.remove(animationClass), 1000); // Only remove for input
+                if (!el.classList.contains(animationClass)) {
+                    el.classList.add(animationClass);
                 }
             }
         } else {
