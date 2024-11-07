@@ -6,13 +6,7 @@
     <title>W.A.A.L.T Project</title>
 
     <link rel="stylesheet" href="./global.css">
-    <link rel="stylesheet" href="./animations.css">
-    <link rel="stylesheet" href="./responsive.css">
-    <link rel="stylesheet" href="./layout.css">
-    <link rel="stylesheet" href="./components.css">
-    <link rel="stylesheet" href="./messages.css">
-    <link rel="stylesheet" href="./input-output.css">
-    <link rel="stylesheet" href="./buttons.css">
+
 </head>
 <body>
 
@@ -36,8 +30,15 @@
         <div class="conversation" id="conversation" aria-live="polite"></div>
         <button class="new-chat-button show-button" onclick="startNewChat()" aria-label="Start a new chat">☉</button>
 
-        <div class="input-container">
+        <!-- Updated message bar with attach and send buttons -->
+        <div class="message-bar">
+            <button class="icon-button attach-button">
+                <img src="path-to-attach-icon.svg" alt="Attach" />
+            </button>
             <input type="text" id="messageInput" class="input-field" placeholder="Escribe aquí..." aria-label="Message input" />
+            <button id="sendButton" class="icon-button send-button">
+                <img src="path-to-send-icon.svg" alt="Send" />
+            </button>
         </div>
 
         <footer>

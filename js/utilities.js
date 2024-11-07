@@ -1,4 +1,4 @@
-/**
+/** utilities.js
  * Clears the content of the specified element.
  * @param {string} id - The ID of the element to clear.
  */

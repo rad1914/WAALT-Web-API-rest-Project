@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const sendButton = document.getElementById('sendButton');
 
     if (inputField) {
-        inputField.addEventListener('keydown', debounce(sendMessage, 300));
+        // Elimina la lógica de envío en el evento `keydown`.
         inputField.classList.add('fadeInInput');
         setTimeout(() => inputField.classList.remove('fadeInInput'), 1000);
     } else {
@@ -54,6 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (sendButton) {
+        // Agrega solo el evento `click` para el envío del mensaje
         sendButton.addEventListener('click', sendMessage);
     }
 

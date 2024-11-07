@@ -18,10 +18,9 @@ body {
     min-height: 100vh;
 }
 
-
 /* Font Preload */
 @font-face {
-    font-family: ' metropolis-bold';
+    font-family: 'metropolis-bold';
     src: url('./res/metropolis-bold.otf') format('opentype');
     font-display: swap;
 }
@@ -30,4 +29,291 @@ body {
     font-family: 'metropolis';
     src: url('./res/metropolis.otf') format('opentype');
     font-display: swap;
+}
+
+/* Main Container */
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 500px;
+    height: 100vh;
+}
+
+/* Welcome Section */
+.welcome-section {
+    margin-top: 130px;
+    font-family: 'metropolis', sans-serif;
+    position: sticky;
+    top: 0;
+    text-align: center;
+    padding: 20px 0;
+    z-index: 1;
+    transition: opacity 0.5s ease;
+}
+
+.welcome-section.hide {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Conversation Section */
+.conversation {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Input Container */
+.input-container {
+    position: sticky;
+    bottom: 0;
+    padding: 10px;
+    width: 100vw; /* Asegura que ocupe todo el ancho de la pantalla */
+    display: flex;
+    justify-content: center;
+    z-index: 1;
+}
+
+/* Barra de mensajes */
+.message-bar {
+    display: flex;
+    align-items: center;
+    background-color: #222222;
+    color: #ffffff; /* Define el color de texto para que el input lo herede */
+    border-radius: 25px;
+    padding: 10px;
+    width: 100%; /* Permite que ocupe todo el ancho de .input-container */
+    margin: 0 auto;
+}
+
+/* Campo de entrada */
+.input-field {
+    font-family: 'metropolis', sans-serif;
+    flex: 1;
+    border: none; /* Quita el borde */
+    outline: none;
+    font-size: 14px;
+    color: inherit; /* Hereda el color de texto de .message-bar */
+    background-color: transparent; /* Para que sea del mismo color que el contenedor */
+    padding: 12px;
+    width: 100%; /* Ocupa todo el ancho del contenedor */
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.input-field:focus {
+    box-shadow: 0px 0px 10px rgba(0, 30, 30, 0.6);
+    transform: scale(1.02);
+}
+
+
+/* Message Styling */
+.message {
+    font-family: 'metropolis', sans-serif;
+    padding: 10px;
+    border-radius: 20px;
+    margin: 5px 0;
+    text-align: left;
+    animation: slideIn 0.5s forwards;
+    transition: background-color 0.3s, box-shadow 0.2s;
+    will-change: transform, opacity;
+}
+
+.message.user {
+    align-self: flex-end;
+    background-color: #222222;
+    color: #999999;
+    tabindex: 0;
+}
+
+.message.bot {
+    display: flex;
+    align-items: center;
+    align-self: flex-start;
+    background-color: #333333;
+    color: #BCBCBC;
+}
+
+.bot-chat-image {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.message.user:hover, .message.bot:hover {
+    background-color: #e0e0e0;
+    color: #333;
+    transform: scale(1.02);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+    outline: 3px dotted #fff;
+    outline-offset: 2px;
+}
+
+.message.user:focus, .message.bot:focus {
+    outline: 3px dotted #fff;
+    outline-offset: 4px;
+}
+
+/* Icon Button */
+.icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #fff;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.attach-button {
+    margin-right: 6px;
+}
+
+.send-button {
+    margin-left: 6px;
+}
+
+/* Adjust Icon Sizes */
+.icon-button img {
+    width: 20px;
+    height: 20px;
+    filter: invert(1);
+}
+
+/* Bot Image */
+.bot-image {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    margin: 0 auto 10px;
+    background-color: #2C2C2C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bot-image img {
+    width: 80px;
+    height: auto;
+}
+
+/* Help Title and Buttons */
+.help-title {
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: #ffffff;
+}
+
+.help-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+.help-button {
+    font-family: 'metropolis', sans-serif;
+    font-size: 14px;
+    color: #999999;
+    background-color: #1D1D1D;
+    border: none;
+    border-radius: 25px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+}
+
+.help-button:hover {
+    background-color: #fff;
+    transform: scale(1.10);
+}
+
+.help-button:focus {
+    outline: 3px dashed #fff;
+    outline-offset: 4px;
+}
+
+/* Code Block Styling */
+code {
+    background-color: #000000;
+    color: #DBDBDB;
+    padding: 0.3px 3px;
+    border-radius: 2px;
+    font-family: monospace;
+}
+
+/* New Chat Button */
+.new-chat-button {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    display: none;
+    padding: 8px 16px;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    border-radius: 60px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.5s ease, background-color 0.3s;
+}
+
+.new-chat-button.show-button {
+    display: block;
+    opacity: 1;
+}
+
+.new-chat-button:hover {
+    background-color: #222222;
+    color: #999;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    .help-title { font-size: 18px; }
+    .help-button { font-size: 12px; padding: 6px 12px; }
+    .bot-image { width: 120px; height: 120px; }
+    .message { font-size: 12px; padding: 8px; }
+    .input-field { font-size: 12px; padding: 10px; }
+}
+
+/* Animation Keyframes */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Animation Classes */
+:root {
+    --fadeIn-duration: 1s;
+    --fadeInImage-duration: 0.8s;
+    --fadeInButton-duration: 0.5s;
+    --fadeInInput-duration: 1s;
+}
+
+.fadeIn {
+    animation: fadeIn var(--fadeIn-duration) forwards;
+}
+
+.fadeInImage {
+    animation: fadeIn var(--fadeInImage-duration) forwards;
+}
+
+.fadeInButton {
+    animation: fadeIn var(--fadeInButton-duration) forwards;
+}
+
+.fadeInInput {
+    animation: fadeIn var(--fadeInInput-duration) forwards;
 }

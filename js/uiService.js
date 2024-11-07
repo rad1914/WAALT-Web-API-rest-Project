@@ -13,15 +13,24 @@ export function setupEventListeners(handleSendMessage) {
     const messageInput = document.getElementById('messageInput');
     const sendButton = document.getElementById('sendButton');
 
+    // Deshabilitar envío de mensaje con tecla Enter
     messageInput.addEventListener('keydown', (event) => {
-        // Disable sending message with Enter key
         if (event.key === 'Enter') {
             event.preventDefault();
         }
     });
 
-    sendButton.addEventListener('click', handleSendMessage);
+    // Solo enviar mensaje cuando se hace clic en el botón de enviar
+    sendButton.addEventListener('click', () => {
+        const message = messageInput.value.trim();
+        if (message) {
+            handleSendMessage(); // Llamar a la función de envío solo si hay contenido
+        } else {
+            alert('Por favor, escribe un mensaje antes de enviar.');
+        }
+    });
 }
+
 
 
 /**
