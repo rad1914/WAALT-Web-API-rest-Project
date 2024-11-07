@@ -74,6 +74,7 @@ ear();
     console.log("Session data cleared.");
 }
 
-export { userIP };
+export { startNewChat, userIP };
+
 
 setupEventListeners(sendMessage);

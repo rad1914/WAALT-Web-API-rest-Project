@@ -54,5 +54,5 @@ export async function sendMessageToServers(message) {
         (result) => result.status === 'fulfilled' && result.value
     );
 
-    return successfulResponse?.value || '✦ Damn, tuve problemas para conectarme al server. Inténtalo de nuevo mas tarde D:';
+    return successfulResponse?.value || '✦ Damn, tuve problemas para conectarme al servidor. Inténtalo de nuevo más tarde D:';
 }

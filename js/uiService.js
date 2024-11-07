@@ -1,4 +1,10 @@
 // uiService.js
+
+/**
+ * Adds a message to the conversation.
+ * @param {string} content - The message content.
+ * @param {string} type - The type of message ('user' or 'bot').
+ */
 export function addMessageToConversation(content, type = 'bot') {
     const conversation = document.getElementById('conversation');
     const messageElem = document.createElement('div');
@@ -8,55 +14,28 @@ export function addMessageToConversation(content, type = 'bot') {
     conversation.scrollTop = conversation.scrollHeight;
 }
 
-
+/**
+ * Sets up event listeners for the send button and message input field.
+ * @param {function} handleSendMessage - The function to call when the send button is clicked.
+ */
 export function setupEventListeners(handleSendMessage) {
     const messageInput = document.getElementById('messageInput');
     const sendButton = document.getElementById('sendButton');
 
-    // Deshabilitar envío de mensaje con tecla Enter
+    // Prevent sending with the Enter key
     messageInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
         }
     });
 
-    // Solo enviar mensaje cuando se hace clic en el botón de enviar
+    // Send message when the send button is clicked
     sendButton.addEventListener('click', () => {
         const message = messageInput.value.trim();
         if (message) {
-            handleSendMessage(); // Llamar a la función de envío solo si hay contenido
+            handleSendMessage(); // Call the function to send the message
         } else {
             alert('Por favor, escribe un mensaje antes de enviar.');
         }
     });
-}
-
-
-
-/**
- * Clears the content of the specified element.
- * @param {string} id - The ID of the element to clear.
- */
-export function clearElementContent(id) {
-    const element = document.getElementById(id);
-    if (element) element.innerHTML = '';
-}
-
-/**
- * Toggles the display style of the specified element.
- * @param {string} id - The ID of the element to toggle.
- * @param {string} displayStyle - The display style to set (default is 'block').
- */
-export function toggleElementDisplay(id, displayStyle = 'block') {
-    const element = document.getElementById(id);
-    if (element) element.style.display = displayStyle;
-}
-
-/**
- * Updates the response output element with a new message.
- * @param {string} message - The message to display.
- */
-export function updateResponseOutput(message) {
-    const responseOutput = document.getElementById('responseOutput');
-    if (responseOutput) responseOutput.innerText = message;
 }

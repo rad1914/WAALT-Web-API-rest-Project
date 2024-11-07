@@ -42,7 +42,7 @@ body {
 
 /* Welcome Section */
 .welcome-section {
-    margin-top: 120;
+    margin-top: 120px;
     font-family: 'metropolis', sans-serif;
     position: sticky;
     top: 0;
@@ -143,9 +143,9 @@ body {
 }
 
 .bot-chat-image {
-    width: 45px;
-    height: 45px;
-    border-radius: 30%;
+    width: 5px;
+    height: 5px;
+    border-radius: 0%;
     margin-right: 10px;
 }
 
@@ -177,6 +177,7 @@ body {
 
 .attach-button {
     margin: 2px;
+    martin-top: -5px;
 }
 
 .send-button {
@@ -203,7 +204,7 @@ body {
 }
 
 .bot-image img {
-    width: 80px;
+    width: 70px;
     height: auto;
 }
 
@@ -277,15 +278,6 @@ code {
 .new-chat-button:hover {
     background-color: #222222;
     color: #999;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 600px) {
-    .help-title { font-size: 18px; }
-    .help-button { font-size: 12px; padding: 6px 12px; }
-    .bot-image { width: 120px; height: 120px; }
-    .message { font-size: 12px; padding: 8px; }
-    .input-field { font-size: 12px; padding: 10px; }
 }
 
 /* Animation Keyframes */

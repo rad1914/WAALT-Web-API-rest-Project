@@ -5,15 +5,24 @@ let index = 0;
 
 export function typeTitle(speed = 28) {
     const writingTitle = document.getElementById('writingTitle');
-    if (writingTitle) {
+    if (!writingTitle) {
+        console.error("Error: Element with ID 'writingTitle' not found.");
+        return;
+    }
+    
+    // Reset the text content and index to re-run animation
+    writingTitle.textContent = '';
+    index = 0;
+
+    const type = () => {
         if (index < titleText.length) {
             writingTitle.textContent += titleText.charAt(index++);
-            setTimeout(() => typeTitle(speed), speed);
+            setTimeout(type, speed);
         }
-    } else {
-        console.error("Error: Element with ID 'writingTitle' not found.");
-    }
+    };
+    type();
 }
+
 
 export function debounce(func, delay) {
     let timeoutId;

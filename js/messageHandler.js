@@ -1,7 +1,8 @@
-// messageHandler.js
+// messageHandler 
 
 import { addMessageToConversation } from './uiService.js';
 import { sendMessageToServers } from './apiService.js';
+import { showLoadingMessage, updateWithBotResponse } from './utilities.js';
 
 /**
  * Formats the message to be compatible with server commands.
@@ -13,30 +14,7 @@ function formatMessageForServer(message) {
 }
 
 /**
- * Adds the loading animation for bot response.
- */
-function showLoadingMessage() {
-    const botMessageId = 'loadingMessage';
-    const loadingMessage = document.createElement('div');
-    loadingMessage.id = botMessageId;
-    loadingMessage.classList.add('bot-message', 'loading');
-    loadingMessage.innerText = 'Cargando...';
-    document.getElementById('conversation').appendChild(loadingMessage);
-}
-
-/**
- * Removes the loading message and updates with the bot's response.
- */
-function updateWithBotResponse(responseText) {
-    const loadingMessage = document.getElementById('loadingMessage');
-    if (loadingMessage) {
-        loadingMessage.remove(); // Remove loading message
-    }
-    addMessageToConversation(responseText, 'bot');
-}
-
-/**
- * Sends a message entered by the user.
+ * Sends a message entered by the user and processes the response.
  */
 export async function sendMessage() {
     const messageInput = document.getElementById('messageInput');
