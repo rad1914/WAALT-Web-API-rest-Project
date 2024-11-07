@@ -1,83 +1,87 @@
 // main.js
+
 import { sendMessage } from './js/messageHandler.js';
-import { addMessageToConversation } from './js/uiService.js';
-import { showLoadingMessage, updateWithBotResponse } from './js/utilities.js';
-import { typeTitle } from './animators.js';
+import { typeTitle } from './js/animators.js';
 import { startNewChat, fetchUserIP } from './js/chat.js';
+import { sendButtonMessage } from './js/buttonMessage.js';
 
-// Function to format the message for the server
-function formatMessageForServer(message) {
-    return message.startsWith('/') ? message : `.ai ${message}`;
-}
-
-// Function for attaching files (placeholder for now)
-function handleAttach() {
-    alert('Función de adjuntar archivo (puedes implementar la lógica aquí)');
-}
-
-// Function to initialize help button listeners
-function setupHelpButtonListeners() {
-    const helpButtons = document.querySelectorAll('.help-button');
-    helpButtons.forEach(button => {
-        button.addEventListener('click', (event) => {
-            console.log("Help button clicked:", event.target);
-            // Perform specific help action
-        });
-    });
-}
+console.log("main.js loaded");
 
 document.addEventListener("DOMContentLoaded", async () => {
-    console.log("DOM fully loaded and parsed");
+    console.log("Script ejecutándose después de DOMContentLoaded");
 
-    // Initialize animations, help button listeners, and fetch user IP
+    // Inicializa las animaciones y funciones principales
     typeTitle();
-    setupHelpButtonListeners();
-    await fetchUserIP();  // Ensure IP is fetched before starting a chat session
+    await fetchUserIP();
 
-    // Select buttons and elements
+    // Selecciona elementos importantes del DOM
     const messageInput = document.getElementById('messageInput');
     const sendButton = document.getElementById('sendButton');
-    const helpButton = document.getElementById('helpButton');
+    const helpButtons = document.querySelectorAll('.button-message');
+    const attachButton = document.querySelector('.attach-button');
     const newChatButton = document.querySelector('.new-chat-button');
 
-    // Debugging log to confirm element loading
-    console.log("Elements loaded:", { messageInput, sendButton, helpButton, newChatButton });
+    // Verificación de elementos cargados correctamente
+    console.log("Verificación de elementos:", { messageInput, sendButton, helpButtons, attachButton, newChatButton });
 
-    // Verify required elements
-    if (!messageInput || !sendButton || !helpButton) {
-        console.error("Required elements not found in the DOM");
-        return;
-    }
-
-    // Add event listener for the send button
-    sendButton.addEventListener('click', () => {
-        console.log("Send button clicked!");
-        sendMessage();
-    });
-
-    // Handle the Enter key event
-    messageInput.addEventListener('keydown', (event) => {
-        console.log("Keydown event on messageInput:", event);
-        if (event.key === 'Enter') {
-            console.log("Enter pressed, sending message...");
+    // Listener del botón de envío
+    if (sendButton) {
+        sendButton.addEventListener('click', () => {
+            console.log("Botón de envío presionado");
             sendMessage();
-            event.preventDefault();
-        }
-    });
-
-    // Add event listener for the help button
-    helpButton.addEventListener('click', () => {
-        console.log("Help button clicked!");
-        // Add additional logic for the help button here
-    });
-
-    // Check and add listener for New Chat button
-    if (newChatButton) {
-        newChatButton.addEventListener('click', () => {
-            console.log("New Chat button clicked!");
-            startNewChat(); // Call startNewChat function
         });
     } else {
-        console.warn("New Chat button not found.");
+        console.warn("El botón de envío no se encontró en el DOM.");
     }
+
+    // Listener de la tecla Enter para enviar mensajes
+    if (messageInput) {
+        messageInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                console.log("Enter presionado, enviando mensaje...");
+                sendMessage();
+                event.preventDefault();
+            }
+        });
+    } else {
+        console.warn("El campo de entrada de mensaje no se encontró en el DOM.");
+    }
+
+    // Listener para los botones de ayuda
+    helpButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+            const message = button.getAttribute('data-message');
+            console.log("Botón de ayuda presionado con mensaje:", message);
+            if (message) {
+                sendButtonMessage(message);
+            } else {
+                console.warn("Advertencia: Botón de ayuda sin el atributo 'data-message'.");
+            }
+        });
+    });
+
+    // Listener para el botón de adjuntar
+    if (attachButton) {
+        attachButton.addEventListener('click', handleAttach);
+        console.log("Listener de botón de adjuntar agregado.");
+    } else {
+        console.warn("Botón de adjuntar no encontrado en el DOM.");
+    }
+
+    // Listener para el botón de nueva conversación
+    if (newChatButton) {
+        newChatButton.addEventListener('click', () => {
+            console.log("Botón de nueva conversación presionado.");
+            startNewChat();
+        });
+    } else {
+        console.warn("Botón de nueva conversación no encontrado en el DOM.");
+    }
+
+    console.log("Script configurado y ejecutado.");
 });
+
+function handleAttach() {
+    console.log("Attach button clicked");
+    // Implement your attach functionality here
+}

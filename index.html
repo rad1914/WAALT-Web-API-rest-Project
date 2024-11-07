@@ -15,24 +15,22 @@
             </div>
             <h2 class="help-title animate-title" id="writingTitle">✦ </h2>
             <div class="help-buttons">
-                <button id="welcomeSendButton" class="help-button animate-button">Send</button> <!-- Renamed to welcomeSendButton -->
-                <button class="help-button animate-button button-message" data-message="Adios">🧮 Adios</button>
-                <button class="help-button animate-button button-message" data-message="Viajes a Cranbrook">🧭 Viajes a Cranbrook</button>
-                <button class="help-button animate-button button-message" data-message="Ayúdame a programar">🧑‍💻 Coding Advice</button>
-                <button class="help-button animate-button button-message" data-message="¿Quién te creó?">🧐 ¿Quién te creó?</button>
-                <button class="help-button animate-button button-message" data-message="Juguemos a algo">🕹️ Juguemos a algo</button>
-                <button class="help-button animate-button button-message" data-message="¿Que puedes hacer?">💬 Más</button>
+                <button class="help-button button-message animate-button" data-message="Adios">🧮 Adios</button>
+                <button class="help-button button-message animate-button" data-message="Viajes a Cranbrook">🧭 Viajes a Cranbrook</button>
+                <button class="help-button button-message animate-button" data-message="Ayúdame a programar">🧑‍💻 Coding Advice</button>
+                <button class="help-button button-message animate-button" data-message="¿Quién te creó?">🧐 ¿Quién te creó?</button>
+                <button class="help-button button-message animate-button" data-message="Juguemos a algo">🕹️ Juguemos a algo</button>
+                <button class="help-button button-message animate-button" data-message="¿Que puedes hacer?">💬 Más</button>
             </div>
         </section>
 
         <div class="conversation" id="conversation" aria-live="polite"></div>
-        <button class="new-chat-button show-button" onclick="startNewChat()" aria-label="Start a new chat">☉</button>
+        <button class="new-chat-button show-button" aria-label="Start a new chat">☉</button>
 
-        <!-- Updated message bar with attach and send buttons -->
         <div class="message-bar">
-            <button class="icon-button attach-button" aria-label="Attach">&#9728;</button> <!-- Paperclip icon -->
+            <button class="icon-button attach-button" aria-label="Attach">&#9728;</button>
             <input type="text" id="messageInput" class="input-field" placeholder="Escribe aquí..." aria-label="Message input" />
-            <button id="sendButton" class="icon-button send-button" aria-label="Send">&#10148;</button> <!-- Arrow icon -->
+            <button id="sendButton" class="icon-button send-button" aria-label="Send">&#10148;</button>
         </div>
 
         <footer>

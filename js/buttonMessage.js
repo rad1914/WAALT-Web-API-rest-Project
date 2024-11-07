@@ -2,16 +2,16 @@
 import { sendMessage } from './messageHandler.js';
 
 /**
- * Sends a predefined message by simulating a button click.
- * @param {string} message - The message to send.
+ * Envía un mensaje predefinido al hacer clic en el botón.
+ * @param {string} message - El mensaje que se enviará.
  */
 export function sendButtonMessage(message) {
     const messageInput = document.getElementById('messageInput');
     if (messageInput) {
         messageInput.value = message;
-        sendMessage(); // Call sendMessage without parameters
+        sendMessage(); // Envía el mensaje simulado
     } else {
-        console.error("Error: Element with ID 'messageInput' not found.");
+        console.error("Error: Elemento con ID 'messageInput' no encontrado.");
     }
 }
 

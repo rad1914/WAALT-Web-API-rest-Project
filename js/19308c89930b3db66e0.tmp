@@ -1,0 +1,74 @@
+// animators.js
+
+const titleText = "¿Qué tienes en mente?";
+let index = 0;
+
+export function typeTitle(speed = 28) {
+    const writingTitle = document.getElementById('writingTitle');
+    if (!writingTitle) {
+        console.error("Error: Element with ID 'writingTitle' not found.");
+        return;
+    }
+    
+    // Reset the text content and index to re-run animation
+    writingTitle.textContent = '';
+    index = 0;
+
+    const type = () => {
+        if (index < titleText.length) {
+            writingTitle.textContent += titleText.charAt(index++);
+            setTimeout(type, speed);
+        }
+    };
+    type();
+}
+
+export function debounce(func, delay) {
+    let timeoutId;
+    return (...args) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => func.apply(this, args), delay);
+    };
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const buttons = document.querySelectorAll('.animate-button');
+    const image = document.querySelector('.animate-image');
+    const inputField = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+
+    console.log("Message Input:", inputField);
+    console.log("Send Button:", sendButton);
+
+    // Add event listener to sendButton if it exists
+    if (sendButton) {
+        sendButton.addEventListener('click', sendMessage);
+    }
+
+    // Animate image if it exists
+    if (image) {
+        image.classList.add('fadeInImage');
+    } else {
+        console.warn("Warning: Element with class 'animate-image' not found.");
+    }
+
+    // Animate buttons with a delay if they exist
+    if (buttons.length > 0) {
+        buttons.forEach((button, idx) => {
+            setTimeout(() => button.classList.add('fadeInButton'), idx * 200);
+        });
+    } else {
+        console.warn("Warning: No elements with the class 'animate-button' found.");
+    }
+
+    // Animate input field if it exists
+    if (inputField) {
+        inputField.classList.add('fadeInInput');
+        setTimeout(() => inputField.classList.remove('fadeInInput'), 1000);
+    } else {
+        console.error("Error: Element with ID 'messageInput' not found.");
+    }
+
+    // Start typing animation after a delay
+    setTimeout(() => typeTitle(), 500);
+});

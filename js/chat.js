@@ -69,12 +69,6 @@ export function startNewChat() {
         console.warn("Message input field not found.");
     }
 
-    sessionStorage.cl
-ear();
+    sessionStorage.clear();
     console.log("Session data cleared.");
 }
-
-export { startNewChat, userIP };
-
-
-setupEventListeners(sendMessage);

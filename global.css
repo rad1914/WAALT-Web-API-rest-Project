@@ -117,6 +117,7 @@ body {
 
 /* Message Styling */
 .message {
+    font-size: 13px;
     font-family: 'metropolis', sans-serif;
     padding: 12px;
     border-radius: 20px;
