@@ -42,7 +42,7 @@ body {
 
 /* Welcome Section */
 .welcome-section {
-    margin-top: 130px;
+    margin-top: 120;
     font-family: 'metropolis', sans-serif;
     position: sticky;
     top: 0;
@@ -61,10 +61,21 @@ body {
 .conversation {
     flex: 1;
     overflow-y: auto;
-    padding: 10px;
+    padding: 13px;
     margin-top: 20px;
     display: flex;
     flex-direction: column;
+}
+
+/* Caption */
+.caption {
+    font-size: 0.8em;
+    color: #888;
+    text-align: center;
+    margin-top: 8px;
+    margin-bottom: 3px;
+    animation: fadeIn 0.5s ease forwards; /* Adjust duration as needed */
+    opacity: 0; 
 }
 
 /* Input Container */
@@ -83,10 +94,10 @@ body {
     display: flex;
     align-items: center;
     background-color: #222222;
-    color: #ffffff; /* Define el color de texto para que el input lo herede */
+    color: #999; 
     border-radius: 25px;
-    padding: 10px;
-    width: 100%; /* Permite que ocupe todo el ancho de .input-container */
+    padding: 7px;
+    width: 95%; 
     margin: 0 auto;
 }
 
@@ -94,28 +105,22 @@ body {
 .input-field {
     font-family: 'metropolis', sans-serif;
     flex: 1;
-    border: none; /* Quita el borde */
+    border: none;
     outline: none;
     font-size: 14px;
-    color: inherit; /* Hereda el color de texto de .message-bar */
-    background-color: transparent; /* Para que sea del mismo color que el contenedor */
-    padding: 12px;
-    width: 100%; /* Ocupa todo el ancho del contenedor */
+    color: inherit; 
+    background-color: transparent;
+    padding: 10px;
+    width: 100%; 
     transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
-
-.input-field:focus {
-    box-shadow: 0px 0px 10px rgba(0, 30, 30, 0.6);
-    transform: scale(1.02);
-}
-
 
 /* Message Styling */
 .message {
     font-family: 'metropolis', sans-serif;
-    padding: 10px;
+    padding: 12px;
     border-radius: 20px;
-    margin: 5px 0;
+    margin: 7px 0;
     text-align: left;
     animation: slideIn 0.5s forwards;
     transition: background-color 0.3s, box-shadow 0.2s;
@@ -133,14 +138,14 @@ body {
     display: flex;
     align-items: center;
     align-self: flex-start;
-    background-color: #333333;
+    background-color: #000;
     color: #BCBCBC;
 }
 
 .bot-chat-image {
     width: 45px;
     height: 45px;
-    border-radius: 50%;
+    border-radius: 30%;
     margin-right: 10px;
 }
 
@@ -171,11 +176,11 @@ body {
 }
 
 .attach-button {
-    margin-right: 6px;
+    margin: 2px;
 }
 
 .send-button {
-    margin-left: 6px;
+    margin: 2px;
 }
 
 /* Adjust Icon Sizes */
@@ -213,7 +218,7 @@ body {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 9px;
+    gap: 8px;
 }
 
 .help-button {
@@ -230,11 +235,11 @@ body {
 
 .help-button:hover {
     background-color: #fff;
-    transform: scale(1.10);
+    transform: scale(1.05);
 }
 
 .help-button:focus {
-    outline: 3px dashed #fff;
+    outline: 2px dashed #fff;
     outline-offset: 4px;
 }
 
@@ -316,4 +321,27 @@ code {
 
 .fadeInInput {
     animation: fadeIn var(--fadeInInput-duration) forwards;
+}
+
+/* Estilo para el mensaje de carga */
+.bot-message.loading {
+    color: #999;
+    font-style: italic;
+    animation: dot-blink 1.5s infinite;
+}
+
+/* Animación de los puntos */
+@keyframes dot-blink {
+    0% {
+        content: "Cargando";
+    }
+    33% {
+        content: "Cargando.";
+    }
+    66% {
+        content: "Cargando..";
+    }
+    100% {
+        content: "Cargando...";
+    }
 }
