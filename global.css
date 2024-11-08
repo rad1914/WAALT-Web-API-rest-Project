@@ -1,3 +1,4 @@
+
 /* Global Reset */
 * {
     box-sizing: border-box;
@@ -42,7 +43,7 @@ body {
 
 /* Welcome Section */
 .welcome-section {
-    margin-top: 100px;
+    margin-top: 130px;
     font-family: 'metropolis', sans-serif;
     position: sticky;
     top: 0;
@@ -171,39 +172,59 @@ body {
 
 
 
+
+
+
+
+
 /* Input Container */
 .input-container {
-    position: relative;
+  /*  position: relative;
     bottom: 0;
-    padding: 0px;
     width: 100vw;
+    justify-content: space-between;*/
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    z-index: 1;
+
 }
 
-/* Barra de mensajes */
-.message-bar, .send-bar { /* Apply styles to both */
+/* Message Bar */
+.message-bar {
     display: flex;
     align-items: center;
     color: #999;
     border-radius: 25px;
-    padding: 7px;
-    background-color: #222222; /* Added background color */
+    background-color: #222222;
+    padding: 7px 25px; /* Left padding for space */
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.message-bar {
-    width: 85%;
-}
-
-/* Boton de enviar mensaje */
+/* Send Bar */
 .send-bar {
-    background-color: #fff; /* Added background color */
-    width: 11%;
+    display: flex;
+    align-items: center;
+    padding: 7px 5px; /* Left padding for space */
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: center; /* Center icon inside the circle */
+    color: #222;
+    background-color: #fff;
+    border-radius: 50%; /* Make it circular */
+
 }
 
-/* Campo de entrada */
+
+
+  
+  
+  
+  
+  
+  
+  
+/*/*/ 
+/* Input Field */
 .input-field {
     font-family: 'metropolis', sans-serif;
     border: none;
@@ -212,7 +233,7 @@ body {
     color: inherit;
     background-color: transparent;
     padding: 4px;
-    width: 90%;
+    width: 100%;
     transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
 
@@ -225,6 +246,93 @@ body {
     display: flex;
     align-items: center;
     padding: 3px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 20px;
+    }
+
+    .welcome-section {
+        margin-top: 50px;
+        font-size: 14px;
+    }
+
+    .help-title {
+        font-size: 16px;
+    }
+
+    .help-button {
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+
+    .message-bar {
+        width: 70%;
+    }
+
+    .send-bar {
+        width: 25%;
+    }
+
+    .input-field {
+        font-size: 13px;
+    }
+
+    .new-chat-button {
+        top: 5px;
+        left: 5px;
+        font-size: 12px;
+    }
+
+    .bot-image {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 10px;
+    }
+
+    .welcome-section {
+        margin-top: 30px;
+        font-size: 12px;
+    }
+
+    .help-title {
+        font-size: 14px;
+    }
+
+    .help-button {
+        font-size: 13px;
+        padding: 5px 10px;
+    }
+
+    .message-bar {
+        width: 60%;
+    }
+
+    .send-bar {
+        width: 30%;
+    }
+
+    .input-field {
+        font-size: 12px;
+    }
+
+    .new-chat-button {
+        top: 3px;
+        left: 3px;
+        font-size: 10px;
+    }
+
+    .bot-image {
+        width: 70px;
+        height: 70px;
+    }
 }
 
 
@@ -248,8 +356,8 @@ body {
 .message.user {
     text-align: right;
     align-self: flex-end;
-    background-color: #1A1A1A;
-    color: #999999;
+    background-color: #1F1F1F;
+    color: #888  ;
     tabindex: 0;
 }
 
