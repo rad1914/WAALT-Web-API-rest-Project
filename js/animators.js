@@ -3,16 +3,13 @@
 const titleText = "¿Qué tienes en mente?";
 let index = 0;
 
-export function typeTitle(speed = 28) {
+export function typeTitle(speed = 30) {
     const writingTitle = document.getElementById('writingTitle');
     if (!writingTitle) {
         console.error("Error: Element with ID 'writingTitle' not found.");
         return;
     }
-    
-    // Reset the text content and index to re-run animation
-    writingTitle.textContent = '';
-    index = 0;
+   
 
     const type = () => {
         if (index < titleText.length) {
@@ -58,5 +55,5 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    setTimeout(typeTitle, 500);
+    setTimeout(typeTitle, 600);
 });

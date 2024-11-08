@@ -1,14 +1,10 @@
 // uiService.js
-/**
- * Adds a message to the conversation.
- * @param {string} content - The message content.
- * @param {string} type - The type of message ('user' or 'bot').
- */
+
 export function addMessageToConversation(content, type = 'bot') {
     const conversation = document.getElementById('conversation');
     const messageElem = document.createElement('div');
     messageElem.classList.add('message', type);
-    messageElem.textContent = content;
+    messageElem.innerHTML = content; // Use innerHTML to support HTML formatting
     conversation.appendChild(messageElem);
     conversation.scrollTop = conversation.scrollHeight;
 }

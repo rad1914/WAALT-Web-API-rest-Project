@@ -7,7 +7,7 @@
 
 /* Base Styles */
 body {
-    background-color: #000;
+    background-color: #0D0D0D;
     color: #ffffff;
     font-family: 'metropolis', sans-serif;
     margin: 0;
@@ -42,12 +42,12 @@ body {
 
 /* Welcome Section */
 .welcome-section {
-    margin-top: 120px;
+    margin-top: 100px;
     font-family: 'metropolis', sans-serif;
     position: sticky;
     top: 0;
     text-align: center;
-    padding: 20px 0;
+    padding: 0px 0;
     z-index: 1;
     transition: opacity 0.5s ease;
 }
@@ -57,140 +57,6 @@ body {
     pointer-events: none;
 }
 
-/* Conversation Section */
-.conversation {
-    flex: 1;
-    overflow-y: auto;
-    padding: 13px;
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Caption */
-.caption {
-    font-size: 0.8em;
-    color: #888;
-    text-align: center;
-    margin-top: 8px;
-    margin-bottom: 3px;
-    animation: fadeIn 0.5s ease forwards; /* Adjust duration as needed */
-    opacity: 0; 
-}
-
-/* Input Container */
-.input-container {
-    position: sticky;
-    bottom: 0;
-    padding: 10px;
-    width: 100vw; /* Asegura que ocupe todo el ancho de la pantalla */
-    display: flex;
-    justify-content: center;
-    z-index: 1;
-}
-
-/* Barra de mensajes */
-.message-bar {
-    display: flex;
-    align-items: center;
-    background-color: #222222;
-    color: #999; 
-    border-radius: 25px;
-    padding: 7px;
-    width: 95%; 
-    margin: 0 auto;
-}
-
-/* Campo de entrada */
-.input-field {
-    font-family: 'metropolis', sans-serif;
-    flex: 1;
-    border: none;
-    outline: none;
-    font-size: 14px;
-    color: inherit; 
-    background-color: transparent;
-    padding: 10px;
-    width: 100%; 
-    transition: box-shadow 0.3s ease, transform 0.2s ease;
-}
-
-/* Message Styling */
-.message {
-    font-size: 13px;
-    font-family: 'metropolis', sans-serif;
-    padding: 12px;
-    border-radius: 20px;
-    margin: 7px 0;
-    text-align: left;
-    animation: slideIn 0.5s forwards;
-    transition: background-color 0.3s, box-shadow 0.2s;
-    will-change: transform, opacity;
-}
-
-.message.user {
-    align-self: flex-end;
-    background-color: #222222;
-    color: #999999;
-    tabindex: 0;
-}
-
-.message.bot {
-    display: flex;
-    align-items: center;
-    align-self: flex-start;
-    background-color: #000;
-    color: #BCBCBC;
-}
-
-.bot-chat-image {
-    width: 5px;
-    height: 5px;
-    border-radius: 0%;
-    margin-right: 10px;
-}
-
-.message.user:hover, .message.bot:hover {
-    background-color: #e0e0e0;
-    color: #333;
-    transform: scale(1.02);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
-    outline: 3px dotted #fff;
-    outline-offset: 2px;
-}
-
-.message.user:focus, .message.bot:focus {
-    outline: 3px dotted #fff;
-    outline-offset: 4px;
-}
-
-/* Icon Button */
-.icon-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    color: #fff;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-}
-
-.attach-button {
-    margin: 2px;
-    martin-top: -5px;
-}
-
-.send-button {
-    margin: 2px;
-}
-
-/* Adjust Icon Sizes */
-.icon-button img {
-    width: 20px;
-    height: 20px;
-    filter: invert(1);
-}
 
 /* Bot Image */
 .bot-image {
@@ -212,7 +78,7 @@ body {
 /* Help Title and Buttons */
 .help-title {
     font-size: 18px;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     color: #ffffff;
 }
 
@@ -225,13 +91,12 @@ body {
 
 .help-button {
     font-family: 'metropolis', sans-serif;
-    font-size: 14px;
+    font-size: 15px;
     color: #999999;
-    background-color: #1D1D1D;
+    background-color: #191919;
     border: none;
     border-radius: 25px;
     padding: 8px 16px;
-    cursor: pointer;
     transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
 }
 
@@ -245,15 +110,6 @@ body {
     outline-offset: 4px;
 }
 
-/* Code Block Styling */
-code {
-    background-color: #000000;
-    color: #DBDBDB;
-    padding: 0.3px 3px;
-    border-radius: 2px;
-    font-family: monospace;
-}
-
 /* New Chat Button */
 .new-chat-button {
     position: fixed;
@@ -262,7 +118,7 @@ code {
     display: none;
     padding: 8px 16px;
     background-color: #fff;
-    color: #000;
+    color: #222;
     border: none;
     border-radius: 60px;
     font-size: 14px;
@@ -277,9 +133,164 @@ code {
 }
 
 .new-chat-button:hover {
-    background-color: #222222;
-    color: #999;
+    background-color: #EC4D68;
+    color: #fff;
 }
+
+
+
+/* Conversation Section */
+.conversation {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Caption */
+.caption {
+    margin-top: 6px;
+    font-size: 0.8em;
+    color: #555;
+    text-align: center;
+    animation: fadeIn 0.5s ease forwards; /* Adjust duration as needed */
+    opacity: 0; 
+}
+
+/* Response Output */
+#responseOutput {
+    color: #888;
+    font-size: 12px;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+
+
+
+
+/* Input Container */
+.input-container {
+    position: relative;
+    bottom: 0;
+    padding: 0px;
+    width: 100vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1;
+}
+
+/* Barra de mensajes */
+.message-bar, .send-bar { /* Apply styles to both */
+    display: flex;
+    align-items: center;
+    color: #999;
+    border-radius: 25px;
+    padding: 7px;
+    background-color: #222222; /* Added background color */
+}
+
+.message-bar {
+    width: 85%;
+}
+
+/* Boton de enviar mensaje */
+.send-bar {
+    background-color: #fff; /* Added background color */
+    width: 11%;
+}
+
+/* Campo de entrada */
+.input-field {
+    font-family: 'metropolis', sans-serif;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    color: inherit;
+    background-color: transparent;
+    padding: 4px;
+    width: 90%;
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+/* Icon Button */
+.icon-button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #D8D8D8;
+    display: flex;
+    align-items: center;
+    padding: 3px;
+}
+
+
+
+
+
+
+
+/* Message Styling */
+.message {
+    font-size: 13px;
+    font-family: 'metropolis', sans-serif;
+    padding: 13px;
+    border-radius: 18px;
+    margin: 4px 0;
+    animation: slideIn 0.5s forwards;
+    transition: background-color 0.3s, box-shadow 0.2s;
+    will-change: transform, opacity;
+}
+
+.message.user {
+    text-align: right;
+    align-self: flex-end;
+    background-color: #1A1A1A;
+    color: #999999;
+    tabindex: 0;
+}
+
+.message.bot {
+    display: flex;
+    text-align: justify;
+    align-items: center;
+    align-self: flex-start;
+    background-color: #0D0D0D;
+    color: #888;
+}
+
+.bot-chat-image {
+    width: 5px;
+    height: 5px;
+    border-radius: 0%;
+    margin-right: 10px;
+}
+
+.message.user:hover, .message.bot:hover {
+    background-color: #fff;
+    transform: scale(1.05);
+}
+
+.message.user:focus, .message.bot:focus {
+    outline: 2px dashed #fff;
+    outline-offset: 24px;
+}
+
+
+.attach-button {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.send-button {
+    margin-left: 4px;
+    color: #000;
+}
+
+
 
 /* Animation Keyframes */
 @keyframes fadeIn {
@@ -316,25 +327,49 @@ code {
     animation: fadeIn var(--fadeInInput-duration) forwards;
 }
 
-/* Estilo para el mensaje de carga */
-.bot-message.loading {
-    color: #999;
-    font-style: italic;
-    animation: dot-blink 1.5s infinite;
-}
-
 /* Animación de los puntos */
 @keyframes dot-blink {
     0% {
-        content: "Cargando";
+        content: "";
     }
-    33% {
-        content: "Cargando.";
+    25% {
+        content: "•";
     }
-    66% {
-        content: "Cargando..";
+    50% {
+        content: "••";
+    }
+    75% {
+        content: "•••";
     }
     100% {
-        content: "Cargando...";
+        content: "••••";
     }
+}
+
+.loading::after {
+    color: #666;
+    font-size: 23px;
+    content: ""; 
+    animation: dot-blink 2s steps(5, end) infinite;
+}
+
+
+.message strong {
+    font-weight: bold;
+}
+
+.message em {
+    font-style: italic;
+}
+
+.message del {
+    text-decoration: line-through;
+}
+
+.message code {
+    background-color: #444;
+    color: #DBDBDB;
+    padding: 0.3px 3px;
+    border-radius: 2px;
+    font-family: monospace;
 }

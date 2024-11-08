@@ -2,11 +2,13 @@
 
 const apiUrls = [
     'https://wrldradd.loca.lt',
-    // Agrega otras URLs de servidores según sea necesario
+    'https://wrldrad1914.loca.lt',
+    'https://wrldradd24.loca.lt',
+    'https://wrldradd2.loca.lt',
 ];
 
 // Función de solicitud con timeout y reintentos
-async function fetchWithTimeoutAndRetry(url, options, timeout = 8000, retries = 2) {
+async function fetchWithTimeoutAndRetry(url, options, timeout = 3000, retries = 4) {
     for (let i = 0; i <= retries; i++) {
         try {
             return await Promise.race([
@@ -42,7 +44,7 @@ export async function sendMessageToServers(message) {
                 const data = await response.json();
                 return data.response || 'Sin respuesta del servidor';
             }
-            console.warn(`Respuesta no OK de ${apiUrl}: ${response.status}`);
+            console.warn(`No-OK Response from ${apiUrl}: ${response.status}`);
         } catch (error) {
             console.error(`Error con ${apiUrl}:`, error);
         }
@@ -54,5 +56,5 @@ export async function sendMessageToServers(message) {
         (result) => result.status === 'fulfilled' && result.value
     );
 
-    return successfulResponse?.value || '✦ Damn, tuve problemas para conectarme al servidor. Inténtalo de nuevo más tarde D:';
+    return successfulResponse?.value || '✦ Recorcholis, tuve problemas para conectarme al servidor. Inténtalo de nuevo en un momento';
 }

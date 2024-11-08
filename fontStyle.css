@@ -1,0 +1,21 @@
+/* fontStyle.css */
+
+.message strong {
+    font-weight: bold;
+}
+
+.message em {
+    font-style: italic;
+}
+
+.message del {
+    text-decoration: line-through;
+}
+
+.message code {
+    font-family: monospace;
+    background-color: #f4f4f4;
+    padding: 2px 4px;
+    border-radius: 3px;
+    color: #d14;
+}

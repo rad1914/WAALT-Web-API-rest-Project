@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>W.A.A.L.T Project</title>
     <link rel="stylesheet" href="./global.css">
+    <link rel="stylesheet" href="./css/fontStyle.css">
 </head>
 <body>
-
     <div class="container">
         <section class="welcome-section" id="welcomeSection" aria-labelledby="writingTitle">
             <div class="bot-image animate-image">
@@ -15,24 +15,31 @@
             </div>
             <h2 class="help-title animate-title" id="writingTitle">✦ </h2>
             <div class="help-buttons">
-                <button class="help-button button-message animate-button" data-message="Adios">🧮 Adios</button>
+                <button class="help-button button-message animate-button" data-message="Integra la siguiente función paso a paso: ∫₀¹ [x² / e³] dx">🧮 <b>∫₀¹</b> [x² / e³] <i>dx</i></button>
                 <button class="help-button button-message animate-button" data-message="Viajes a Cranbrook">🧭 Viajes a Cranbrook</button>
                 <button class="help-button button-message animate-button" data-message="Ayúdame a programar">🧑‍💻 Coding Advice</button>
                 <button class="help-button button-message animate-button" data-message="¿Quién te creó?">🧐 ¿Quién te creó?</button>
                 <button class="help-button button-message animate-button" data-message="Juguemos a algo">🕹️ Juguemos a algo</button>
                 <button class="help-button button-message animate-button" data-message="¿Que puedes hacer?">💬 Más</button>
             </div>
+            
+            <div class="caption"; style="font-size: 25px; color: #DDD; margin-top: 0px; margin-bottom: -22px;">•••</div>
+
         </section>
 
         <div class="conversation" id="conversation" aria-live="polite"></div>
         <button class="new-chat-button show-button" aria-label="Start a new chat">☉</button>
 
-        <div class="message-bar">
-            <button class="icon-button attach-button" aria-label="Attach">&#9728;</button>
-            <input type="text" id="messageInput" class="input-field" placeholder="Escribe aquí..." aria-label="Message input" />
-            <button id="sendButton" class="icon-button send-button" aria-label="Send">&#10148;</button>
-        </div>
-
+       
+<div class="input-container">
+    <div class="message-bar">
+        <button class="icon-button attach-button" aria-label="Attach">&#9728;</button>
+        <input type="text" id="messageInput" class="input-field" placeholder="Escribe aquí..." aria-label="Message input" />
+    </div>
+    <div class="send-bar">
+        <button id="sendButton" class="icon-button send-button" aria-label="Send">&#10148;</button>
+    </div>
+</div>        
         <footer>
             <div class="caption">WebV Branch debug Artifact (68cadb) BETA<br />Created by Sr. RAD - TECNM</div>
             <div id="responseOutput" aria-live="polite"></div>
