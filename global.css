@@ -1,163 +1,95 @@
-
 /* Input Container */
 .input-container {
-  /*  position: relative;
-    bottom: 0;
-    width: 100vw;
-    justify-content: space-between;*/
+ 
     display: flex;
-    align-items: center;
-
+    align-items: center; /* Vertically center items */
+    width: 100%;
 }
 
-/* Message Bar */
+/* Message Bar (renamed to input bar container) */
 .message-bar {
     display: flex;
     align-items: center;
-    color: #999;
-    border-radius: 25px;
-    background-color: #222222;
-    padding: 7px 25px; /* Left padding for space */
-    width: 100%;
-    box-sizing: border-box;
+    background-color: #333; /* Dark gray input bar */
+    color: #ccc; /* Light gray text */
+    padding: 15px 20px;
+    border-radius: 25px; 
+    flex-grow: 1; /* Input bar takes up available space */
+    margin-right: 30px; 
+    margin-left: 10px;
 }
 
-/* Send Bar */
+/* Input Bar */
+.input-field {
+    background-color: transparent; /* Transparent input background */
+    border: none; /* No border */
+    color: #ccc; /* Light gray text */
+    width: 100%; /* Input takes up full width */
+    padding: 0;
+    font-size: 16px;
+}
+
+/* Send Bar (Button styling) */
 .send-bar {
+    aspect-ratio: 1;
     display: flex;
     align-items: center;
-    padding: 7px 5px; /* Left padding for space */
-    width: 100%;
-    box-sizing: border-box;
-    justify-content: center; /* Center icon inside the circle */
-    color: #222;
-    background-color: #fff;
-    border-radius: 50%; /* Make it circular */
-
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    background-color: #484B40; /* Darker gray button background */
+    color: #ccc; /* Light gray text */
+    border: none;
+    border-radius: 50%; /* Circular buttons */
+    transition: background-color 0.3s;
+    margin-left: -20px;
+    margin-right: 15px;
 }
 
+.send-bar:hover {
+    background-color: #666; /* Slightly lighter gray on hover */
+}
 
-
-  
-  
-  
-  
-  
-  
-  
-/*/*/ 
-/* Input Field */
-.input-field {
-    font-family: 'metropolis', sans-serif;
-    border: none;
+.send-bar:focus {
     outline: none;
-    font-size: 14px;
-    color: inherit;
-    background-color: transparent;
-    padding: 4px;
-    width: 100%;
-    transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
 
 /* Icon Button */
 .icon-button {
     background: none;
     border: none;
-    font-size: 18px;
-    color: #D8D8D8;
+    font-size: 20px;
+    color: #ccc; /* Light gray text */
     display: flex;
     align-items: center;
-    padding: 3px;
+    padding: 0;
 }
 
-/* Responsive Styles */
-@media (max-width: 768px) {
-    .container {
-        padding: 0 20px;
-    }
-
-    .welcome-section {
-        margin-top: 50px;
-        font-size: 14px;
-    }
-
-    .help-title {
-        font-size: 16px;
-    }
-
-    .help-button {
-        font-size: 14px;
-        padding: 6px 12px;
-    }
-
-    .message-bar {
-        width: 70%;
-    }
-
-    .send-bar {
-        width: 25%;
-    }
-
-    .input-field {
-        font-size: 13px;
-    }
-
-    .new-chat-button {
-        top: 5px;
-        left: 5px;
-        font-size: 12px;
-    }
-
-    .bot-image {
-        width: 80px;
-        height: 80px;
-    }
+/* Send Button Icon */
+.icon-button.send-button {
+    width: 100%;
+    height: 100%;
+    color: #ccc; /* Light gray text */
 }
 
-@media (max-width: 480px) {
-    .container {
-        padding: 0 10px;
-    }
-
-    .welcome-section {
-        margin-top: 30px;
-        font-size: 12px;
-    }
-
-    .help-title {
-        font-size: 14px;
-    }
-
-    .help-button {
-        font-size: 13px;
-        padding: 5px 10px;
-    }
-
-    .message-bar {
-        width: 60%;
-    }
-
-    .send-bar {
-        width: 30%;
-    }
-
-    .input-field {
-        font-size: 12px;
-    }
-
-    .new-chat-button {
-        top: 3px;
-        left: 3px;
-        font-size: 10px;
-    }
-
-    .bot-image {
-        width: 70px;
-        height: 70px;
-    }
+/* Style for the plus icon */
+.plus-icon {
+    font-size: 20px;
+    margin-right: 10px;
 }
 
+/* Style for the microphone icon */
+.mic-icon {
+    font-size: 20px;
+    margin-left: 10px;
+}
 
+/* Style for the send icon */
+.send-icon {
+    font-size: 20px;
+}
 
 
 

@@ -23,23 +23,25 @@
                 <button class="help-button button-message animate-button" data-message="¿Que puedes hacer?">💬 Más</button>
             </div>
             
-            <div class="caption"; style="font-size: 25px; color: #DDD; margin-top: 0px; margin-bottom: -22px;">•••</div>
+            <div class="caption" style="font-size: 25px; color: #DDD; margin-top: 0px; margin-bottom: -22px;">•••</div>
 
         </section>
 
         <div class="conversation" id="conversation" aria-live="polite"></div>
         <button class="new-chat-button show-button" aria-label="Start a new chat">☉</button>
 
-       
-<div class="input-container">
-    <div class="message-bar">
-        <button class="icon-button attach-button" aria-label="Attach">&#9728;</button>
-        <input type="text" id="messageInput" class="input-field" placeholder="Escribe aquí..." aria-label="Message input" />
-    </div>
-    <div class="send-bar">
-        <button id="sendButton" class="icon-button send-button" aria-label="Send">&#10148;</button>
-    </div>
-</div>        
+        <!-- Input Container with updated styles -->
+        <div class="input-container">
+            <div class="message-bar">
+                <button class="icon-button plus-icon attach-button" aria-label="Attach">&#10133;</button>
+                <input type="text" id="messageInput" class="input-field" placeholder="Escribe aquí..." aria-label="Message input" />
+                <button class="icon-button mic-icon" aria-label="Voice input">&#127908;</button>
+            </div>
+            <div class="send-bar">
+                <button id="sendButton" class="icon-button send-button send-icon" aria-label="Send">&#10148;</button>
+            </div>
+        </div>
+
         <footer>
             <div class="caption">WebV Branch debug Artifact (68cadb) BETA<br />Created by Sr. RAD - TECNM</div>
             <div id="responseOutput" aria-live="polite"></div>
