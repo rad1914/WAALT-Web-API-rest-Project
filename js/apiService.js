@@ -8,7 +8,7 @@ const apiUrls = [
 ];
 
 // Request function with timeout and retries
-async function fetchWithTimeoutAndRetry(url, options, timeout = 8000, retries = 5) {
+async function fetchWithTimeoutAndRetry(url, options, timeout = 10000, retries = 5) {
     for (let i = 0; i <= retries; i++) {
         try {
             return await Promise.race([

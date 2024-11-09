@@ -39,7 +39,7 @@
     height: 50px;
     flex-grow: 0;
     flex-shrink: 0;
-    background-color: #484B40; 
+    background-color: #44483D; 
     color: #ccc; 
     border: none;
     border-radius: 50%;
@@ -71,7 +71,7 @@
 .icon-button.send-button {
     width: 50%;
     height: 50%;
-    color: #ccc; /* Light gray text */
+    color: #D9DCCC; /* Light gray text */
     margin: 0;
 }
 
