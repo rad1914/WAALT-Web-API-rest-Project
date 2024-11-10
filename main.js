@@ -20,8 +20,32 @@ document.addEventListener("DOMContentLoaded", async () => {
     const helpButtons = document.querySelectorAll('.button-message');
     const attachButton = document.querySelector('.attach-button');
     const newChatButton = document.querySelector('.new-chat-button');
+    const welcomeSection = document.getElementById('welcomeSection');
 
-    console.log("Verificación de elementos:", { messageInput, sendButton, helpButtons, attachButton, newChatButton });
+    console.log("Verificación de elementos:", { messageInput, sendButton, helpButtons, attachButton, newChatButton, welcomeSection });
+
+    // Función para iniciar una nueva conversación
+    function startNewChat() {
+        if (welcomeSection) {
+            welcomeSection.classList.remove('slide-down');
+            welcomeSection.classList.add('slide-up');
+        }
+        console.log("Nueva conversación iniciada");
+        // Añade la lógica necesaria para iniciar el chat aquí
+    }
+
+    // Escuchar el evento del botón de nueva conversación para mostrar la sección de bienvenida
+    if (newChatButton) {
+        newChatButton.addEventListener('click', () => {
+            if (welcomeSection) {
+                welcomeSection.classList.remove('slide-up');
+                welcomeSection.classList.add('slide-down');
+            }
+            console.log("Sección de bienvenida mostrada");
+        });
+    } else {
+        console.warn("Botón de nueva conversación no encontrado en el DOM.");
+    }
 
     // Listener del botón de envío
     if (sendButton) {
@@ -73,15 +97,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     function handleAttach() {
         console.log("Attach button clicked. Define your file attachment logic here.");
         // Add your actual attachment logic here, such as opening a file dialog.
-    }
-
-    if (newChatButton) {
-        newChatButton.addEventListener('click', () => {
-            console.log("Botón de nueva conversación presionado.");
-            startNewChat();
-        });
-    } else {
-        console.warn("Botón de nueva conversación no encontrado en el DOM.");
     }
 
     console.log("Script configurado y ejecutado.");

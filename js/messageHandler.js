@@ -1,4 +1,4 @@
-// messageHandler 
+// messageHandler.js
 
 import { addMessageToConversation } from './uiService.js';
 import { sendMessageToServers } from './apiService.js';
@@ -19,39 +19,34 @@ function formatMessageForServer(message) {
 export async function sendMessage() {
     const messageInput = document.getElementById('messageInput');
     const message = messageInput.value.trim();
+    const helpButtons = document.querySelectorAll('.help-button');
 
-    if (!message) return; // Prevent sending empty messages without showing an alert
-
-    console.log("Sending message:", message);
+    if (!message) return;
 
     const sendButton = document.getElementById('sendButton');
-    sendButton.disabled = true; // Disable button while sending
+    sendButton.disabled = true; 
 
-    // Clear input and update UI with user's message
+    // Deshabilitar botones de ayuda
+    helpButtons.forEach(button => button.disabled = true);
+
     messageInput.value = '';
     addMessageToConversation(message, 'user');
 
-    // Show loading message from the bot
     showLoadingMessage();
 
     try {
-        // Format message and send it to the server
         const formattedMessage = formatMessageForServer(message);
-        console.log("Formatted message for server:", formattedMessage);
         const responseText = await sendMessageToServers(formattedMessage);
 
-        // Handle server response
         if (responseText) {
-            console.log("Received response from server:", responseText);
             updateWithBotResponse(responseText);
         } else {
-            console.warn("No response received from server.");
             updateWithBotResponse('Error: Respuesta no recibida. Inténtalo más tarde.');
         }
     } catch (error) {
-        console.error('Error with sendMessageToServers:', error);
         updateWithBotResponse('Error: No se pudo enviar el mensaje. Inténtalo más tarde.');
     } finally {
-        sendButton.disabled = false; // Re-enable the send button after the message is sent
+        sendButton.disabled = false; 
+        helpButtons.forEach(button => button.disabled = false); // Habilitar botones de ayuda
     }
 }
