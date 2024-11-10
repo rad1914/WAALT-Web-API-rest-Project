@@ -1,3 +1,25 @@
+
+/* Enhanced Text Formatting */
+.message strong {
+    font-weight: bold;
+}
+.message em {
+    font-style: italic;
+}
+.message del {
+    text-decoration: line-through;
+}
+.message code {
+    background-color: #333;
+    color: #E1E1E1;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: 'Courier New', monospace;
+    display: inline-block;
+}
+
+
 /* Global Reset */
 * {
     box-sizing: border-box;
@@ -37,7 +59,7 @@ body {
     flex-direction: column;
     width: 100%;
     max-width: 500px;
-    height: 100vh;
+    height: 100vh; /* Ensure sticky elements work correctly */
 }
 
 /* Welcome Section */
@@ -97,10 +119,12 @@ body {
     border-radius: 25px;
     padding: 8px 16px;
     transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+    cursor: pointer; /* Ensures a pointer cursor on hover */
 }
 
 .help-button:hover {
     background-color: #fff;
+    color: #191919; /* Improved contrast */
     transform: scale(1.05);
 }
 
@@ -112,8 +136,8 @@ body {
 /* New Chat Button */
 .new-chat-button {
     position: fixed;
-    top: 10px;
-    left: 10px;
+    top: 20px;
+    left: 20px;
     display: none;
     padding: 8px 16px;
     background-color: #fff;
@@ -152,8 +176,18 @@ body {
     font-size: 0.8em;
     color: #555;
     text-align: center;
-    animation: fadeIn 0.5s ease forwards; /* Adjust duration as needed */
+    animation: fadeIn 0.5s ease forwards; /* Corrected animation */
     opacity: 0;
+}
+
+/* Keyframes for Fade In Animation */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 /* Response Output */
@@ -164,7 +198,16 @@ body {
     margin-bottom: 5px;
 }
 
+/* Scrollbar Styling (Optional) */
+::-webkit-scrollbar {
+    width: 8px;
+}
 
+::-webkit-scrollbar-thumb {
+    background-color: #444;
+    border-radius: 4px;
+}
 
-
-
+::-webkit-scrollbar-track {
+    background: #191919;
+}

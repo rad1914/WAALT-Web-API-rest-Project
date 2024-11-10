@@ -1,158 +1,135 @@
-/* Input Container */
-.input-container {
- 
-    display: flex;
-    align-items: center; /* Vertically center items */
-    width: 100%;
+/* Root Variables for Consistency */
+:root {
+    --background-color-dark: #0D0D0D;
+    --background-color-user: #1F1F1F;
+    --text-color: #ccc;
+    --hover-background-color: #444;
+    --input-height: 55px; /* Consistent height for both message and send bar */
+    --fadeIn-duration: 1s;
+    --fadeInImage-duration: 0.8s;
+    --fadeInButton-duration: 0.5s;
+    --fadeInInput-duration: 1s;
 }
 
-/* Message Bar (renamed to input bar container) */
+/* Input Container */
+.input-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    padding: 5px 10px;
+    gap: 10px; /* 10px margin between elements */
+    margin: auto; /* Center alignment */
+    box-sizing: border-box;
+}
+
+/* Message Bar - Same height as Send Bar */
 .message-bar {
     display: flex;
     align-items: center;
-    background-color: #333; 
-    color: #ccc; 
-    padding: 15px 20px;
-    border-radius: 25px; 
+    background-color: var(--background-color-user);
+    color: var(--text-color);
+    padding: 0 18px; /* Horizontal padding only */
+    height: var(--input-height);
+    border-radius: 30px;
     flex-grow: 1;
-    margin-right: 15px; 
-    margin-left: 10px;
+    margin: 0 5px; /* 10px margin on the left and right */
 }
 
-/* Input Bar */
+/* Input Field */
 .input-field {
-    background-color: transparent; 
+    background-color: transparent;
     border: none;
-    color: #ccc; 
+    color: var(--text-color);
     width: 100%;
     padding: 0;
     font-size: 16px;
+    outline: none;
+    overflow-x: auto; /* Prevent text overflow */
 }
 
-/* Send Bar (Button styling) */
+/* Send Bar - Same height and size as Message Bar */
 .send-bar {
-    aspect-ratio: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 50px;
-    height: 50px;
-    flex-grow: 0;
-    flex-shrink: 0;
-    background-color: #44483D; 
-    color: #ccc; 
+    width: var(--input-height);
+    height: var(--input-height);
+    background-color: #44483D;
+    color: var(--text-color);
     border: none;
-    border-radius: 50%;
-    transition: background-color 0.3s;
-    margin-left: -10px;
-    margin-right: 10px;
+    border-radius: 50%; 
+    transition: background-color 0.3s, transform 0.2s;
+    margin-top: 3px;
+    margin-right: 7px; 
 }
 
+/* Send Bar Hover Effect */
 .send-bar:hover {
-    background-color: #666; /* Slightly lighter gray on hover */
-}
-
-.send-bar:focus {
-    outline: none;
+    background-color: #666;
+    transform: scale(1.05); /* Scale effect on hover */
 }
 
 /* Icon Button */
 .icon-button {
     background: none;
     border: none;
-    font-size: 20px;
-    color: #ccc; /* Light gray text */
+    font-size: 22px;
+    color: inherit;
     display: flex;
     align-items: center;
-    padding: 0;
 }
 
-/* Send Button Icon */
-.icon-button.send-button {
-    width: 50%;
-    height: 50%;
-    color: #D9DCCC; /* Light gray text */
-    margin: 0;
-}
-
-/* Style for the plus icon */
-.plus-icon {
-    font-size: 20px;
-}
-
-/* Style for the microphone icon */
-.mic-icon {
-    font-size: 20px;
-    margin-left: 10px;
-}
-
-/* Style for the send icon */
+/* Input Icons */
+.plus-icon,
+.mic-icon,
 .send-icon {
-    font-size: 20px;
+    font-size: 22px;
 }
 
-
-
-
+.plus-icon {
+    margin-left: 0px;
+    margin-right: 5px;
+}
 
 /* Message Styling */
 .message {
-    font-size: 13px;
-    font-family: 'metropolis', sans-serif;
-    padding: 13px;
+    font-size: 14px;
+    font-family: 'Metropolis', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 12px 16px;
     border-radius: 18px;
-    margin: 4px 0;
-    animation: slideIn 0.5s forwards;
-    transition: background-color 0.3s, box-shadow 0.2s;
-    will-change: transform, opacity;
+    margin: 6px 0;
+    animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards, scaleUp 0.3s ease-in-out;
+    transition: background-color 0.3s, box-shadow 0.3s;
 }
 
+/* User and Bot Messages */
 .message.user {
     text-align: right;
     align-self: flex-end;
-    background-color: #1F1F1F;
-    color: #888  ;
-    tabindex: 0;
-}
+    background-color: var(--background-color-user);
+    color: #999;
 
+}
 .message.bot {
     display: flex;
-    text-align: justify;
     align-items: center;
     align-self: flex-start;
-    background-color: #0D0D0D;
-    color: #888;
+    background-color: var(--background-color-dark);
+    color: #999;
+
 }
 
-.bot-chat-image {
-    width: 5px;
-    height: 5px;
-    border-radius: 0%;
-    margin-right: 10px;
-}
-
-.message.user:hover, .message.bot:hover {
-    background-color: #fff;
-    transform: scale(1.05);
-}
-
-.message.user:focus, .message.bot:focus {
-    outline: 2px dashed #fff;
-    outline-offset: 24px;
-}
-
-
+/* Attach Button */
 .attach-button {
     margin-left: 4px;
-    margin-right: 4px;
 }
 
-.send-button {
-    margin-left: 4px;
-    color: #000;
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch; /* For iOS smooth scrolling */
 }
-
-
 
 /* Animation Keyframes */
 @keyframes fadeIn {
@@ -165,14 +142,16 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Animation Classes */
-:root {
-    --fadeIn-duration: 1s;
-    --fadeInImage-duration: 0.8s;
-    --fadeInButton-duration: 0.5s;
-    --fadeInInput-duration: 1s;
+@keyframes scaleUp {
+    from {
+        transform: scale(0.98);
+    }
+    to {
+        transform: scale(1);
+    }
 }
 
+/* Animation Classes */
 .fadeIn {
     animation: fadeIn var(--fadeIn-duration) forwards;
 }
@@ -189,49 +168,18 @@
     animation: fadeIn var(--fadeInInput-duration) forwards;
 }
 
-/* Animación de los puntos */
+/* Dot Blink Animation */
 @keyframes dot-blink {
-    0% {
-        content: "";
-    }
-    25% {
-        content: "•";
-    }
-    50% {
-        content: "••";
-    }
-    75% {
-        content: "•••";
-    }
-    100% {
-        content: "••••";
-    }
+    0% { content: ""; }
+    25% { content: "•"; }
+    50% { content: "••"; }
+    75% { content: "•••"; }
+    100% { content: "••••"; }
 }
 
 .loading::after {
     color: #666;
     font-size: 23px;
-    content: ""; 
-    animation: dot-blink 2s steps(5, end) infinite;
-}
-
-
-.message strong {
-    font-weight: bold;
-}
-
-.message em {
-    font-style: italic;
-}
-
-.message del {
-    text-decoration: line-through;
-}
-
-.message code {
-    background-color: #444;
-    color: #DBDBDB;
-    padding: 0.3px 3px;
-    border-radius: 2px;
-    font-family: monospace;
+    content: "";
+    animation: dot-blink 2s steps(4, end) infinite;
 }
