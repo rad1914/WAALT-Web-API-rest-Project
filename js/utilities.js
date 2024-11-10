@@ -2,7 +2,6 @@
 
 import { addMessageToConversation } from './uiService.js';
 
-
 /**
  * Clears the content of the specified element.
  * @param {string} id - The ID of the element to clear.
@@ -54,6 +53,9 @@ function formatText(input) {
     return formattedText;
 }
 
+/**
+ * Shows a loading message in the conversation area.
+ */
 export function showLoadingMessage() {
     const loadingMessage = document.createElement('div');
     loadingMessage.id = 'loadingMessage';
@@ -67,9 +69,7 @@ export function showLoadingMessage() {
  */
 export function updateWithBotResponse(responseText) {
     const loadingMessage = document.getElementById('loadingMessage');
-    if (loadingMessage) {
-        loadingMessage.remove(); // Remove loading message
-    }
-  
+    if (loadingMessage) loadingMessage.remove();
+
     addMessageToConversation(formatText(responseText), 'bot');
 }
