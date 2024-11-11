@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>W.A.A.L.T Project</title>
+    <link rel="stylesheet" href="./global.css">
+    <link rel="stylesheet" href="./fontStyle.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Disclaimer Section -->
+        <div class="disclaimer-overlay" id="disclaimerOverlay">
+            <div class="disclaimer-content">
+                <p>Este servicio de chat recopila la dirección IP para mejorar la experiencia del usuario y aplicar medidas de seguridad, incluyendo la limitación de velocidad de solicitudes. Al utilizar este servicio, aceptas que algunos datos pueden ser enviados a través de APIs externas para el procesamiento y respuesta de tus mensajes. En caso de exceder el límite de uso, podrías experimentar un bloqueo temporal.</p>
+                <p>Consulta nuestra <a href="#">Política de Privacidad</a> para más información.</p>
+                <button id="acceptDisclaimer">Aceptar</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <section class="welcome-section" id="welcomeSection" aria-labelledby="writingTitle">
+            <div class="bot-image animate-image">
+                <img src="bot.webp" alt="Bot" />
+            </div>
+            <h2 class="help-title animate-title" id="writingTitle">✦ </h2>
+            <div class="help-buttons">
+                <button class="help-button button-message animate-button" data-message="Integra la siguiente función paso a paso: ∫₀¹ [x² / e³] dx">🧮 <b>∫₀¹</b> [x² / e³] <i>dx</i></button>
+                <button class="help-button button-message animate-button" data-message="Viajes a Cranbrook">🧭 Viajes a Cranbrook</button>
+                <button class="help-button button-message animate-button" data-message="Ayúdame a programar">🧑‍💻 Coding Advice</button>
+                <button class="help-button button-message animate-button" data-message="¿Quién te creó?">🧐 ¿Quién te creó?</button>
+                <button class="help-button button-message animate-button" data-message="Juguemos a algo">🕹️ Juguemos a algo</button>
+                <button class="help-button button-message animate-button" data-message="¿Que puedes hacer?">💬 Más</button>
+            </div>
+            
+            <div class="caption" style="font-size: 25px; color: #999; margin-top: 0px; margin-bottom: -22px;">•••</div>
+        </section>
+
+        <div class="conversation" id="conversation" aria-live="polite"></div>
+        <button class="new-chat-button show-button" aria-label="Start a new chat">☉</button>
+
+        <!-- Input Container with updated styles -->
+        <div class="input-container">
+            <div class="message-bar">
+                <button class="icon-button plus-icon attach-button" aria-label="Attach">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2"/>
+                        <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </button>
+                <input type="text" id="messageInput" class="input-field" placeholder="Escribe aquí..." aria-label="Message input" />
+                <button class="icon-button mic-icon" aria-label="Voice input">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 15C14.2091 15 16 13.2091 16 11V6C16 3.79086 14.2091 2 12 2C9.79086 2 8 3.79086 8 6V11C8 13.2091 9.79086 15 12 15Z" stroke="currentColor" stroke-width="2"/>
+                        <path d="M19 11C19 15.4183 15.4183 19 12 19C8.58172 19 5 15.4183 5 11" stroke="currentColor" stroke-width="2"/>
+                        <line x1="12" y1="22" x2="12" y2="19" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="send-bar">
+                <button id="sendButton" class="icon-button send-button send-icon" aria-label="Send">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2 21L23 12L2 3V10L17 12L2 14V21Z" fill="currentColor"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <footer>
+            <div class="caption">WebV Branch debug Artifact (68cadb) BETA<br />Created by Sr. RAD - TECNM</div>
+            <div id="responseOutput" aria-live="polite"></div>
+        </footer>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+</body>
+</html>
