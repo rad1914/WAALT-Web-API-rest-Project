@@ -2,8 +2,10 @@
 
 import { addMessageToConversation } from './uiService.js';
 
+let userIP = null;
+
 /**
- * Clears the content of the specified element.
+ * Clears content of the specified element.
  * @param {string} id - The ID of the element to clear.
  */
 export function clearElementContent(id) {
@@ -12,7 +14,7 @@ export function clearElementContent(id) {
 }
 
 /**
- * Toggles the display style of the specified element.
+ * Toggles display of the specified element.
  * @param {string} id - The ID of the element to toggle.
  * @param {string} displayStyle - The display style to set (default is 'block').
  */
@@ -22,35 +24,25 @@ export function toggleElementDisplay(id, displayStyle = 'block') {
 }
 
 /**
- * Formats and updates the response output element with a new message.
+ * Formats text with HTML tags for bold, italics, strikethrough, and monospace.
+ * @param {string} input - The text to format.
+ * @returns {string} - The formatted text.
+ */
+function formatText(input) {
+    return input
+        .replace(/\*(.*?)\*/g, '<strong>$1</strong>')   // Bold
+        .replace(/_(.*?)_/g, '<em>$1</em>')             // Italics
+        .replace(/~(.*?)~/g, '<del>$1</del>')           // Strikethrough
+        .replace(/```(.*?)```/g, '<code>$1</code>');    // Monospace
+}
+
+/**
+ * Updates the response output element with a formatted message.
  * @param {string} message - The message to display.
  */
 export function updateResponseOutput(message) {
     const responseOutput = document.getElementById('responseOutput');
     if (responseOutput) responseOutput.innerHTML = formatText(message);
-}
-
-/**
- * Applies custom text formatting to specified syntax markers.
- * @param {string} input - The text to format.
- * @returns {string} - The formatted text.
- */
-function formatText(input) {
-    let formattedText = input;
-
-    // Bold (Negrita)
-    formattedText = formattedText.replace(/\*(.*?)\*/g, '<strong>$1</strong>');
-
-    // Italics (Cursiva)
-    formattedText = formattedText.replace(/_(.*?)_/g, '<em>$1</em>');
-
-    // Strikethrough (Tachado)
-    formattedText = formattedText.replace(/~(.*?)~/g, '<del>$1</del>');
-
-    // Monospace
-    formattedText = formattedText.replace(/```(.*?)```/g, '<code>$1</code>');
-
-    return formattedText;
 }
 
 /**
@@ -70,6 +62,22 @@ export function showLoadingMessage() {
 export function updateWithBotResponse(responseText) {
     const loadingMessage = document.getElementById('loadingMessage');
     if (loadingMessage) loadingMessage.remove();
-
     addMessageToConversation(formatText(responseText), 'bot');
+}
+
+/**
+ * Fetch user's IP address if not already fetched.
+ */
+export async function fetchUserIP() {
+    if (userIP) return userIP;
+    try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        if (!response.ok) throw new Error('Error fetching IP');
+        userIP = (await response.json()).ip;
+        console.log("User IP:", userIP);
+        return userIP;
+    } catch (error) {
+        console.error('Failed to fetch IP:', error);
+        return null;
+    }
 }

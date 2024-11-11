@@ -1,8 +1,16 @@
 // messageHandler.js
 
-import { addMessageToConversation } from './uiService.js';
+import { 
+    fetchUserIP, 
+    updateWithBotResponse, 
+    showLoadingMessage 
+} from './utilities.js';  // No need to change this line
+import { addMessageToConversation } from './uiService.js';  // Correct import from uiService
 import { sendMessageToServers } from './apiService.js';
-import { showLoadingMessage, updateWithBotResponse } from './utilities.js';
+import RateLimiter from './rateLimiter.js';
+
+// Initialize RateLimiter: 5 messages every 60 seconds
+const rateLimiter = new RateLimiter(5, 60000);
 
 /**
  * Formats the message to be compatible with server commands.
@@ -14,7 +22,7 @@ function formatMessageForServer(message) {
 }
 
 /**
- * Sends a message entered by the user and processes the response.
+ * Sends a message entered by the user and processes the response, with rate limiting and IP caching.
  */
 export async function sendMessage() {
     const messageInput = document.getElementById('messageInput');
@@ -24,39 +32,33 @@ export async function sendMessage() {
     const sendButton = document.getElementById('sendButton');
     const helpButtons = document.querySelectorAll('.help-button');
 
-    // Disable buttons and clear input
+    // Disable input elements
     sendButton.disabled = true;
     helpButtons.forEach(button => button.disabled = true);
+
+    // Clear user input and display the message
     messageInput.value = '';
     addMessageToConversation(message, 'user');
     showLoadingMessage();
 
     try {
+        // Fetch user IP if not already fetched
+        const userIP = await fetchUserIP();
+        if (!userIP || !rateLimiter.isAllowed(userIP)) {
+            updateWithBotResponse('Too many requests. Please wait before sending more messages.');
+            return;
+        }
+
+        // Send formatted message to server
         const formattedMessage = formatMessageForServer(message);
         const responseText = await sendMessageToServers(formattedMessage);
-        updateWithBotResponse(responseText || 'Error: Respuesta no recibida. Inténtalo más tarde.');
-    } catch {
+        updateWithBotResponse(responseText || 'No response received. Try again later.');
+    } catch (error) {
         updateWithBotResponse('Error: No se pudo enviar el mensaje. Inténtalo más tarde.');
     } finally {
+        // Re-enable input elements
         sendButton.disabled = false;
         helpButtons.forEach(button => button.disabled = false);
-    }
-}
-
-/**
- * Fetches the user's IP address from an external API, with caching.
- */
-let userIP = null;
-export async function fetchUserIP() {
-    if (userIP) return console.log("User IP (cached):", userIP);
-
-    try {
-        const response = await fetch('https://api.ipify.org?format=json');
-        if (!response.ok) throw new Error('Error fetching IP');
-        userIP = (await response.json()).ip;
-        console.log("User IP:", userIP);
-    } catch {
-        console.error('Failed to fetch IP address');
     }
 }
 

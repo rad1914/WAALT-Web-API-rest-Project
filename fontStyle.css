@@ -242,7 +242,6 @@ body {
 
 .help-button:hover {
     background-color: #fff;
-    color: #191919;
     transform: scale(1.05);
 }
 
@@ -252,6 +251,6 @@ body {
 }
 
 .help-button:disabled {
-    opacity: 0.5;
+    opacity: 0.3;
     pointer-events: none;
 }
