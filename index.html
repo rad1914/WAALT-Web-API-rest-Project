@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./global.css">
     <link rel="stylesheet" href="./fontStyle.css">
 </head>
+
 <body>
     <div class="container">
         <section class="welcome-section" id="welcomeSection" aria-labelledby="writingTitle">
@@ -35,20 +36,16 @@
         <!-- Input Container with updated styles -->
 <div class="input-container">
     <div class="message-bar">
+
         <button class="icon-button plus-icon attach-button" aria-label="Attach">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2"/>
-                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2"/>
+                <path d="M19 13H5V11H19V13Z" fill="currentColor"/>
+                <path d="M14 19H10V15H14V19Z" fill="currentColor"/>
+                <path d="M19 5H5V7H19V5Z" fill="currentColor"/>
             </svg>
         </button>
+    
         <input type="text" id="messageInput" class="input-field" placeholder="Escribe aquí..." aria-label="Message input" />
-        <button class="icon-button mic-icon" aria-label="Voice input">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 15C14.2091 15 16 13.2091 16 11V6C16 3.79086 14.2091 2 12 2C9.79086 2 8 3.79086 8 6V11C8 13.2091 9.79086 15 12 15Z" stroke="currentColor" stroke-width="2"/>
-                <path d="M19 11C19 15.4183 15.4183 19 12 19C8.58172 19 5 15.4183 5 11" stroke="currentColor" stroke-width="2"/>
-                <line x1="12" y1="22" x2="12" y2="19" stroke="currentColor" stroke-width="2"/>
-            </svg>
-        </button>
     </div>
     <div class="send-bar">
         <button id="sendButton" class="icon-button send-button send-icon" aria-label="Send">
