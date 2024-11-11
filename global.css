@@ -34,7 +34,10 @@
     color: var(--text-color);
 }
 
-
+.a {
+    color: var(--text-color);
+    text-decoration: none;
+}
 
 .caption {
     margin-top: 0px;
