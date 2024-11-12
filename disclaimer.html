@@ -1,77 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>W.A.A.L.T Project</title>
-    <link rel="stylesheet" href="./global.css">
-    <link rel="stylesheet" href="./fontStyle.css">
+    <title>Documentación de Privacidad y Términos de Uso</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        p {
+            line-height: 1.6;
+            color: #555;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <!-- Disclaimer Section -->
-        <div class="disclaimer-overlay" id="disclaimerOverlay">
-            <div class="disclaimer-content">
-                <p>Este servicio de chat recopila la dirección IP para mejorar la experiencia del usuario y aplicar medidas de seguridad, incluyendo la limitación de velocidad de solicitudes. Al utilizar este servicio, aceptas que algunos datos pueden ser enviados a través de APIs externas para el procesamiento y respuesta de tus mensajes. En caso de exceder el límite de uso, podrías experimentar un bloqueo temporal.</p>
-                <p>Consulta nuestra <a href="#">Política de Privacidad</a> para más información.</p>
-                <button id="acceptDisclaimer">Aceptar</button>
-            </div>
-        </div>
+        <h1>Aviso Legal y Política de Privacidad</h1>
+        <p>En cumplimiento con la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP) y sus disposiciones reglamentarias, informamos a los usuarios de este servicio de chat sobre el tratamiento que se realizará de los datos personales proporcionados y/o generados durante el uso de esta plataforma, a saber: la dirección IP, entre otros, con el propósito de mejorar la experiencia del usuario, implementar medidas de seguridad y realizar la limitación de velocidad de solicitudes según se requiera para la protección del servicio.</p>
+        
+        <p>Al utilizar este servicio, los usuarios reconocen y consienten expresamente que sus datos personales, de acuerdo a lo establecido en el artículo 8 de la LFPDPPP, pueden ser transferidos a terceros nacionales o extranjeros (incluyendo proveedores de servicios en la nube y APIs externas) únicamente para la finalidad de procesar y responder eficazmente los mensajes, y de conformidad con lo establecido en esta política y las leyes aplicables.</p>
 
-        <!-- Main Content -->
-        <section class="welcome-section" id="welcomeSection" aria-labelledby="writingTitle">
-            <div class="bot-image animate-image">
-                <img src="bot.webp" alt="Bot" />
-            </div>
-            <h2 class="help-title animate-title" id="writingTitle">✦ </h2>
-            <div class="help-buttons">
-                <button class="help-button button-message animate-button" data-message="Integra la siguiente función paso a paso: ∫₀¹ [x² / e³] dx">🧮 <b>∫₀¹</b> [x² / e³] <i>dx</i></button>
-                <button class="help-button button-message animate-button" data-message="Viajes a Cranbrook">🧭 Viajes a Cranbrook</button>
-                <button class="help-button button-message animate-button" data-message="Ayúdame a programar">🧑‍💻 Coding Advice</button>
-                <button class="help-button button-message animate-button" data-message="¿Quién te creó?">🧐 ¿Quién te creó?</button>
-                <button class="help-button button-message animate-button" data-message="Juguemos a algo">🕹️ Juguemos a algo</button>
-                <button class="help-button button-message animate-button" data-message="¿Que puedes hacer?">💬 Más</button>
-            </div>
-            
-            <div class="caption" style="font-size: 25px; color: #999; margin-top: 0px; margin-bottom: -22px;">•••</div>
-        </section>
+        <h2>Derechos ARCO</h2>
+        <p>En caso de que los usuarios deseen ejercer sus derechos ARCO (Acceso, Rectificación, Cancelación y Oposición) en relación a los datos personales que hemos recopilado, podrán hacerlo en cualquier momento mediante los mecanismos que se especificarán a través de nuestros canales de contacto.</p>
 
-        <div class="conversation" id="conversation" aria-live="polite"></div>
-        <button class="new-chat-button show-button" aria-label="Start a new chat">☉</button>
+        <h2>Transferencia de Datos</h2>
+        <p>En situaciones donde resulte necesario, este servicio podrá realizar transferencias de datos en términos del artículo 37 de la LFPDPPP, siempre asegurando que los receptores de dichos datos cuenten con las mismas medidas de seguridad y privacidad establecidas en la presente política. Al utilizar el servicio, el usuario acepta implícitamente dichas transferencias, comprendiendo que la finalidad última es la de mejorar y optimizar la prestación del servicio.</p>
 
-        <!-- Input Container with updated styles -->
-        <div class="input-container">
-            <div class="message-bar">
-                <button class="icon-button plus-icon attach-button" aria-label="Attach">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2"/>
-                        <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2"/>
-                    </svg>
-                </button>
-                <input type="text" id="messageInput" class="input-field" placeholder="Escribe aquí..." aria-label="Message input" />
-                <button class="icon-button mic-icon" aria-label="Voice input">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 15C14.2091 15 16 13.2091 16 11V6C16 3.79086 14.2091 2 12 2C9.79086 2 8 3.79086 8 6V11C8 13.2091 9.79086 15 12 15Z" stroke="currentColor" stroke-width="2"/>
-                        <path d="M19 11C19 15.4183 15.4183 19 12 19C8.58172 19 5 15.4183 5 11" stroke="currentColor" stroke-width="2"/>
-                        <line x1="12" y1="22" x2="12" y2="19" stroke="currentColor" stroke-width="2"/>
-                    </svg>
-                </button>
-            </div>
-            <div class="send-bar">
-                <button id="sendButton" class="icon-button send-button send-icon" aria-label="Send">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M2 21L23 12L2 3V10L17 12L2 14V21Z" fill="currentColor"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
+        <h2>Medidas de Seguridad</h2>
+        <p>Implementamos protocolos y controles técnicos, administrativos y físicos razonables para proteger la integridad, confidencialidad y disponibilidad de los datos personales procesados. En el improbable evento de una violación de seguridad, y de acuerdo con el artículo 64 del Reglamento de la LFPDPPP, tomaremos las medidas necesarias para notificar a las partes afectadas y minimizar cualquier posible daño.</p>
 
-        <footer>
-            <div class="caption">WebV Branch debug Artifact (68cadb) BETA<br />Created by Sr. RAD - TECNM</div>
-            <div id="responseOutput" aria-live="polite"></div>
-        </footer>
+        <h2>Limitación de Responsabilidad</h2>
+        <p>En caso de exceder el límite de uso razonable de solicitudes a este servicio, el usuario acepta que puede ser objeto de un bloqueo temporal de acceso, como parte de las medidas de control y protección de nuestro sistema.</p>
+
+        <h1>Condiciones de Uso</h1>
+        <p>Estas Condiciones de Uso regulan el acceso y uso de este proyecto y sus servicios, incluyendo DALL·E y otros servicios asociados, aplicaciones de software y sitios web relacionados (en conjunto, los “Servicios”). Al utilizar los Servicios, usted acepta estas Condiciones de Uso, que constituyen un acuerdo vinculante.</p>
+
+        <h2>Registro y Acceso</h2>
+        <p>El uso de los Servicios requiere que el usuario tenga al menos 13 años de edad o la edad mínima permitida en su país para otorgar consentimiento, y si es menor de 18 años, debe contar con el permiso de un padre o tutor legal.</p>
+
+        <h2>Uso Permitido de los Servicios</h2>
+        <p>El usuario podrá acceder y utilizar los Servicios, siempre que cumpla con todas las leyes aplicables y nuestras políticas de uso, y que no participe en actividades ilegales, nocivas o abusivas.</p>
+
+        <h2>Contenido</h2>
+        <p>El usuario es responsable del contenido que proporcione en la plataforma, asegurándose de que no infrinja ninguna ley aplicable ni estas Condiciones.</p>
+
+        <h2>Propiedad Intelectual</h2>
+        <p>Nosotros y nuestras filiales poseemos todos los derechos de los Servicios. El usuario solo podrá utilizar nuestra marca conforme a las Directrices de Uso de Marca publicadas.</p>
+
+        <h2>Terminación</h2>
+        <p>El usuario puede dejar de usar los Servicios en cualquier momento. Nos reservamos el derecho de suspender o cancelar el acceso a los Servicios o eliminar una cuenta en caso de incumplimiento de estas Condiciones.</p>
+        
+        <h3>Fuentes Citadas:</h3>
+        <ul>
+            <li>Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP), Artículo 6 y 8.</li>
+            <li>Reglamento de la Ley Federal de Protección de Datos Personales en Posesión de los Particulares, Artículo 19 y 64.</li>
+            <li>Instituto Nacional de Transparencia, Acceso a la Información y Protección de Datos Personales (INAI), “Guía para el tratamiento de datos personales en posesión de los particulares”.</li>
+        </ul>
+
+        
+        <p>Para más información, consulte nuestra política de privacidad y términos específicos para servicios de empresa.</p>
     </div>
-
-    <script type="module" src="./main.js"></script>
 </body>
 </html>
