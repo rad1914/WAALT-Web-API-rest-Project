@@ -7,14 +7,6 @@ const apiUrls = [
     'https://wrldradd2.loca.lt',
 ];
 
-/**
- * Helper function to fetch with timeout and retries.
- * @param {string} url - The API URL to fetch.
- * @param {object} options - Fetch options.
- * @param {number} timeout - Timeout in milliseconds (default 30000 ms).
- * @param {number} retries - Number of retries (default 3).
- * @returns {Promise<Response>} - Fetch response.
- */
 async function fetchWithTimeoutAndRetry(url, options, timeout = 30000, retries = 3) {
     for (let i = 0; i <= retries; i++) {
         try {
@@ -45,8 +37,9 @@ export async function sendMessageToServers(message) {
         // Intento con la API primaria con opción de reintento
         const primaryResponse = await fetchWithTimeoutAndRetry(`${apiUrls[0]}/api/message`, options);
         if (primaryResponse.ok) {
-            const data = await primaryResponse.json();
-            return data.response || 'No response from server';
+            const data = await parseJsonResponse(primaryResponse);
+            console.log('Primary API Response Data:', data);
+            return data?.response || 'No response from server';
         }
         console.warn(`Primary API responded with status: ${primaryResponse.status}`);
     } catch (error) {
@@ -66,21 +59,17 @@ export async function sendMessageToServers(message) {
 }
 
 
-/**
- * Helper function to attempt the remaining APIs in the background.
- * @param {string} message - The message to send.
- * @param {object} options - Fetch options.
- * @returns {Promise<object>} - Resolves with success status and server response if any API succeeds.
- */
+
+
 async function backgroundAttemptOtherApis(message, options) {
     for (const apiUrl of apiUrls.slice(1)) {
         try {
             const response = await fetchWithTimeoutAndRetry(`${apiUrl}/api/message`, options);
             if (response.ok) {
-                const data = await response.json();
-                console.log(`Background API Success: ${apiUrl}`, data.response);
+                const data = await parseJsonResponse(response);
+                console.log(`Background API Success: ${apiUrl}`, data);
                 // Retornar éxito y respuesta del servidor
-                return { success: true, response: data.response };
+                return { success: true, response: data?.response || 'No response field in server response' };
             } else {
                 console.warn(`No-OK Response from ${apiUrl}: ${response.status}`);
             }
@@ -91,3 +80,20 @@ async function backgroundAttemptOtherApis(message, options) {
     // Si todas fallan, retornar sin éxito
     return { success: false, response: '' };
 }
+
+
+/**
+ * Helper function to safely parse JSON response
+ * @param {Response} response - The fetch response object
+ * @returns {Promise<object>} - Parsed JSON or empty object
+ */
+async function parseJsonResponse(response) {
+    try {
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Failed to parse JSON response:', error);
+        return {}; // Retornar objeto vacío en caso de fallo
+    }
+}
+
