@@ -41,34 +41,32 @@ export async function sendMessageToServers(message) {
         credentials: 'include',
     };
 
-    let primarySuccess = false;
-    
     try {
         // Intento con la API primaria con opción de reintento
         const primaryResponse = await fetchWithTimeoutAndRetry(`${apiUrls[0]}/api/message`, options);
         if (primaryResponse.ok) {
             const data = await primaryResponse.json();
-            primarySuccess = true; // Indica éxito para evitar mensaje de error
-            return data.response || 'No response from server';
+            return data.response || 'No response from server'; // Retorna directamente el contenido
         }
         console.warn(`Primary API responded with status: ${primaryResponse.status}`);
     } catch (error) {
         console.error('Error with primary API:', error);
     }
 
-    // Inicia los intentos en segundo plano con las APIs de respaldo
+    // Intento en segundo plano con las APIs de respaldo
     const backgroundResults = await backgroundAttemptOtherApis(message, options);
 
-    // Evalúa si alguna de las solicitudes en segundo plano fue exitosa
-    const anySuccess = backgroundResults.some(result => result.status === 'fulfilled' && result.value);
+    // Verificar si alguna respuesta fue exitosa
+    const successfulResult = backgroundResults.find(result => result.status === 'fulfilled' && result.value);
 
-    if (primarySuccess || anySuccess) {
-        return 'Operación completada exitosamente en una de las APIs.';
+    if (successfulResult) {
+        return successfulResult.value; // Retorna el contenido de la respuesta exitosa
     }
 
-    // Si ninguna fue exitosa, entonces se envía el mensaje de error
+    // Si todas las respuestas fallaron
     return '✦ Oops, I had trouble connecting to the server. Please try again shortly.';
 }
+
 
 
 /**
@@ -84,14 +82,14 @@ async function backgroundAttemptOtherApis(message, options) {
             if (response.ok) {
                 const data = await response.json();
                 console.log(`Background API Success: ${apiUrl}`, data.response);
-                return { status: 'fulfilled', value: true }; // Indica éxito en la respuesta
+                return { status: 'fulfilled', value: data.response }; // Retorna el contenido de la respuesta
             } else {
                 console.warn(`No-OK Response from ${apiUrl}: ${response.status}`);
-                return { status: 'rejected', value: false };
+                return { status: 'rejected', value: null };
             }
         } catch (error) {
             console.error(`Error with ${apiUrl} in background:`, error);
-            return { status: 'rejected', value: false };
+            return { status: 'rejected', value: null };
         }
     });
 
