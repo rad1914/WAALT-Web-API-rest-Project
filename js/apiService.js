@@ -29,11 +29,6 @@ async function fetchWithTimeoutAndRetry(url, options, timeout = 30000, retries =
     }
 }
 
-/**
- * Main function to send the message to servers with failover support.
- * @param {string} message - The formatted message to send.
- * @returns {Promise<string>} - The server response message.
- */
 export async function sendMessageToServers(message) {
     const options = {
         method: 'POST',
@@ -46,59 +41,59 @@ export async function sendMessageToServers(message) {
         credentials: 'include',
     };
 
-    let apiSuccessResponse = '';
+    let primarySuccess = false;
+    let serverResponse = '';
 
     try {
-        // Attempt to send the message to the primary API with retries
+        // Intento con la API primaria con opción de reintento
         const primaryResponse = await fetchWithTimeoutAndRetry(`${apiUrls[0]}/api/message`, options);
         if (primaryResponse.ok) {
             const data = await primaryResponse.json();
-            apiSuccessResponse = data.response;
-            console.log(`API Success: ${apiUrls[0]} ✦ ${apiSuccessResponse}`);
-            return 'Operación completada exitosamente en una API.';
+            primarySuccess = true;
+            return data.response || 'No response from server';
         }
         console.warn(`Primary API responded with status: ${primaryResponse.status}`);
     } catch (error) {
         console.error('Error with primary API:', error);
     }
 
-    // Initiate background attempts with fallback APIs
-    const backgroundResults = await backgroundAttemptOtherApis(message, options);
+    // Iniciar los intentos en segundo plano con las APIs de respaldo
+    const backgroundResult = await backgroundAttemptOtherApis(message, options);
 
-    // Check if any background API was successful
-    const successfulResponse = backgroundResults.find(result => result.status === 'fulfilled' && result.value);
-    if (successfulResponse) {
-        console.log(`API Success: ${successfulResponse.url} ✦ ${successfulResponse.message}`);
-        return 'Operación completada exitosamente en una API.';
+    // Si una de las APIs de respaldo tuvo éxito, retornar esa respuesta
+    if (primarySuccess) {
+        return serverResponse;
+    } else if (backgroundResult.success) {
+        return backgroundResult.response;
     }
 
-    // Return error message if no API succeeded
+    // Si ninguna API respondió correctamente, devolver mensaje de error
     return '✦ Oops, I had trouble connecting to the server. Please try again shortly.';
 }
+
 
 /**
  * Helper function to attempt the remaining APIs in the background.
  * @param {string} message - The message to send.
  * @param {object} options - Fetch options.
- * @returns {Promise<Array>} - Resolves with the results of background attempts.
+ * @returns {Promise<object>} - Resolves with success status and server response if any API succeeds.
  */
 async function backgroundAttemptOtherApis(message, options) {
-    const requests = apiUrls.slice(1).map(async (apiUrl) => {
+    for (const apiUrl of apiUrls.slice(1)) {
         try {
             const response = await fetchWithTimeoutAndRetry(`${apiUrl}/api/message`, options);
             if (response.ok) {
                 const data = await response.json();
-                return { status: 'fulfilled', value: true, url: apiUrl, message: data.response };
+                console.log(`Background API Success: ${apiUrl}`, data.response);
+                // Retornar éxito y respuesta del servidor
+                return { success: true, response: data.response };
+            } else {
+                console.warn(`No-OK Response from ${apiUrl}: ${response.status}`);
             }
-            console.warn(`No-OK Response from ${apiUrl}: ${response.status}`);
-            return { status: 'rejected', value: false };
         } catch (error) {
             console.error(`Error with ${apiUrl} in background:`, error);
-            return { status: 'rejected', value: false };
         }
-    });
-
-    // Wait for all background requests to finish
-    const results = await Promise.allSettled(requests);
-    return results;
+    }
+    // Si todas fallan, retornar sin éxito
+    return { success: false, response: '' };
 }
