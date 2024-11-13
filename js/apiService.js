@@ -29,6 +29,11 @@ async function fetchWithTimeoutAndRetry(url, options, timeout = 30000, retries =
     }
 }
 
+/**
+ * Main function to send the message to servers with failover support.
+ * @param {string} message - The formatted message to send.
+ * @returns {Promise<string>} - The server response message.
+ */
 export async function sendMessageToServers(message) {
     const options = {
         method: 'POST',
@@ -41,33 +46,35 @@ export async function sendMessageToServers(message) {
         credentials: 'include',
     };
 
+    let apiSuccessResponse = '';
+
     try {
-        // Intento con la API primaria con opción de reintento
+        // Attempt to send the message to the primary API with retries
         const primaryResponse = await fetchWithTimeoutAndRetry(`${apiUrls[0]}/api/message`, options);
         if (primaryResponse.ok) {
             const data = await primaryResponse.json();
-            return data.response || 'No response from server'; // Retorna directamente el contenido
+            apiSuccessResponse = data.response;
+            console.log(`API Success: ${apiUrls[0]} ✦ ${apiSuccessResponse}`);
+            return 'Operación completada exitosamente en una API.';
         }
         console.warn(`Primary API responded with status: ${primaryResponse.status}`);
     } catch (error) {
         console.error('Error with primary API:', error);
     }
 
-    // Intento en segundo plano con las APIs de respaldo
+    // Initiate background attempts with fallback APIs
     const backgroundResults = await backgroundAttemptOtherApis(message, options);
 
-    // Verificar si alguna respuesta fue exitosa
-    const successfulResult = backgroundResults.find(result => result.status === 'fulfilled' && result.value);
-
-    if (successfulResult) {
-        return successfulResult.value; // Retorna el contenido de la respuesta exitosa
+    // Check if any background API was successful
+    const successfulResponse = backgroundResults.find(result => result.status === 'fulfilled' && result.value);
+    if (successfulResponse) {
+        console.log(`API Success: ${successfulResponse.url} ✦ ${successfulResponse.message}`);
+        return 'Operación completada exitosamente en una API.';
     }
 
-    // Si todas las respuestas fallaron
+    // Return error message if no API succeeded
     return '✦ Oops, I had trouble connecting to the server. Please try again shortly.';
 }
-
-
 
 /**
  * Helper function to attempt the remaining APIs in the background.
@@ -81,19 +88,17 @@ async function backgroundAttemptOtherApis(message, options) {
             const response = await fetchWithTimeoutAndRetry(`${apiUrl}/api/message`, options);
             if (response.ok) {
                 const data = await response.json();
-                console.log(`Background API Success: ${apiUrl}`, data.response);
-                return { status: 'fulfilled', value: data.response }; // Retorna el contenido de la respuesta
-            } else {
-                console.warn(`No-OK Response from ${apiUrl}: ${response.status}`);
-                return { status: 'rejected', value: null };
+                return { status: 'fulfilled', value: true, url: apiUrl, message: data.response };
             }
+            console.warn(`No-OK Response from ${apiUrl}: ${response.status}`);
+            return { status: 'rejected', value: false };
         } catch (error) {
             console.error(`Error with ${apiUrl} in background:`, error);
-            return { status: 'rejected', value: null };
+            return { status: 'rejected', value: false };
         }
     });
 
-    // Espera a que todas las solicitudes en segundo plano terminen
+    // Wait for all background requests to finish
     const results = await Promise.allSettled(requests);
     return results;
 }
