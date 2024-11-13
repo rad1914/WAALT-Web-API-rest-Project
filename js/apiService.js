@@ -41,15 +41,11 @@ export async function sendMessageToServers(message) {
         credentials: 'include',
     };
 
-    let primarySuccess = false;
-    let serverResponse = '';
-
     try {
         // Intento con la API primaria con opción de reintento
         const primaryResponse = await fetchWithTimeoutAndRetry(`${apiUrls[0]}/api/message`, options);
         if (primaryResponse.ok) {
             const data = await primaryResponse.json();
-            primarySuccess = true;
             return data.response || 'No response from server';
         }
         console.warn(`Primary API responded with status: ${primaryResponse.status}`);
@@ -57,14 +53,12 @@ export async function sendMessageToServers(message) {
         console.error('Error with primary API:', error);
     }
 
-    // Iniciar los intentos en segundo plano con las APIs de respaldo
-    const backgroundResult = await backgroundAttemptOtherApis(message, options);
+    // Inicia los intentos en segundo plano con las APIs de respaldo y espera la respuesta
+    const { success, response } = await backgroundAttemptOtherApis(message, options);
 
-    // Si una de las APIs de respaldo tuvo éxito, retornar esa respuesta
-    if (primarySuccess) {
-        return serverResponse;
-    } else if (backgroundResult.success) {
-        return backgroundResult.response;
+    // Si alguna API en segundo plano respondió correctamente, devolver esa respuesta
+    if (success) {
+        return response;
     }
 
     // Si ninguna API respondió correctamente, devolver mensaje de error
