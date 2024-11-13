@@ -58,8 +58,10 @@ export async function sendMessageToServers(message) {
         console.error('Error with primary API:', error);
     }
 
-    // If primary API fails, initiate background attempts with fallback APIs
-    backgroundAttemptOtherApis(message, options);
+    // If primary API fails, initiate background attempts with fallback APIs and wait for them to complete
+    await backgroundAttemptOtherApis(message, options);
+
+    // After background attempts, return fallback message
     return '✦ Oops, I had trouble connecting to the server. Please try again shortly.';
 }
 
@@ -67,8 +69,9 @@ export async function sendMessageToServers(message) {
  * Helper function to attempt the remaining APIs in the background.
  * @param {string} message - The message to send.
  * @param {object} options - Fetch options.
+ * @returns {Promise<void>} - Resolves once background attempts are done.
  */
-function backgroundAttemptOtherApis(message, options) {
+async function backgroundAttemptOtherApis(message, options) {
     const requests = apiUrls.slice(1).map(async (apiUrl) => {
         try {
             const response = await fetchWithTimeoutAndRetry(`${apiUrl}/api/message`, options);
@@ -83,6 +86,6 @@ function backgroundAttemptOtherApis(message, options) {
         }
     });
 
-    // Process all background API requests silently
-    Promise.allSettled(requests);
+    // Wait for all background requests to finish (even if some fail)
+    await Promise.allSettled(requests);
 }
