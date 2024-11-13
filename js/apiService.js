@@ -29,11 +29,6 @@ async function fetchWithTimeoutAndRetry(url, options, timeout = 30000, retries =
     }
 }
 
-/**
- * Main function to send the message to servers with failover support.
- * @param {string} message - The formatted message to send.
- * @returns {Promise<string>} - The server response message.
- */
 export async function sendMessageToServers(message) {
     const options = {
         method: 'POST',
@@ -46,11 +41,14 @@ export async function sendMessageToServers(message) {
         credentials: 'include',
     };
 
+    let primarySuccess = false;
+    
     try {
-        // Attempt to send the message to the primary API with retries
+        // Intento con la API primaria con opción de reintento
         const primaryResponse = await fetchWithTimeoutAndRetry(`${apiUrls[0]}/api/message`, options);
         if (primaryResponse.ok) {
             const data = await primaryResponse.json();
+            primarySuccess = true; // Indica éxito para evitar mensaje de error
             return data.response || 'No response from server';
         }
         console.warn(`Primary API responded with status: ${primaryResponse.status}`);
@@ -58,18 +56,26 @@ export async function sendMessageToServers(message) {
         console.error('Error with primary API:', error);
     }
 
-    // If primary API fails, initiate background attempts with fallback APIs and wait for them to complete
-    await backgroundAttemptOtherApis(message, options);
+    // Inicia los intentos en segundo plano con las APIs de respaldo
+    const backgroundResults = await backgroundAttemptOtherApis(message, options);
 
-    // After background attempts, return fallback message
+    // Evalúa si alguna de las solicitudes en segundo plano fue exitosa
+    const anySuccess = backgroundResults.some(result => result.status === 'fulfilled' && result.value);
+
+    if (primarySuccess || anySuccess) {
+        return 'Operación completada exitosamente en una de las APIs.';
+    }
+
+    // Si ninguna fue exitosa, entonces se envía el mensaje de error
     return '✦ Oops, I had trouble connecting to the server. Please try again shortly.';
 }
+
 
 /**
  * Helper function to attempt the remaining APIs in the background.
  * @param {string} message - The message to send.
  * @param {object} options - Fetch options.
- * @returns {Promise<void>} - Resolves once background attempts are done.
+ * @returns {Promise<Array>} - Resolves with the results of background attempts.
  */
 async function backgroundAttemptOtherApis(message, options) {
     const requests = apiUrls.slice(1).map(async (apiUrl) => {
@@ -78,14 +84,18 @@ async function backgroundAttemptOtherApis(message, options) {
             if (response.ok) {
                 const data = await response.json();
                 console.log(`Background API Success: ${apiUrl}`, data.response);
+                return { status: 'fulfilled', value: true }; // Indica éxito en la respuesta
             } else {
                 console.warn(`No-OK Response from ${apiUrl}: ${response.status}`);
+                return { status: 'rejected', value: false };
             }
         } catch (error) {
             console.error(`Error with ${apiUrl} in background:`, error);
+            return { status: 'rejected', value: false };
         }
     });
 
-    // Wait for all background requests to finish (even if some fail)
-    await Promise.allSettled(requests);
+    // Espera a que todas las solicitudes en segundo plano terminen
+    const results = await Promise.allSettled(requests);
+    return results;
 }
