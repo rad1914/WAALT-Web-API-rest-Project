@@ -4,18 +4,17 @@ import {
     fetchUserIP, 
     updateWithBotResponse, 
     showLoadingMessage 
-} from './utilities.js';  // No need to change this line
-import { addMessageToConversation } from './uiService.js';  // Correct import from uiService
-import { sendMessageToServers } from './apiService.js';
+} from './utilities.js';  
+import { addMessageToConversation } from './uiService.js';  
+import { sendMessageToServers, handshakeWithServer } from './apiService.js';
 import RateLimiter from './rateLimiter.js';
 
-// Initialize RateLimiter: 5 messages every 60 seconds
 const rateLimiter = new RateLimiter(5, 60000);
 
 /**
  * Formats the message to be compatible with server commands.
  * @param {string} message - The message to format.
- * @returns {string} The formatted message.
+ * @returns {string} - The formatted message.
  */
 function formatMessageForServer(message) {
     return message.startsWith('/') ? message : `.ai ${message}`;
@@ -32,31 +31,36 @@ export async function sendMessage() {
     const sendButton = document.getElementById('sendButton');
     const helpButtons = document.querySelectorAll('.help-button');
 
-    // Disable input elements
     sendButton.disabled = true;
     helpButtons.forEach(button => button.disabled = true);
 
-    // Clear user input and display the message
     messageInput.value = '';
     addMessageToConversation(message, 'user');
     showLoadingMessage();
 
     try {
-        // Fetch user IP if not already fetched
-        const userIP = await fetchUserIP();
-        if (!userIP || !rateLimiter.isAllowed(userIP)) {
-            updateWithBotResponse('Too many requests. Please wait before sending more messages.');
+        const handshakeSuccess = await handshakeWithServer();
+        if (!handshakeSuccess) {
+            updateWithBotResponse('✦ The server may be temporarily full. Please try again in a few moments.');
+            sendButton.disabled = false;
+            helpButtons.forEach(button => button.disabled = false);
             return;
         }
 
-        // Send formatted message to server
+        const userIP = await fetchUserIP();
+        if (!userIP || !rateLimiter.isAllowed(userIP)) {
+            updateWithBotResponse('Too many requests. Please wait before sending more messages.');
+            sendButton.disabled = false;
+            helpButtons.forEach(button => button.disabled = false);
+            return;
+        }
+
         const formattedMessage = formatMessageForServer(message);
         const responseText = await sendMessageToServers(formattedMessage);
         updateWithBotResponse(responseText || 'No response received. Try again later.');
     } catch (error) {
-        updateWithBotResponse('Error: No se pudo enviar el mensaje. Inténtalo más tarde.');
+        updateWithBotResponse('Error: Could not send the message. Please try again later.');
     } finally {
-        // Re-enable input elements
         sendButton.disabled = false;
         helpButtons.forEach(button => button.disabled = false);
     }
