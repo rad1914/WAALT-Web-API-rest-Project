@@ -1,8 +1,8 @@
 // *apiService.js
 
 const apiUrls = [
-    'https://wrldrad1914.loca.lt',
     'https://wrldradd.loca.lt',
+    'https://wrldrad1914.loca.lt',
     'https://wrldradd24.loca.lt',
     'https://wrldradd2.loca.lt',
 ];
