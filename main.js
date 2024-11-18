@@ -1,6 +1,6 @@
 // main.js
 
-import { performHandshakeWithFallback } from './apiService.js';
+import { performHandshakeWithFallback } from './js/apiService.js';
 import { sendMessage } from './js/messageHandler.js';
 import { typeTitle } from './js/animators.js';
 import { startNewChat, fetchUserIP } from './js/chat.js';
