@@ -1,0 +1,124 @@
+:root {
+    --background-color-dark: #0D0D0D;
+    --background-color-user: #1F1F1F;
+    --text-color: #ccc;
+    --hover-background-color: #444;
+    --input-height: 55px;
+    --fade-duration: 0.6s;
+    --slide-duration: 0.5s;
+    --scaleUp-duration: 0.5s;
+    --animation-ease-soft: cubic-bezier(0.4, 0.0, 0.2, 1);
+    --animation-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    0% { transform: translateY(30px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { max-height: 100px; opacity: 1; transform: translateY(0); }
+    to { max-height: 0; opacity: 0; transform: translateY(-100%); display: none; }
+}
+
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background-color: var(--background-color-dark);
+    color: #FFFFFF;
+    font-family: 'Metropolis', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+@font-face {
+    font-family: 'Metropolis Bold';
+    src: url('./res/metropolis-bold.otf') format('opentype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Metropolis';
+    src: url('./res/metropolis.otf') format('opentype');
+    font-display: swap;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 500px;
+    height: 100vh;
+}
+
+.welcome-section {
+    margin-top: 100px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    transition: transform 0.5s ease, opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.welcome-section.slide-up {
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+}
+
+.welcome-section.slide-down {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.bot-image {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    margin: 0 auto 10px;
+    background-color: #2C2C2C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bot-image img {
+    width: 70px;
+    height: auto;
+}
+
+.new-chat-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    display: none;
+    padding: 8px 16px;
+    background-color: #FFFFFF;
+    color: #222;
+    border: none;
+    border-radius: 60px;
+    font-size: 14px;
+    transition: opacity 0.5s, background-color 0.3s;
+}
+
+.new-chat-button.show-button {
+    display: block;
+    opacity: 1;
+}
+
+.new-chat-button:hover {
+    background-color: #EC4D68;
+    color: #FFFFFF;
+}

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Bot Interface</title>
+    <style>
+        /* General Styles */
+        body {
+            background-color: #1c1c1e;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* Container for the interface */
+        .container {
+            text-align: center;
+            max-width: 400px;
+            position: relative;
+        }
+
+        /* Bot Image Styling */
+        .bot-image {
+            background-color: #29292b;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .bot-image img {
+            width: 100px;
+            height: auto;
+        }
+
+        /* Bot Text Styling */
+        .bot-text {
+            font-size: 18px;
+            color: #ffffff;
+            opacity: 0.7;
+        }
+
+        /* Microphone Button Styling */
+        .mic-button-container {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            margin: 20px auto;
+            background-color: #333333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .mic-button {
+            background-color: #ffffff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mic-icon {
+            width: 20px;
+            height: 20px;
+            background-color: #1c1c1e;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        /* Dots Style */
+        .dots-container {
+            display: flex;
+            justify-content: space-between;
+            max-width: 60px;
+            margin: 10px auto 0;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: #ffffff;
+            opacity: 0.5;
+            border-radius: 50%;
+        }
+
+        /* Conversation Area */
+        .conversation {
+            background-color: #333333;
+            border-radius: 10px;
+            padding: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .message {
+            background-color: #4a4a4a;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 5px 0;
+            text-align: left;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideIn 0.5s forwards;
+        }
+
+        /* Input Field Styles */
+        .input-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .input-field {
+            width: 80%;
+            padding: 10px;
+            border-radius: 20px;
+            border: none;
+            background-color: #29292b;
+            color: #ffffff;
+            outline: none;
+            text-align: center;
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Bot Image -->
+        <div class="bot-image">
+            <img src="https://via.placeholder.com/100" alt="Bot">
+        </div>
+
+        <!-- Bot Text -->
+        <p class="bot-text">Describe and show me the perfect vacation spot on an island in the ocean</p>
+
+        <!-- Microphone Button -->
+        <div class="mic-button-container" onclick="toggleInput()">
+            <div class="mic-button">
+                <span class="mic-icon"></span>
+            </div>
+        </div>
+
+        <!-- Dots below microphone button -->
+        <div class="dots-container">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+
+        <!-- Conversation Area -->
+        <div class="conversation" id="conversation">
+            <!-- Messages will appear here -->
+        </div>
+
+        <!-- Input Field -->
+        <div class="input-container" id="inputContainer" style="display: none;">
+            <input type="text" id="inputField" class="input-field" placeholder="Type your message here..." onkeydown="sendMessage(event)">
+        </div>
+    </div>
+
+    <script>
+        function toggleInput() {
+            // Toggle input field visibility
+            const inputContainer = document.getElementById("inputContainer");
+            inputContainer.style.display = inputContainer.style.display === "none" ? "flex" : "none";
+            document.getElementById("inputField").focus();
+        }
+
+        function sendMessage(event) {
+            // Send message on Enter key press
+            if (event.key === "Enter") {
+                const inputField = document.getElementById("inputField");
+                const messageText = inputField.value.trim();
+
+                if (messageText !== "") {
+                    const conversation = document.getElementById("conversation");
+                    
+                    // Create a new message bubble
+                    const message = document.createElement("div");
+                    message.classList.add("message");
+                    message.textContent = messageText;
+
+                    // Add message to conversation
+                    conversation.appendChild(message);
+                    inputField.value = "";
+
+                    // Scroll to the latest message
+                    conversation.scrollTop = conversation.scrollHeight;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

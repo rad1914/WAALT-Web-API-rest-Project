@@ -1,0 +1,8 @@
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    .help-title { font-size: 18px; }
+    .help-button { font-size: 12px; padding: 6px 12px; }
+    .bot-image { width: 120px; height: 120px; }
+    .message { font-size: 12px; padding: 8px; }
+    .input-field { font-size: 12px; padding: 10px; }
+}
