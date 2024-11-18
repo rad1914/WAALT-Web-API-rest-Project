@@ -1,5 +1,6 @@
 // main.js
 
+import { performHandshakeWithFallback } from './apiService.js';
 import { sendMessage } from './js/messageHandler.js';
 import { typeTitle } from './js/animators.js';
 import { startNewChat, fetchUserIP } from './js/chat.js';
@@ -9,11 +10,15 @@ import { handleAttach } from './js/attachHandler.js';
 document.addEventListener("DOMContentLoaded", async () => {
     console.log("Script ejecutándose después de DOMContentLoaded");
 
-    // Inicializa las animaciones y funciones principales
+    // 1. Perform handshake with main or fallback APIs
+    await performHandshakeWithFallback();
+    console.log('Page loaded and handshake attempted');
+
+    // 2. Initialize main animations and fetch user IP
     typeTitle();
     await fetchUserIP();
 
-    // Selecciona elementos importantes del DOM
+    // 3. Select important DOM elements
     const elements = {
         messageInput: document.getElementById('messageInput'),
         sendButton: document.getElementById('sendButton'),
@@ -25,21 +30,21 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     console.log("Verificación de elementos:", elements);
 
-    // Validación de existencia de elementos críticos en el DOM
+    // 4. Validate critical DOM elements
     if (!elements.messageInput || !elements.sendButton || !elements.attachButton) {
         console.warn("Advertencia: Algunos elementos esenciales no se encontraron en el DOM.");
     }
 
-    // Función para mostrar la sección de bienvenida
+    // 5. Function to show the welcome section
     function showWelcomeSection() {
         elements.welcomeSection?.classList.replace('slide-up', 'slide-down');
         console.log("Sección de bienvenida mostrada");
     }
 
-    // Configurar eventos de nueva conversación y bienvenida
+    // 6. Setup events for new chat button and welcome section
     elements.newChatButton?.addEventListener('click', showWelcomeSection);
 
-    // Listener del botón de envío y tecla Enter para enviar mensaje
+    // 7. Listener for the send button and Enter key to send a message
     const sendCurrentMessage = () => {
         console.log("Mensaje enviado");
         sendMessage();
@@ -53,7 +58,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
-    // Listener para los botones de ayuda (con validación de inicialización)
+    // 8. Listener for help buttons with validation
     elements.helpButtons.forEach(button => {
         if (!button.dataset.initialized) {
             button.dataset.initialized = 'true';
@@ -66,7 +71,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
-    // Listener para el botón de adjuntar
+    // 9. Listener for the attach button
     elements.attachButton?.addEventListener('click', handleAttach);
 
     console.log("Script configurado y ejecutado.");
