@@ -1,6 +1,14 @@
 // *apiService.js
 
-import { apiUrls, timeoutDuration } from './config';
+import { logger } from './logger'; // Centralized logging utility
+
+const apiUrls = [
+    'https://wrldradd.loca.lt',
+    'https://wrldrad1914.loca.lt',
+];
+
+// Dynamic API management (if needed, load from env or config file)
+// Example: const apiUrls = process.env.API_URLS.split(',');
 
 /**
  * Perform a handshake with the main API or fallback APIs.
@@ -15,22 +23,25 @@ export async function performHandshakeWithFallback() {
         },
     };
 
-    // Helper function to handle handshake requests with a timeout
+    // Helper function to handle handshake requests with retries
     async function tryHandshake(apiUrl) {
-        try {
+        const attemptHandshake = async () => {
             const response = await fetchWithTimeout(apiUrl + '/api/handshake', options);
-            const result = await parseJsonResponse(response);
-
-            if (result.status === 'success') {
-                log('info', `Handshake successful with API: ${apiUrl}`);
+            const result = await response.json();
+            if (validateApiResponse(result)) {
+                logger.info(`Handshake successful with API: ${apiUrl}`);
                 return true;
             } else {
-                log('warn', `Handshake failed with API: ${apiUrl}`);
+                logger.warn(`Handshake failed with API: ${apiUrl}`);
             }
+        };
+
+        try {
+            return await retryWithBackoff(attemptHandshake);
         } catch (error) {
-            log('error', `Error during handshake with API: ${apiUrl}`, { error: error.message });
+            logger.error(`Error during handshake with API: ${apiUrl}`, error.message);
+            return false;
         }
-        return false;
     }
 
     // Attempt handshake with the main API first
@@ -42,11 +53,11 @@ export async function performHandshakeWithFallback() {
     }
 
     // If no handshake succeeded, log a warning
-    log('warn', '✦ No API available after handshake attempts.');
+    logger.warn('✦ No API available after handshake attempts.');
 }
 
 /**
- * Send a message to the server, using fallback APIs if necessary.
+ * Send a message to servers with fallback and concurrency.
  */
 export async function sendMessageToServers(message) {
     const options = {
@@ -60,23 +71,21 @@ export async function sendMessageToServers(message) {
         credentials: 'include',
     };
 
-    // Try the primary API first
     try {
-        const primaryResponse = await fetchWithTimeout(apiUrls[0] + '/api/message', options, timeoutDuration);
+        const primaryResponse = await fetchWithTimeout(apiUrls[0] + '/api/message', options);
         if (primaryResponse.ok) {
             const data = await parseJsonResponse(primaryResponse);
-            log('info', 'Primary API Response Data:', data);
+            logger.info('Primary API Response Data:', data);
             return data?.response || 'No response from server';
         }
-        log('warn', `Primary API responded with status: ${primaryResponse.status}`);
+        logger.warn(`Primary API responded with status: ${primaryResponse.status}`);
     } catch (error) {
-        log('error', 'Primary API error:', { error: error.message });
+        logger.error('Primary API error:', error.message);
     }
 
-    // Try backup APIs in parallel if primary API failed
-    const { success, response } = await attemptBackupApisInParallel(options);
+    // Try backup APIs concurrently if primary API failed
+    const { success, response } = await attemptBackupApisConcurrently(options);
 
-    // If any backup API responded successfully, return its response
     if (success) return response;
 
     // If all APIs fail, return a generic error message
@@ -84,34 +93,39 @@ export async function sendMessageToServers(message) {
 }
 
 /**
- * Attempt all backup APIs in parallel.
+ * Attempt fallback APIs concurrently for better response time.
  */
-async function attemptBackupApisInParallel(options) {
-    const promises = apiUrls.slice(1).map(async (apiUrl) => {
-        try {
-            const response = await fetchWithTimeout(apiUrl + '/api/message', options, timeoutDuration);
-            if (response.ok) {
-                const data = await parseJsonResponse(response);
-                log('info', `Backup API Success: ${apiUrl}`, data);
-                return { success: true, response: data?.response };
-            }
-            log('warn', `Non-OK Response from ${apiUrl}: ${response.status}`);
-        } catch (error) {
-            log('error', `Error with backup API: ${apiUrl}`, { error: error.message });
+async function attemptBackupApisConcurrently(options) {
+    const promises = apiUrls.slice(1).map(apiUrl =>
+        fetchWithTimeout(apiUrl + '/api/message', options)
+            .then(async response => ({
+                apiUrl,
+                response: response.ok ? await parseJsonResponse(response) : null,
+            }))
+            .catch(error => ({ apiUrl, error }))
+    );
+
+    const results = await Promise.all(promises);
+
+    for (const { apiUrl, response, error } of results) {
+        if (response) {
+            logger.info(`Backup API Success: ${apiUrl}`, response);
+            return { success: true, response: response.response || 'No response field in server response' };
         }
-        return { success: false };
-    });
+        if (error) {
+            logger.error(`Backup API Error with ${apiUrl}:`, error.message);
+        } else {
+            logger.warn(`Non-OK Response from ${apiUrl}`);
+        }
+    }
 
-    const results = await Promise.allSettled(promises);
-    const successfulResult = results.find((result) => result.status === 'fulfilled' && result.value.success);
-
-    return successfulResult?.value || { success: false, response: '' };
+    return { success: false, response: '' };
 }
 
 /**
  * Fetch with a timeout.
  */
-async function fetchWithTimeout(url, options, timeout = timeoutDuration) {
+async function fetchWithTimeout(url, options, timeout = 45000) {
     return Promise.race([
         fetch(url, options),
         new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), timeout)),
@@ -119,23 +133,46 @@ async function fetchWithTimeout(url, options, timeout = timeoutDuration) {
 }
 
 /**
- * Helper function to safely parse JSON response.
- * @param {Response} response - The fetch response object
- * @returns {Promise<object>} - Parsed JSON or empty object
+ * Retry logic with exponential backoff.
+ */
+async function retryWithBackoff(fn, retries = 3, delay = 1000) {
+    for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+            return await fn();
+        } catch (error) {
+            logger.error(`Retry attempt ${attempt} failed:`, error.message);
+            if (attempt < retries) await new Promise(resolve => setTimeout(resolve, delay * attempt));
+        }
+    }
+    throw new Error('All retry attempts failed');
+}
+
+/**
+ * Validate API response schema.
+ */
+function validateApiResponse(data) {
+    if (data && typeof data.response === 'string') return true;
+    logger.warn('Invalid API response schema:', data);
+    return false;
+}
+
+/**
+ * Safely parse JSON response.
  */
 async function parseJsonResponse(response) {
     try {
         return await response.json();
     } catch (error) {
-        log('error', 'Failed to parse JSON response:', { error: error.message });
+        logger.error('Failed to parse JSON response:', error.message);
         return {}; // Return empty object on parse failure
     }
 }
 
 /**
- * Centralized logger function.
+ * Centralized logger (example implementation).
  */
-function log(level, message, data = {}) {
-    const timestamp = new Date().toISOString();
-    console[level](`[${timestamp}] ${message}`, data);
-}
+export const logger = {
+    info: console.log,
+    warn: console.warn,
+    error: console.error,
+};
