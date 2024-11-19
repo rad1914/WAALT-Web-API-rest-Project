@@ -58,40 +58,21 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
-    // 8. Improved Listener for help buttons using Event Delegation
-    document.body.addEventListener('click', (event) => {
-        const button = event.target.closest('.button-message');
-        if (button && !button.dataset.initialized) {
+    // 8. Listener for help buttons with validation
+    elements.helpButtons.forEach(button => {
+        if (!button.dataset.initialized) {
             button.dataset.initialized = 'true';
-            const message = button.dataset.message;
-            console.log("Botón de ayuda presionado con mensaje:", message);
-            if (message) sendButtonMessage(message);
-            else console.warn("Advertencia: Botón de ayuda sin el atributo 'data-message'.");
+            button.addEventListener('click', () => {
+                const message = button.dataset.message;
+                console.log("Botón de ayuda presionado con mensaje:", message);
+                if (message) sendButtonMessage(message);
+                else console.warn("Advertencia: Botón de ayuda sin el atributo 'data-message'.");
+            });
         }
     });
 
-    // 9. Listener for the attach button (typo fix applied)
+    // 9. Listener for the attach button
     elements.attachButton?.addEventListener('click', handleAttach);
-
-    // 10. Optional: MutationObserver to detect dynamically added help buttons
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.type === 'childList') {
-                const newButtons = mutation.target.querySelectorAll('.button-message:not([data-initialized])');
-                newButtons.forEach(button => {
-                    button.dataset.initialized = 'true';
-                    button.addEventListener('click', () => {
-                        const message = button.dataset.message;
-                        console.log("Nuevo botón de ayuda detectado y presionado con mensaje:", message);
-                        if (message) sendButtonMessage(message);
-                    });
-                });
-            }
-        });
-    });
-
-    // Start observing the document body for dynamically added elements
-    observer.observe(document.body, { childList: true, subtree: true });
 
     console.log("Script configurado y ejecutado.");
 });
