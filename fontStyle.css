@@ -60,12 +60,11 @@ body {
 }
 
 .welcome-section {
-    margin-top: 100px;
-    text-align: center;
     position: sticky;
-    top: 0;
+    top: 65%;
+    text-align: center;
     z-index: 1;
-    transform: translateY(0);
+    transform: translateY(-50%);
     opacity: 1;
     visibility: visible;
     transition: transform 0.5s ease, opacity 0.5s ease, visibility 0.5s ease;
