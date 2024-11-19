@@ -59,7 +59,11 @@
 ::-webkit-scrollbar-thumb { background-color: #444; border-radius: 4px; }
 ::-webkit-scrollbar-track { background: #191919; }
 
-.message strong { font-weight: bold; }
+.message strong {
+    font-family: 'Metropolis Bold';
+    font-weight: bold;
+}
+
 .message em { font-style: italic; }
 .message del { text-decoration: line-through; }
 .message code {
