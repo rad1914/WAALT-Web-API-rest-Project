@@ -4,9 +4,9 @@
     --text-color: #ccc;
     --hover-background-color: #444;
     --input-height: 55px;
-    --fade-duration: 0.6s;
-    --slide-duration: 0.5s;
-    --scaleUp-duration: 0.5s;
+    --fade-duration: 0.5s;
+    --slide-duration: 0.4s;
+    --scaleUp-duration: 0.4s;
     --animation-ease-soft: cubic-bezier(0.4, 0.0, 0.2, 1);
     --animation-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
 }
