@@ -1,8 +1,9 @@
 // *apiService.js
 
 const apiUrls = [
-    'https://wrldradd.loca.lt',
-    'https://wrldrad1914.loca.lt',
+    'http://22.ip.gl.ply.gg:18880'
+/*    'https://wrldradd.loca.lt',
+    'https://wrldrad1914.loca.lt',*/
 ];
 
 /**

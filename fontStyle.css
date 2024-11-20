@@ -111,3 +111,42 @@ body {
     background-color: #EC4D68;
     color: #FFFFFF;
 }
+
+.bot-message.loading {
+    display: flex;
+    align-items: center;
+    gap: 4px; 
+    margin-top: 6px; /* Top margin as requested */
+    margin-left: -3px; /* Align to the left */
+    font-size: 0; /* Prevent text spacing issues */
+}
+
+.bot-message.loading span {
+    width: 5px; /* Smaller size for dots */
+    height: 5px;
+    background-color: #888; /* Neutral gray color */
+    border-radius: 50%; /* Circular dots */
+    animation: bounce 1.2s infinite cubic-bezier(0.5, 0.15, 0.25, 1);
+    opacity: 0.8; /* Softer appearance */
+}
+
+.bot-message.loading span:nth-child(1) {
+    animation-delay: 0s;
+}
+.bot-message.loading span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.bot-message.loading span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: scale(0.8); /* Slightly smaller at start and end */
+        opacity: 0.4; /* Fading effect at rest */
+    }
+    50% {
+        transform: scale(1.1); /* Slightly larger bounce for subtle pop */
+        opacity: 1; /* Full opacity at peak */
+    }
+}
