@@ -6,47 +6,6 @@ const apiUrls = [
 ];
 
 /**
- * Perform a handshake with the main API or fallback APIs.
- * Logs a warning if no API is available after attempts.
- */
-export async function performHandshakeWithFallback() {
-    const options = {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-            'bypass-tunnel-reminder': 'true',
-        },
-    };
-
-    async function tryHandshake(apiUrl) {
-        try {
-            const response = await fetchWithTimeout(apiUrl + '/api/handshake', options);
-            const result = await parseJsonResponse(response);
-
-            if (validateApiResponse(result)) {
-                console.log(`Handshake successful with API: ${apiUrl}`);
-                return true;
-            } else {
-                console.warn(`Handshake failed with API: ${apiUrl}`);
-            }
-        } catch (error) {
-            console.error(`Error during handshake with API: ${apiUrl}`, error.message);
-        }
-        return false;
-    }
-
-    // Attempt handshake with the main API first
-    if (await tryHandshake(apiUrls[0])) return;
-
-    // Attempt handshake with backup APIs if the main API fails
-    for (const apiUrl of apiUrls.slice(1)) {
-        if (await tryHandshake(apiUrl)) return;
-    }
-
-    console.warn('✦ No API available after handshake attempts.');
-}
-
-/**
  * Fetch with a timeout
  */
 async function fetchWithTimeout(url, options, timeout = 45000) {
