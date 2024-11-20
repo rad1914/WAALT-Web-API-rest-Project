@@ -34,11 +34,6 @@
     color: var(--text-color);
 }
 
-.a {
-    color: var(--text-color);
-    text-decoration: none;
-}
-
 .caption {
     margin-top: 0px;
     font-size: 0.8em;
@@ -71,9 +66,13 @@
     color: #E1E1E1;
     padding: 2px 5px;
     border-radius: 4px;
-    font-size: 12px;
     font-family: monospace;
     display: inline-block;
+}
+
+a {
+    text-decoration: none; 
+    color: #739ED1;
 }
 
 .help-title {
@@ -135,7 +134,7 @@
     height: var(--input-height);
     border-radius: 30px;
     flex-grow: 1;
-    margin: 0 5px;
+    margin: 0 -2px;
 }
 
 .input-field {
@@ -147,6 +146,7 @@
     font-size: 16px;
     outline: none;
     overflow-x: auto;
+    margin-left: 6px;
 }
 
 .send-bar {
@@ -161,15 +161,15 @@
     border-radius: 50%;
     transition: background-color 0.3s, transform 0.2s;
     margin-top: 3px;
-    margin-right: 7px;
+
 }
 
 .send-bar:hover {
-    background-color: #666;
+    background-color: #23271D;
 }
 
 .attach-button {
-    margin-left: 4px;
+    margin-left: -2px;
 }
 
 .icon-button {
