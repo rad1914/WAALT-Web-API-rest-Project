@@ -1,6 +1,7 @@
 // *apiService.js
 
 const apiUrls = [
+    'https://rad1914.github.io/WAALT-Web-API-rest-Project/',   
     'http://22.ip.gl.ply.gg:18880',
     'http://23.ip.gl.ply.gg:65329'
 /*    'https://wrldradd.loca.lt',
