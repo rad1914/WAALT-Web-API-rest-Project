@@ -20,6 +20,7 @@ function formatText(input) {
         .replace(/_(.*?)_/g, '<em>$1</em>')
         .replace(/~(.*?)~/g, '<del>$1</del>')
         .replace(/```(.*?)```/g, '<code>$1</code>')
+        .replace(/`(.*?)`/g, '<code>$1</code>')
         .replace(/\n/g, '<br>');
 }
 
