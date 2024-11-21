@@ -37,21 +37,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 5. Setup events for new chat button and welcome section
     elements.newChatButton?.addEventListener('click', showWelcomeSection);
 
-    // 6. Listener for the send button and Enter key to send a message
+    // 6. Listener for the send button
     const sendCurrentMessage = () => {
         console.log("Mensaje enviado");
         sendMessage();
     };
 
     elements.sendButton?.addEventListener('click', sendCurrentMessage);
+
+    // 7. Listener for the Enter key to prevent sending messages
     elements.messageInput?.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            sendCurrentMessage();
-            event.preventDefault();
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault(); // Prevent default submission behavior
+            console.log("Enter presionado sin enviar mensaje.");
         }
     });
 
-    // 7. Listener for help buttons with validation
+    // 8. Listener for help buttons with validation
     elements.helpButtons.forEach(button => {
         if (!button.dataset.initialized) {
             button.dataset.initialized = 'true';
@@ -64,7 +66,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
-    // 8. Listener for the attach button
+    // 9. Listener for the attach button
     elements.attachButton?.addEventListener('click', handleAttach);
 
     console.log("Script configurado y ejecutado.");
