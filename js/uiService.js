@@ -16,6 +16,16 @@ export function setupEventListeners(handleSendMessage) {
     sendButton?.addEventListener('click', handleSendMessage);
 
     messageInput?.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') event.preventDefault();
+        // Prevent default action when pressing Enter but allow Shift+Enter for new line
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            handleSendMessage();
+        }
+    });
+
+    messageInput?.addEventListener('input', () => {
+        // Dynamic resizing
+        messageInput.style.height = 'auto';
+        messageInput.style.height = `${messageInput.scrollHeight}px`;
     });
 }
