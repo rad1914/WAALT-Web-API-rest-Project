@@ -1,7 +1,5 @@
 // apiService.js
 
-import pLimit from 'p-limit';
-
 let apiUrls = [
     'https://wrldrad.loca.lt',
     'https://wrldrad24.loca.lt',
@@ -14,9 +12,7 @@ const TIMEOUTS = [5000, 10000, 20000];
 const CACHE_TTL = 5 * 60 * 1000; // Cache expiration in milliseconds
 const serverTimings = new Map();
 const cache = new Map();
-const limit = pLimit(3);
-
-let metrics = { totalRequests: 0, successes: 0, failures: 0 };
+const metrics = { totalRequests: 0, successes: 0, failures: 0 };
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -25,16 +21,15 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
  */
 async function fetchWithRetries(url, options = {}, timeout = 3000, retries = 3, backoff = 1000) {
     for (let attempt = 1; attempt <= retries; attempt++) {
-        const controller = new AbortController();
-        const signal = controller.signal;
-        const timeoutId = setTimeout(() => controller.abort(), timeout);
-
         try {
+            const controller = new AbortController();
+            const signal = controller.signal;
+            const timeoutId = setTimeout(() => controller.abort(), timeout);
+
             const response = await fetch(url, { ...options, signal });
             clearTimeout(timeoutId);
             return response;
-        } catch (error) {
-            clearTimeout(timeoutId);
+        } catch {
             if (attempt < retries) await delay(backoff * attempt);
         }
     }
@@ -42,28 +37,27 @@ async function fetchWithRetries(url, options = {}, timeout = 3000, retries = 3, 
 }
 
 /**
- * Handle cache: get, set, and auto-remove expired entries
+ * Handle cache: get or set response with expiration
  */
-function handleCache(message, response = null) {
-    if (response) {
-        const expiry = Date.now() + CACHE_TTL;
-        cache.set(message, { response, expiry });
-        return;
+function handleCache(key, value = null) {
+    if (value) {
+        cache.set(key, { value, expiry: Date.now() + CACHE_TTL });
+    } else {
+        const cached = cache.get(key);
+        if (cached && Date.now() < cached.expiry) return cached.value;
+        cache.delete(key);
     }
-    const cached = cache.get(message);
-    if (cached && Date.now() < cached.expiry) return cached.response;
-    cache.delete(message);
     return null;
 }
 
 /**
- * Reorder API URLs based on response times
+ * Reorder API URLs by response times
  */
 async function reorderApiUrls() {
     const results = await Promise.allSettled(
         apiUrls.map(async (url) => {
+            const startTime = Date.now();
             try {
-                const startTime = Date.now();
                 await fetchWithRetries(`${url}/ping`, {}, 3000, 1);
                 const responseTime = Date.now() - startTime;
                 serverTimings.set(url, responseTime);
@@ -83,20 +77,20 @@ async function reorderApiUrls() {
 }
 
 /**
- * Parse API response
+ * Parse and validate response
  */
 async function parseResponse(response) {
     try {
         const data = await response.json();
-        if (data?.response) return data.response;
+        return data?.response || null;
     } catch (error) {
         console.error('Error parsing response:', error.message);
+        return null;
     }
-    return null;
 }
 
 /**
- * Send message to servers with caching and fallback
+ * Send message with caching and fallback
  */
 export async function sendMessageToServers(message) {
     const cachedResponse = handleCache(message);
@@ -113,7 +107,7 @@ export async function sendMessageToServers(message) {
     metrics.totalRequests++;
     try {
         const responses = apiUrls.map((url, index) =>
-            limit(() => fetchWithRetries(`${url}/api/message`, options, TIMEOUTS[index] || 45000))
+            fetchWithRetries(`${url}/api/message`, options, TIMEOUTS[index] || 45000)
         );
         const response = await Promise.any(responses);
 
@@ -133,7 +127,7 @@ export async function sendMessageToServers(message) {
 }
 
 /**
- * Health check
+ * Perform health check
  */
 async function healthCheck() {
     console.log('Performing health check...');
