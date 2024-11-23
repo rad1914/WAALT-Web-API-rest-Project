@@ -3,7 +3,8 @@
 import {
     fetchUserIP,
     updateWithBotResponse,
-    showLoadingMessage
+    showLoadingMessage,
+    resetUI
 } from './utilities.js';
 
 import { addMessageToConversation } from './uiService.js';
@@ -50,9 +51,5 @@ export async function sendMessage() {
 }
 
 export function startNewChat() {
-    document.getElementById('conversation').innerHTML = '';
-    document.getElementById('responseOutput').innerText = '';
-    document.getElementById('messageInput').value = '';
-    document.getElementById('welcomeSection').classList.replace('slide-down', 'slide-up');
-    sessionStorage.clear();
+    resetUI();
 }

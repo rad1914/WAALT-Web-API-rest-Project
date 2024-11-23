@@ -1,16 +1,18 @@
-// *apiService.js
+// apiService.js
 
-const apiUrls = [
-
+let apiUrls = [
     'http://22.ip.gl.ply.gg:18880',
-    'http://23.ip.gl.ply.gg:65329',
-    'https://proxy-6zdljnzl6-ramses-aracen-s-projects.vercel.app',
+    'https://proxy-3i0u4jeev-ramses-aracen-s-projects.vercel.app',
+    'http://23.ip.gl.ply.gg:18880',
 ];
 
+const TIMEOUTS = [5000, 10000, 20000]; // Sequential timeouts for faster fallback
+const cache = new Map(); // In-memory cache
+
 /**
- * Fetch con un timeout
+ * Fetch with a timeout
  */
-async function fetchWithTimeout(url, options, timeout = 45000) {
+async function fetchWithTimeout(url, options, timeout) {
     return Promise.race([
         fetch(url, options),
         new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), timeout)),
@@ -18,21 +20,67 @@ async function fetchWithTimeout(url, options, timeout = 45000) {
 }
 
 /**
- * Mecanismo de reintento con backoff exponencial
+ * Retry mechanism with exponential backoff
  */
 async function retryWithBackoff(fn, retries = 3, delay = 1000) {
     for (let attempt = 1; attempt <= retries; attempt++) {
         try {
             return await fn();
         } catch (error) {
-            console.error(`Intento ${attempt} fallido:`, error.message);
+            console.error(`Attempt ${attempt} failed:`, error.message);
             if (attempt < retries) await new Promise(resolve => setTimeout(resolve, delay * attempt));
         }
     }
-    throw new Error('Todos los intentos de reintento fallaron');
+    throw new Error('All retry attempts failed');
 }
 
+/**
+ * Reorder API URLs based on response times
+ */
+async function reorderApiUrls() {
+    try {
+        const timings = await Promise.all(
+            apiUrls.map(async (url) => {
+                const startTime = Date.now();
+                try {
+                    await fetchWithTimeout(`${url}/ping`, {}, 3000); // Assume /ping endpoint exists
+                    return { url, time: Date.now() - startTime };
+                } catch {
+                    return { url, time: Infinity };
+                }
+            })
+        );
+
+        apiUrls = timings.sort((a, b) => a.time - b.time).map(({ url }) => url);
+        console.log('Reordered API URLs:', apiUrls);
+    } catch (error) {
+        console.error('Error reordering API URLs:', error.message);
+    }
+}
+
+/**
+ * Parse and validate API response
+ */
+async function parseAndValidateResponse(response) {
+    try {
+        const data = await response.json();
+        if (data && typeof data.response === 'string') return data.response;
+        console.warn('Invalid API response schema:', data);
+    } catch (error) {
+        console.error('Error parsing JSON:', error.message);
+    }
+    return null;
+}
+
+/**
+ * Send a message to the servers with parallel fallback and caching
+ */
 export async function sendMessageToServers(message) {
+    if (cache.has(message)) {
+        console.log('Returning cached response for message:', message);
+        return cache.get(message);
+    }
+
     const options = {
         method: 'POST',
         headers: {
@@ -40,70 +88,31 @@ export async function sendMessageToServers(message) {
             'bypass-tunnel-reminder': 'true',
         },
         body: JSON.stringify({ message }),
-        mode: 'cors', // Habilitar CORS
-        credentials: 'include', // Enviar cookies o credenciales
+        mode: 'cors',
+        credentials: 'include',
     };
 
-    // Intentar con la API principal
+    const fetchPromises = apiUrls.map((url, index) =>
+        retryWithBackoff(() => fetchWithTimeout(`${url}/api/message`, options, TIMEOUTS[index] || 45000))
+    );
+
     try {
-        const primaryResponse = await retryWithBackoff(() => fetchWithTimeout(apiUrls[0] + '/api/message', options));
-        if (primaryResponse.ok) {
-            const data = await parseJsonResponse(primaryResponse);
-            if (validateApiResponse(data)) {
-                console.log('Respuesta de la API principal:', data);
-                return data.response;
+        const response = await Promise.any(fetchPromises);
+        if (response.ok) {
+            const validatedResponse = await parseAndValidateResponse(response);
+            if (validatedResponse) {
+                cache.set(message, validatedResponse); // Cache the response
+                return validatedResponse;
             }
         }
-        console.warn(`La API principal respondió con estado: ${primaryResponse.status}`);
+        console.warn('All servers responded, but none succeeded.');
     } catch (error) {
-        console.error('Error en la API principal:', error.message);
+        console.error('Error with all APIs:', error.message);
     }
-
-    // Intentar con APIs de respaldo si falla la principal
-    const { success, response } = await attemptBackupApisSequentially(options);
-
-    if (success) return response;
 
     return '✦ No se pudo conectar al servidor. ¡Inténtalo de nuevo!';
 }
 
-async function attemptBackupApisSequentially(options) {
-    for (const apiUrl of apiUrls.slice(1)) {
-        try {
-            const response = await fetchWithTimeout(apiUrl + '/api/message', options);
-            if (response.ok) {
-                const data = await parseJsonResponse(response);
-                if (validateApiResponse(data)) {
-                    console.log(`API de respaldo exitosa: ${apiUrl}`, data);
-                    return { success: true, response: data.response };
-                }
-            } else {
-                console.warn(`Respuesta no OK desde ${apiUrl}: ${response.status}`);
-            }
-        } catch (error) {
-            console.error(`Error con la API de respaldo ${apiUrl}:`, error.message);
-        }
-    }
-    return { success: false, response: '' };
-}
-
-/**
- * Ayudante para analizar respuestas JSON
- */
-async function parseJsonResponse(response) {
-    try {
-        return await response.json();
-    } catch (error) {
-        console.error('Error al analizar JSON:', error.message);
-        return {};
-    }
-}
-
-/**
- * Validar esquema de respuesta de la API
- */
-function validateApiResponse(data) {
-    if (data && typeof data.response === 'string') return true;
-    console.warn('Esquema de respuesta de la API inválido:', data);
-    return false;
-}
+// Reorder APIs periodically (e.g., on startup or every 10 minutes)
+setInterval(reorderApiUrls, 10 * 60 * 1000);
+reorderApiUrls(); // Initial call
