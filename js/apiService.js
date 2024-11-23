@@ -12,28 +12,26 @@ const TIMEOUTS = [5000, 10000, 20000]; // Sequential timeouts for faster fallbac
 const cache = new Map(); // In-memory cache
 
 /**
- * Fetch with a timeout
+ * Helper to add a delay
  */
-async function fetchWithTimeout(url, options, timeout) {
-    return Promise.race([
-        fetch(url, options),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), timeout)),
-    ]);
-}
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 /**
- * Retry mechanism with exponential backoff
+ * Fetch with timeout and retries using exponential backoff
  */
-async function retryWithBackoff(fn, retries = 3, delay = 1000) {
+async function fetchWithRetries(url, options, timeout, retries = 3, backoff = 1000) {
     for (let attempt = 1; attempt <= retries; attempt++) {
         try {
-            return await fn();
+            return await Promise.race([
+                fetch(url, options),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), timeout))
+            ]);
         } catch (error) {
-            console.error(`Attempt ${attempt} failed:`, error.message);
-            if (attempt < retries) await new Promise(resolve => setTimeout(resolve, delay * attempt));
+            console.error(`Attempt ${attempt} failed for ${url}:`, error.message);
+            if (attempt < retries) await delay(backoff * attempt);
         }
     }
-    throw new Error('All retry attempts failed');
+    throw new Error(`Failed after ${retries} attempts: ${url}`);
 }
 
 /**
@@ -45,7 +43,7 @@ async function reorderApiUrls() {
             apiUrls.map(async (url) => {
                 const startTime = Date.now();
                 try {
-                    await fetchWithTimeout(`${url}/ping`, {}, 3000); // Assume /ping endpoint exists
+                    await fetchWithRetries(`${url}/ping`, {}, 3000, 1); // Single attempt for /ping
                     return { url, time: Date.now() - startTime };
                 } catch {
                     return { url, time: Infinity };
@@ -63,7 +61,7 @@ async function reorderApiUrls() {
 /**
  * Parse and validate API response
  */
-async function parseAndValidateResponse(response) {
+async function parseResponse(response) {
     try {
         const data = await response.json();
         if (data && typeof data.response === 'string') return data.response;
@@ -94,16 +92,17 @@ export async function sendMessageToServers(message) {
         credentials: 'include',
     };
 
-    const fetchPromises = apiUrls.map((url, index) =>
-        retryWithBackoff(() => fetchWithTimeout(`${url}/api/message`, options, TIMEOUTS[index] || 45000))
-    );
-
     try {
-        const response = await Promise.any(fetchPromises);
+        // Try all URLs in parallel with timeouts
+        const responses = apiUrls.map((url, index) =>
+            fetchWithRetries(`${url}/api/message`, options, TIMEOUTS[index] || 45000)
+        );
+        const response = await Promise.any(responses);
+
         if (response.ok) {
-            const validatedResponse = await parseAndValidateResponse(response);
+            const validatedResponse = await parseResponse(response);
             if (validatedResponse) {
-                cache.set(message, validatedResponse); // Cache the response
+                cache.set(message, validatedResponse); // Cache successful response
                 return validatedResponse;
             }
         }
@@ -115,6 +114,6 @@ export async function sendMessageToServers(message) {
     return '✦ No se pudo conectar al servidor. ¡Inténtalo de nuevo!';
 }
 
-// Reorder APIs periodically (e.g., on startup or every 10 minutes)
+// Periodic API URL reordering
 setInterval(reorderApiUrls, 2 * 60 * 1000);
 reorderApiUrls(); // Initial call
