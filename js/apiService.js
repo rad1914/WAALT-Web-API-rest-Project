@@ -1,15 +1,13 @@
 // *apiService.js
 
 const apiUrls = [
-    'https://express-proxy-akydxt5ox-ramses-aracen-s-projects.vercel.app',   
+    'https://proxy-6zdljnzl6-ramses-aracen-s-projects.vercel.app',
     'http://22.ip.gl.ply.gg:18880',
-    'http://23.ip.gl.ply.gg:65329'
-/*    'https://wrldradd.loca.lt',
-    'https://wrldrad1914.loca.lt',*/
+    'http://23.ip.gl.ply.gg:65329',
 ];
 
 /**
- * Fetch with a timeout
+ * Fetch con un timeout
  */
 async function fetchWithTimeout(url, options, timeout = 45000) {
     return Promise.race([
@@ -19,18 +17,18 @@ async function fetchWithTimeout(url, options, timeout = 45000) {
 }
 
 /**
- * Retry mechanism with exponential backoff
+ * Mecanismo de reintento con backoff exponencial
  */
 async function retryWithBackoff(fn, retries = 3, delay = 1000) {
     for (let attempt = 1; attempt <= retries; attempt++) {
         try {
             return await fn();
         } catch (error) {
-            console.error(`Attempt ${attempt} failed:`, error.message);
+            console.error(`Intento ${attempt} fallido:`, error.message);
             if (attempt < retries) await new Promise(resolve => setTimeout(resolve, delay * attempt));
         }
     }
-    throw new Error('All retry attempts failed');
+    throw new Error('Todos los intentos de reintento fallaron');
 }
 
 export async function sendMessageToServers(message) {
@@ -41,31 +39,31 @@ export async function sendMessageToServers(message) {
             'bypass-tunnel-reminder': 'true',
         },
         body: JSON.stringify({ message }),
-        mode: 'cors',
-        credentials: 'include',
+        mode: 'cors', // Habilitar CORS
+        credentials: 'include', // Enviar cookies o credenciales
     };
 
-    // Try the primary API first with retry mechanism
+    // Intentar con la API principal
     try {
         const primaryResponse = await retryWithBackoff(() => fetchWithTimeout(apiUrls[0] + '/api/message', options));
         if (primaryResponse.ok) {
             const data = await parseJsonResponse(primaryResponse);
             if (validateApiResponse(data)) {
-                console.log('Primary API Response Data:', data);
+                console.log('Respuesta de la API principal:', data);
                 return data.response;
             }
         }
-        console.warn(`Primary API responded with status: ${primaryResponse.status}`);
+        console.warn(`La API principal respondió con estado: ${primaryResponse.status}`);
     } catch (error) {
-        console.error('Primary API error:', error.message);
+        console.error('Error en la API principal:', error.message);
     }
 
-    // Try backup APIs in sequence if primary API failed
+    // Intentar con APIs de respaldo si falla la principal
     const { success, response } = await attemptBackupApisSequentially(options);
 
     if (success) return response;
 
-    return '✦ Damn, tuve problemas para conectarme al servidor. ¡Inténtalo de nuevo! D:';
+    return '✦ No se pudo conectar al servidor. ¡Inténtalo de nuevo!';
 }
 
 async function attemptBackupApisSequentially(options) {
@@ -75,36 +73,36 @@ async function attemptBackupApisSequentially(options) {
             if (response.ok) {
                 const data = await parseJsonResponse(response);
                 if (validateApiResponse(data)) {
-                    console.log(`Backup API Success: ${apiUrl}`, data);
+                    console.log(`API de respaldo exitosa: ${apiUrl}`, data);
                     return { success: true, response: data.response };
                 }
             } else {
-                console.warn(`Non-OK Response from ${apiUrl}: ${response.status}`);
+                console.warn(`Respuesta no OK desde ${apiUrl}: ${response.status}`);
             }
         } catch (error) {
-            console.error(`Backup API Error with ${apiUrl}:`, error.message);
+            console.error(`Error con la API de respaldo ${apiUrl}:`, error.message);
         }
     }
     return { success: false, response: '' };
 }
 
 /**
- * Helper function to safely parse JSON response
+ * Ayudante para analizar respuestas JSON
  */
 async function parseJsonResponse(response) {
     try {
         return await response.json();
     } catch (error) {
-        console.error('Failed to parse JSON response:', error.message);
-        return {}; // Return empty object on parse failure
+        console.error('Error al analizar JSON:', error.message);
+        return {};
     }
 }
 
 /**
- * Validate API response schema
+ * Validar esquema de respuesta de la API
  */
 function validateApiResponse(data) {
     if (data && typeof data.response === 'string') return true;
-    console.warn('Invalid API response schema:', data);
+    console.warn('Esquema de respuesta de la API inválido:', data);
     return false;
 }

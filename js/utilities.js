@@ -16,12 +16,17 @@ export function toggleElementDisplay(id, displayStyle = 'block') {
 
 function formatText(input) {
     return input
-        .replace(/\*(.*?)\*/g, '<strong>$1</strong>')
-        .replace(/_(.*?)_/g, '<em>$1</em>')
-        .replace(/~(.*?)~/g, '<del>$1</del>')
-        .replace(/```(.*?)```/g, '<code>$1</code>')
-        .replace(/`(.*?)`/g, '<code>$1</code>')
-        .replace(/\n/g, '<br>');
+        .replace(/\*(.*?)\*/g, '<strong>$1</strong>') // Negrita
+        .replace(/_(.*?)_/g, '<em>$1</em>')          // Cursiva
+        .replace(/~(.*?)~/g, '<del>$1</del>')        // Tachado
+        .replace(/__(.*?)__/g, '<u>$1</u>')          // Subrayado
+        .replace(/```(.*?)```/gs, '<pre><code>$1</code></pre>') // Bloque de código
+        .replace(/`(.*?)`/g, '<code>$1</code>')      // Inline código
+        .replace(/^\# (.*?)$/gm, '<h1>$1</h1>')      // Encabezado 1
+        .replace(/^\## (.*?)$/gm, '<h2>$1</h2>')     // Encabezado 2
+        .replace(/^\### (.*?)$/gm, '<h3>$1</h3>')    // Encabezado 3
+        .replace(/^\- (.*?)$/gm, '<li>$1</li>')      // Listas
+        .replace(/\n/g, '<br>');                     // Saltos de línea
 }
 
 export function updateResponseOutput(message) {

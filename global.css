@@ -1,3 +1,16 @@
+pre {
+    background-color: #222;
+    color: var(--text-color);
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color var(--fade-duration) var(--animation-ease-soft);
+}
 
 .conversation {
     flex: 1;
@@ -68,6 +81,7 @@
     border-radius: 4px;
     font-family: monospace;
     display: inline-block;
+    font-size: 12px;
 }
 
 a {
@@ -131,10 +145,10 @@ a {
     background-color: var(--background-color-user);
     color: var(--text-color);
     padding: 0 18px;
+    height: var(--input-height);
     border-radius: 30px;
     flex-grow: 1;
     margin: 0 -2px;
-    overflow: hidden; /* Prevent overflow */
 }
 
 .input-field {
@@ -142,15 +156,11 @@ a {
     border: none;
     color: var(--text-color);
     width: 100%;
-    padding: 5px;
+    padding: 0;
     font-size: 16px;
     outline: none;
-    resize: none; /* Disable manual resizing */
-    overflow-y: auto; /* Add scroll for multi-line */
-    max-height: 120px; /* Limit to 4 lines */
-    line-height: 1.5;
-    height: auto; /* Allow dynamic height */
-    box-sizing: border-box;
+    overflow-x: auto;
+    margin-left: 6px;
 }
 
 .send-bar {
