@@ -1,20 +1,40 @@
-// serverService.js
+// metrics.js
+import { fetchWithRetries, handleCache, parseResponse } from './apiService.js';
 
-import { apiUrls, handleCache, fetchWithRetries, reorderApiUrls, serverTimings, metrics } from './apiService.js';
+let apiUrls = [
+    'https://wrldrad.loca.lt',
+    'https://wrldrad24.loca.lt',
+    'https://wrldrad1914.loca.lt',
+    'http://22.ip.gl.ply.gg:18880',
+    'http://23.ip.gl.ply.gg:65329',
+];
 
-const TIMEOUTS = [5000, 10000, 20000];
+const metrics = { totalRequests: 0, successes: 0, failures: 0 };
 
 /**
- * Parse and validate response
+ * Reorder API URLs by response times
  */
-async function parseResponse(response) {
-    try {
-        const data = await response.json();
-        return data?.response || null;
-    } catch (error) {
-        console.error('Error parsing response:', error.message);
-        return null;
-    }
+export async function reorderApiUrls() {
+    const results = await Promise.allSettled(
+        apiUrls.map(async (url) => {
+            const startTime = Date.now();
+            try {
+                await fetchWithRetries(`${url}/ping`, {}, 3000, 1);
+                const responseTime = Date.now() - startTime;
+                serverTimings.set(url, responseTime);
+                return { url, time: responseTime };
+            } catch {
+                return { url, time: Infinity };
+            }
+        })
+    );
+
+    apiUrls = results
+        .filter((result) => result.status === 'fulfilled' && result.value.time !== Infinity)
+        .sort((a, b) => a.value.time - b.value.time)
+        .map((result) => result.value.url);
+
+    console.log('Reordered API URLs:', apiUrls);
 }
 
 /**

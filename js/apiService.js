@@ -1,18 +1,8 @@
 // apiService.js
-
-export let apiUrls = [
-    'https://wrldrad.loca.lt',
-    'https://wrldrad24.loca.lt',
-    'https://wrldrad1914.loca.lt',
-    'http://22.ip.gl.ply.gg:18880',
-    'http://23.ip.gl.ply.gg:65329',
-];
-
 const TIMEOUTS = [5000, 10000, 20000];
+const serverTimings = new Map();
+const cache = new Map();
 const CACHE_TTL = 5 * 60 * 1000; // Cache expiration in milliseconds
-export const serverTimings = new Map();
-export const cache = new Map();
-export const metrics = { totalRequests: 0, successes: 0, failures: 0 };
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -51,27 +41,14 @@ export function handleCache(key, value = null) {
 }
 
 /**
- * Reorder API URLs by response times
+ * Parse and validate response
  */
-export async function reorderApiUrls() {
-    const results = await Promise.allSettled(
-        apiUrls.map(async (url) => {
-            const startTime = Date.now();
-            try {
-                await fetchWithRetries(`${url}/ping`, {}, 3000, 1);
-                const responseTime = Date.now() - startTime;
-                serverTimings.set(url, responseTime);
-                return { url, time: responseTime };
-            } catch {
-                return { url, time: Infinity };
-            }
-        })
-    );
-
-    apiUrls = results
-        .filter((result) => result.status === 'fulfilled' && result.value.time !== Infinity)
-        .sort((a, b) => a.value.time - b.value.time)
-        .map((result) => result.value.url);
-
-    console.log('Reordered API URLs:', apiUrls);
+export async function parseResponse(response) {
+    try {
+        const data = await response.json();
+        return data?.response || null;
+    } catch (error) {
+        console.error('Error parsing response:', error.message);
+        return null;
+    }
 }
