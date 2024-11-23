@@ -1,9 +1,11 @@
 // apiService.js
 
 let apiUrls = [
+    'https://wrldrad.loca.lt',
+    'https://wrldrad24.loca.lt',
+    'https://wrldrad1914.loca.lt',
     'http://22.ip.gl.ply.gg:18880',
-    'https://proxy-3i0u4jeev-ramses-aracen-s-projects.vercel.app',
-    'http://23.ip.gl.ply.gg:18880',
+    'http://23.ip.gl.ply.gg:65329',
 ];
 
 const TIMEOUTS = [5000, 10000, 20000]; // Sequential timeouts for faster fallback
@@ -114,5 +116,5 @@ export async function sendMessageToServers(message) {
 }
 
 // Reorder APIs periodically (e.g., on startup or every 10 minutes)
-setInterval(reorderApiUrls, 10 * 60 * 1000);
+setInterval(reorderApiUrls, 2 * 60 * 1000);
 reorderApiUrls(); // Initial call
