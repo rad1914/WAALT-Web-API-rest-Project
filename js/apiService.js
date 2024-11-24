@@ -1,7 +1,7 @@
 // apiService.js
 
 let apiUrls = [
-    'https://wrldrad.loca.lt',
+    'https://wrldradd.loca.lt',
     'https://wrldrad24.loca.lt',
     'https://wrldrad1914.loca.lt',
  ];
