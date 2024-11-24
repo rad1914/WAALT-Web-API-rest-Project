@@ -137,8 +137,7 @@ async function healthCheck() {
 /**
  * Periodic tasks
  */
-setInter
-val(reorderApiUrls, 2 * 60 * 1000);
+setInterval(reorderApiUrls, 2 * 60 * 1000);
 setInterval(() => console.log('API Metrics:', metrics), 5 * 60 * 1000);
 
 reorderApiUrls();
