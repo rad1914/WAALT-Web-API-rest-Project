@@ -4,8 +4,8 @@ export const apiUrls = [
     'https://wrldrad.loca.lt',
     'https://wrldrad24.loca.lt',
     'https://wrldrad1914.loca.lt',
-    'http://22.ip.gl.ply.gg:18880',
-    'http://23.ip.gl.ply.gg:65329',
+ //   'http://22.ip.gl.ply.gg:18880',
+ //.  'http://23.ip.gl.ply.gg:65329',
 ];
 
 export const TIMEOUTS = [5000, 10000, 20000];
