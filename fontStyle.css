@@ -190,10 +190,9 @@ pre {
 .message code {
     background-color: #333;
     color: #E1E1E1;
-    padding: 2px 5px;
+    padding: 1.5px 4px;
     border-radius: 4px;
     font-family: monospace;
-    font-size: 12px;
 }
 
 a { text-decoration: none; color: #739ED1; }
