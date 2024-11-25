@@ -14,7 +14,7 @@ import RateLimiter from './rateLimiter.js';
 const rateLimiter = new RateLimiter(5, 60000);
 
 function formatMessageForServer(message) {
-    return message.startsWith('/') ? message : `.ai ${message}`;
+    return message.startsWith('/') ? message : `${message}`;
 }
 
 export async function sendMessage() {

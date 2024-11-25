@@ -129,32 +129,36 @@ pre {
     background-color: #000;
     padding: 15px;
     border-radius: 8px;
-    overflow-x: scroll; /* Fuerza el desplazamiento horizontal */
-   /*overflow-y: hidden; */
+    overflow-x: auto; /* Permite desplazamiento horizontal */
     white-space: pre; /* Mantiene los saltos de línea y espacios */
     font-family: monospace;
-    font-size: 14px;
     margin-top: 5px;
     margin-bottom: 5px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color var(--fade-duration) var(--animation-ease-soft);
-    max-width: 100%; /* Evita que el <pre> sea más ancho que el contenedor */
-    box-sizing: border-box; /* Incluye el padding en el tamaño total */
-    display: block; /* Asegura que se comporte como un bloque */
-}
+    max-width: 100%; /* Limita el ancho al 100% del contenedor */
+    box-sizing: border-box; /* Incluye padding en el tamaño total */
+    display: block;
 
+    /* Forzar que aparezca en la capa superior */
+    position: relative;
+    z-index: 10; /* Ajusta el valor según tu diseño */
+}
 
 .conversation {
     flex: 1;
-    overflow-y: auto; /* Permite solo desplazamiento vertical */
+    overflow-y: auto; /* Permite desplazamiento vertical */
+    overflow-x: hidden; /* Evita desplazamiento horizontal */
     padding: 10px;
     margin-top: 20px;
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - 100px); /* Ajusta según el diseño */
-    max-width: 100%; /* Evita que el contenedor se expanda más allá del tamaño de la pantalla */
-    box-sizing: border-box; /* Asegura que el padding no aumente el tamaño del contenedor */
-    overflow-x: hidden; /* Evita desplazamiento horizontal en el contenedor */
+    max-height: calc(100vh - 100px); /* Ajusta la altura según diseño */
+    max-width: 100%; /* Evita expansión horizontal */
+    box-sizing: border-box;
+
+    /* Asegura que no bloquee el pre */
+    position: relative;
+    z-index: 1;
 }
 
 
@@ -178,6 +182,7 @@ pre {
 }
 
 .message.bot {
+    margin: 0px 0;
     color: var(--text-color);
     align-self: flex-start;
     background-color: var(--background-color-dark);
@@ -190,7 +195,7 @@ pre {
 .message code {
     background-color: #333;
     color: #E1E1E1;
-    padding: 1.5px 4px;
+    padding: 0.5px 2px;
     border-radius: 4px;
     font-family: monospace;
 }

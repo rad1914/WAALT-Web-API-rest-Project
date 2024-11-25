@@ -8,37 +8,9 @@
     }
 
     .welcome-section {
-        font-size: 16px;
         margin-top: 70px;
     }
 
-    .new-chat-button {
-        padding: 5px 10px;
-        font-size: 12px;
-    }
-
-    .bot-image {
-        width: 90px;
-        height: 90px;
-    }
-
-    .bot-image img {
-        width: 70px;
-    }
-
-    .message {
-        font-size: 12px;
-        padding: 8px 12px;
-    }
-
-    .message.user, .message.bot {
-        font-size: 13px;
-    }
-
-    #responseOutput {
-        font-size: 10px;
-    }
-}
 
 /* Mobile Devices */
 @media (max-width: 480px) {
@@ -47,42 +19,12 @@
     }
 
     .welcome-section {
-        font-size: 14px;
-        margin-top: 50px;
+        margin-top: 80px;
     }
 
-    .new-chat-button {
-        padding: 4px 8px;
-        font-size: 10px;
-        top: 10px;
-        left: 10px;
-    }
-
-    .bot-image {
-        width: 90px;
-        height: 90px;
-    }
-
-    .bot-image img {
-        width: 60px;
-    }
-
-
-    .message {
-        font-size: 11px;
-        padding: 8px 10px;
-    }
-
-    .message.user, .message.bot {
-        font-size: 12px;
-    }
 
     #responseOutput {
         font-size: 9px;
     }
 
-    pre {
-        font-size: 10px;
-        padding: 8px;
-    }
 }
