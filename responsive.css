@@ -1,30 +1,223 @@
+:root {
+    --font-small: 12px;
+    --font-medium: 12.5px;
+    --font-large: 14px;
+    --font-xlarge: 18px;
+    --font-xxlarge: 20px;
 
-/* Media Queries */
+    --padding-small: 8px;
+    --padding-medium: 12px;
+    --padding-large: 15px;
 
-/* Tablets and small screens */
-@media (max-width: 768px) {
+    --button-height-small: 45px;
+    --button-height-medium: 50px;
+    --button-height-large: 60px;
+
+    --container-width-mobile: 100%;
+    --container-width-tablet: 100%;
+    --container-width-desktop: 60%;
+    --container-width-large-desktop: 50%;
+}
+
+/* General container styling */
+.container {
+    padding: var(--padding-large);
+    width: var(--container-width-desktop);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+
+
+/* Espaciado para evitar solapamiento de la barra */
+.conversation {
+    padding: var(--padding-medium);
+    max-height: calc(100vh - 180px);
+    margin-bottom: calc(var(--button-height-medium) + var(--padding-large));
+    overflow-y: auto;
+}
+
+/* Mobile Styles (max-width: 600px) */
+@media (max-width: 600px) {
     .container {
-        max-width: 90%; /* Reduce container width */
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        padding: var(--padding-medium);
+    }
+
+    .conversation {
+        padding: var(--padding-medium);
+        max-height: calc(100vh - 180px);
+    }
+
+    .welcome-section {
+        margin-top: 40px;
+        text-align: center;
+        font-size: var(--font-medium);
+    }
+
+    .bot-image {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto;
+        margin-bottom: 5px;
+    }
+
+    .bot-image img {
+        width: 60px;
+        height: auto;
+        border-radius: 50%;
+    }
+
+    .new-chat-button {
+        top: var(--padding-small);
+        left: var(--padding-small);
+        font-size: var(--font-medium);
+        padding: 8px 14px;
+    }
+
+    .message {
+        font-size: var(--font-medium);
+        padding: var(--padding-medium);
+    }
+
+    .icon-button {
+        font-size: var(--font-xlarge);
+    }
+
+    .help-buttons {
+        flex-direction: column;
+        gap: var(--padding-small);
+    }
+
+    .help-button {
+        font-size: var(--font-medium);
+        padding: var(--padding-small);
+    }
+
+    pre {
+        padding: var(--padding-medium);
+        font-size: var(--font-small);
+        overflow-x: auto;
+    }
+}
+
+/* Tablet Styles (max-width: 900px) */
+@media (max-width: 900px) {
+    .container {
+        width: var(--container-width-tablet);
+    }
+
+    .conversation {
+        padding: var(--padding-medium);
+        max-height: calc(100vh - 150px);
     }
 
     .welcome-section {
         margin-top: 70px;
+        font-size: var(--font-medium);
     }
 
+    .bot-image {
+        width: 80px;
+        height: 80px;
+    }
 
-/* Mobile Devices */
-@media (max-width: 480px) {
+    .bot-image img {
+        width: 60px;
+        height: auto;
+    }
+
+    .new-chat-button {
+        top: 20px;
+        left: 20px;
+        font-size: var(--font-medium);
+        padding: 7px 14px;
+    }
+
+    .message {
+        font-size: var(--font-medium);
+    }
+
+    .icon-button {
+        font-size: var(--font-xlarge);
+    }
+
+    .help-buttons {
+        gap: var(--padding-medium);
+    }
+
+    .help-button {
+        font-size: var(--font-large);
+    }
+
+    pre {
+        padding: var(--padding-medium);
+        font-size: var(--font-medium);
+    }
+}
+
+/* Desktop Styles (min-width: 901px) */
+@media (min-width: 901px) {
     .container {
-        max-width: 100%; /* Full-width for mobile */
+        width: var(--container-width-desktop);
     }
 
     .welcome-section {
-        margin-top: 80px;
+        margin-top: 90px;
+        font-size: var(--font-large);
     }
 
-
-    #responseOutput {
-        font-size: 9px;
+    .bot-image {
+        width: 90px;
+        height: 90px;
     }
 
+    .bot-image img {
+        width: 70px;
+        height: auto;
+    }
+
+    .new-chat-button {
+        top: 20px;
+        left: 20px;
+        font-size: var(--font-large);
+        padding: var(--padding-medium) var(--padding-large);
+    }
+
+    .message {
+        font-size: var(--font-large);
+    }
+
+    .conversation {
+        padding: var(--padding-medium);
+        max-height: calc(100vh - 150px);
+    }
+
+    .icon-button {
+        font-size: var(--font-xlarge);
+    }
+
+    pre {
+        padding: var(--padding-large);
+        font-size: var(--font-large);
+    }
+}
+
+/* Larger screens (min-width: 1200px) */
+@media (min-width: 1200px) {
+    .container {
+        width: var(--container-width-large-desktop);
+        max-width: 800px;
+    }
+
+    .conversation {
+        padding: var(--padding-large);
+    }
+
+    pre {
+        padding: var(--padding-large);
+        font-size: var(--font-xxlarge);
+    }
 }
