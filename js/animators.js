@@ -1,4 +1,8 @@
-const titleText = "¿Qué tienes en mente?";
+// animators.js
+
+
+
+const titleText = "✦ ¿Qué tienes en mente?";
 let index = 0;
 let isAnimationRunning = false;
 
@@ -41,6 +45,8 @@ async function animateButtonsWithExponentialDelay(buttons, baseDelay = 80) {
 
 async function mainAnimationSequence() {
     const botImage = document.querySelector('.animate-image');
+    const footer = document.querySelector('footer');
+
     animateElement(botImage);
     await new Promise(resolve => setTimeout(resolve, 480));
 
@@ -48,24 +54,13 @@ async function mainAnimationSequence() {
         const buttons = Array.from(document.querySelectorAll('.help-button'));
         await animateButtonsWithExponentialDelay(buttons);
 
-        const sendBar = document.querySelector('.send-bar');
-        const caption = document.querySelector('.caption');
-        const messageBar = document.querySelector('.message-bar');
-        
-        // Calculate total button animation delay
-        const totalButtonDelay = buttons.length > 0
-            ? buttons.reduce((acc, _, i) => acc + 90 * Math.pow(1, i), 0)
-            : 500; // Fallback delay if no buttons exist
-
-        // Animate send bar, caption, and message bar with the calculated delay
-        if (sendBar) animateElement(sendBar, { delay: totalButtonDelay, animationClass: 'show' });
-        if (caption) {
-            console.log("Animating caption...");
-            animateElement(caption, { delay: totalButtonDelay, animationClass: 'show' });
+        // Animar el footer completo después de los botones
+        if (footer) {
+            setTimeout(() => {
+                footer.classList.add('footer-animate');
+            }, 500); // Ajusta el retraso según lo necesario
         }
-        if (messageBar) animateElement(messageBar, { delay: totalButtonDelay, animationClass: 'show' });
 
-        // Reset the flag once the animation is complete
         isAnimationRunning = false;
         console.log("Animation sequence completed.");
     });

@@ -45,7 +45,7 @@ class RateLimiter {
      * @param {number} now - Current timestamp.
      */
     applyGradualLock(ip, now) {
-        const baseLockTime = 30000; // Initial lock time: 30 seconds
+        const baseLockTime = 90000; // Initial lock time: 30 seconds
         const currentLockDuration = this.lockDurations.get(ip) || 0;
         const newLockDuration = currentLockDuration ? currentLockDuration * 2 : baseLockTime;
 

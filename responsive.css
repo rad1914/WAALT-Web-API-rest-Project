@@ -6,102 +6,149 @@
     --font-xxlarge: 20px;
 
     --padding-small: 8px;
-    --padding-medium: 12px;
+    --padding-medium: 8px;
     --padding-large: 15px;
 
     --button-height-small: 45px;
-    --button-height-medium: 50px;
+    --button-height-medium: 60px;
     --button-height-large: 60px;
 
-    --container-width-mobile: 100%;
-    --container-width-tablet: 100%;
+    --container-width-mobile: 95%;
+    --container-width-tablet: 95%;
     --container-width-desktop: 60%;
     --container-width-large-desktop: 50%;
 }
 
-/* General container styling */
+/* Global styles for consistent sizing */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Prevents body from scrolling */
+}
+
 .container {
-    padding: var(--padding-large);
-    width: var(--container-width-desktop);
-    max-width: 600px;
-    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100%; /* Ensures container takes full height */
 }
 
-
-
-/* Espaciado para evitar solapamiento de la barra */
 .conversation {
-    padding: var(--padding-medium);
-    max-height: calc(100vh - 180px);
-    margin-bottom: calc(var(--button-height-medium) + var(--padding-large));
-    overflow-y: auto;
+    flex-grow: 1; /* Fills available space */
+    overflow-y: auto; /* Enables scrolling for the content */
+    padding: var(--padding-medium); /* Optional: adjust padding as needed */
+    margin: 0; /* Ensure no extra spacing */
 }
 
-/* Mobile Styles (max-width: 600px) */
+.input-container {
+gap: 8px;
+}
+
+.send-bar {
+  gap: 8px;
+    padding: 12px;
+       border-radius: 50%;
+ 
+  }
+
+ .caption {
+     margin-bottom: -12px;
+     
+ }
+
+.footer {
+    flex-shrink: 0;
+    text-align: center;
+}
+
+/* Ensure mobile layout also works */
 @media (max-width: 600px) {
     .container {
-        width: 100%;
-        max-width: 100%;
-        margin: 0 auto;
-        padding: var(--padding-medium);
+        height: 100%;
+        padding: 0; /* Remove padding on the container */
     }
 
     .conversation {
-        padding: var(--padding-medium);
-        max-height: calc(100vh - 180px);
+        padding: var(--padding-small);
     }
+
 
     .welcome-section {
-        margin-top: 40px;
+        margin-top: clamp(10px, 5%, 20px); /* Dynamic margin for cleaner look */
         text-align: center;
-        font-size: var(--font-medium);
+        font-size: var(--font-small);
     }
+    
+    
+
 
     .bot-image {
-        width: 80px;
-        height: 80px;
+        width: 15%; /* Adjust size relative to screen width */
+        max-width: 80px; /* Limit max size */
+        height: auto; /* Maintain aspect ratio */
         margin: 0 auto;
-        margin-bottom: 5px;
+        margin-bottom: 8px;
     }
 
     .bot-image img {
-        width: 60px;
+        width: 100%;
         height: auto;
         border-radius: 50%;
+        transition: transform 0.2s ease;
     }
+
+    .bot-image img:hover {
+        transform: scale(1.1);
+    }
+
 
     .new-chat-button {
         top: var(--padding-small);
         left: var(--padding-small);
-        font-size: var(--font-medium);
-        padding: 8px 14px;
+        font-size: var(--font-small); /* Smaller font for buttons */
+        padding: 4px 8px; /* Reduce padding for compact buttons */
+        min-width: 48px;
+        min-height: 36px; /* Recommended touch size */
+        border-radius: 4px;
     }
+    
 
     .message {
-        font-size: var(--font-medium);
-        padding: var(--padding-medium);
+        font-size: var(--font-small); /* Smaller font for messages */
+        padding: var(--padding-small);
     }
 
     .icon-button {
-        font-size: var(--font-xlarge);
+        font-size: var(--font-large);
     }
 
     .help-buttons {
         flex-direction: column;
-        gap: var(--padding-small);
+        gap: clamp(2px, 2%, 4px); /* Dynamic gap for compact layout */
     }
 
     .help-button {
-        font-size: var(--font-medium);
-        padding: var(--padding-small);
-    }
-
-    pre {
-        padding: var(--padding-medium);
-        font-size: var(--font-small);
-        overflow-x: auto;
+        font-size: var(--font-small); /* Smaller help button text */
+        padding: 4px 6px; /* Smaller padding for more responsive buttons */
+        min-width: 48px;
+        min-height: 36px; /* Recommended touch size */
+        border-radius: 4px;
     }
 }
+
+
+
+
+
+/* fox this*/
 
 /* Tablet Styles (max-width: 900px) */
 @media (max-width: 900px) {
@@ -110,7 +157,6 @@
     }
 
     .conversation {
-        padding: var(--padding-medium);
         max-height: calc(100vh - 150px);
     }
 
@@ -133,7 +179,8 @@
         top: 20px;
         left: 20px;
         font-size: var(--font-medium);
-        padding: 7px 14px;
+        padding: 7px 12px;
+        border-radius: 20px;
     }
 
     .message {
@@ -149,6 +196,7 @@
     }
 
     .help-button {
+        border-radius: 20px;
         font-size: var(--font-large);
     }
 
@@ -191,7 +239,6 @@
     }
 
     .conversation {
-        padding: var(--padding-medium);
         max-height: calc(100vh - 150px);
     }
 
@@ -213,7 +260,7 @@
     }
 
     .conversation {
-        padding: var(--padding-large);
+        padding: 0; /* Mantener sin padding para que ocupe toda la pantalla */
     }
 
     pre {

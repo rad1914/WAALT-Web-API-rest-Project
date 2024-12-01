@@ -1,89 +1,87 @@
 // apiService.js
 
-const apiUrls = [
-    'http://22.ip.gl.ply.gg:18880',
-    'https://wrldradd.loca.lt',
-];
+const apiUrls = ['http://22.ip.gl.ply.gg:18880'];
 
-const TIMEOUTS = [5000, 10000, 20000];
-const serverTimings = new Map();
+const TIMEOUTS = [15000, 20000, 30000];
 const metrics = { totalRequests: 0, successes: 0, failures: 0 };
 
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 /**
  * Fetch data with retries, timeout, and exponential backoff.
  */
-async function fetchWithRetries(url, options = {}, { timeout = 3000, retries = 3, backoff = 1000 } = {}) {
+async function fetchWithRetries(url, options = {}, { timeout = 15000, retries = 3, backoff = 2000 } = {}) {
     for (let attempt = 1; attempt <= retries; attempt++) {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), timeout);
-
         try {
+            console.log(`Intento ${attempt}/${retries} a ${url}`);
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), timeout);
+
             const response = await fetch(url, { ...options, signal: controller.signal });
             clearTimeout(timeoutId);
 
             if (response.ok) {
-                const data = await response.json(); // Parse the response data
-                return data;  // Return parsed data
+                const data = await response.json();
+                console.log(`Respuesta exitosa de ${url}:`, data);
+                return data;
             } else {
-                console.error(`Request failed with status: ${response.status} at ${url}`);
-                throw new Error(`Request failed with status: ${response.status}`);
+                console.error(`Error del servidor ${url}: ${response.status}`);
+                throw new Error(`Status: ${response.status}`);
             }
         } catch (error) {
-            console.error(`Error on attempt ${attempt} to fetch ${url}: ${error.message}`);
-            if (attempt === retries) {
-                console.error(`Failed after ${retries} attempts: ${url}`);
-                throw new Error(`Failed after ${retries} attempts: ${url}`);
+            if (error.name === 'AbortError') {
+                console.error(`Timeout en ${url} después de ${timeout}ms`);
+            } else {
+                console.error(`Error en intento ${attempt} para ${url}: ${error.message}`);
             }
-        } finally {
-            clearTimeout(timeoutId);
+            if (attempt < retries) await delay(backoff * attempt);
         }
-
-        await delay(backoff * attempt);
     }
+    throw new Error(`Falló después de ${retries} intentos: ${url}`);
 }
 
 /**
  * Cache handler (stub for cache functionality).
  */
-function handleCache(message, response = null) {
-    // Implement caching logic here if needed
-    return null; // Stub: no cache implemented
+function handleCache(message, jid, response = null) {
+    return null; // Pendiente de implementación de caché
 }
 
 /**
  * Send message to multiple servers with fallback and caching.
  */
-export async function sendMessageToServers(message) {
-    const cachedResponse = handleCache(message);
+export async function sendMessageToServers(message, jid) {
+    const cachedResponse = handleCache(message, jid);
     if (cachedResponse) return cachedResponse;
 
     const options = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }, // Standard JSON Content-Type
-        body: JSON.stringify({ message }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message, jid }),
     };
 
     metrics.totalRequests++;
 
+    const requests = apiUrls.map((url, index) =>
+        fetchWithRetries(`${url}/api/message`, options, { timeout: TIMEOUTS[index] || 30000 })
+    );
+
     try {
-        const responses = apiUrls.map((url, index) =>
-            fetchWithRetries(`${url}/api/message`, options, { timeout: TIMEOUTS[index] || 45000 })
-        );
+        const results = await Promise.allSettled(requests);
+        const successfulResponse = results.find(result => result.status === 'fulfilled');
 
-        // Wait for the first successful response
-        const response = await Promise.any(responses);
-
-        // Log the response data (now that we can handle the full response)
-        console.log('Server Response:', response);
-
-        metrics.successes++;
-        return response;  // Returning the actual response data from the server
+        if (successfulResponse) {
+            console.log('Respuesta exitosa:', successfulResponse.value);
+            metrics.successes++;
+            return successfulResponse.value.response || '✦ Respuesta sin contenido.';
+        } else {
+            metrics.failures++;
+            console.error('Ningún servidor respondió exitosamente.');
+            return '✦ Ningún servidor pudo procesar la solicitud.';
+        }
     } catch (error) {
-        console.error('Error sending message:', error.message);
+        console.error('Error crítico en el envío:', error.message);
         metrics.failures++;
+        return '✦ Error inesperado. Inténtalo de nuevo.';
     }
-
-    return '✦ No se pudo conectar al servidor. ¡Inténtalo de nuevo!';
 }
