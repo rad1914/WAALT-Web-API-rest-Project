@@ -2,6 +2,17 @@
 
 let userIP = null;
 
+// Helper to fetch and cache UI elements
+const elements = {
+    welcomeSection: () => document.getElementById('welcomeSection'),
+    newChatButton: () => document.querySelector('.new-chat-button'),
+    conversation: () => document.getElementById('conversation'),
+    responseOutput: () => document.getElementById('responseOutput'),
+    messageInput: () => document.getElementById('messageInput'),
+    sendButton: () => document.getElementById('sendButton'),
+    helpButtons: () => document.querySelectorAll('.help-button'),
+};
+
 /**
  * Fetches and caches the user's IP address.
  * @returns {Promise<void>}
@@ -18,34 +29,25 @@ export async function fetchUserIP() {
         console.log("User IP:", userIP);
     } catch (error) {
         console.error('Failed to fetch IP address:', error);
-        document.getElementById('responseOutput').innerText = 'Error: Unable to fetch IP address.';
+        elements.responseOutput().innerText = 'Error: Unable to fetch IP address.';
     }
 }
 
 /**
- * Toggles the visibility of UI elements like the welcome section and new chat button.
- * @param {boolean} isNewChat - Whether this is a new chat session.
+ * Toggles the visibility of UI elements.
+ * @param {boolean} isWelcomeView - Whether to show the welcome view.
  */
-function toggleChatUI(isNewChat) {
-    const welcomeSection = document.getElementById('welcomeSection');
-    const newChatButton = document.querySelector('.new-chat-button');
+function toggleChatUI(isWelcomeView) {
+    const welcomeSection = elements.welcomeSection();
+    const newChatButton = elements.newChatButton();
 
-    if (isNewChat) {
-        if (welcomeSection) {
-            welcomeSection.classList.remove('slide-up');
-            welcomeSection.classList.add('slide-down');
-        }
-        if (newChatButton) {
-            newChatButton.classList.remove('show-button');
-        }
-    } else {
-        if (welcomeSection) {
-            welcomeSection.classList.remove('slide-down');
-            welcomeSection.classList.add('slide-up');
-        }
-        if (newChatButton) {
-            newChatButton.classList.add('show-button');
-        }
+    if (welcomeSection) {
+        welcomeSection.classList.toggle('slide-up', !isWelcomeView);
+        welcomeSection.classList.toggle('slide-down', isWelcomeView);
+    }
+
+    if (newChatButton) {
+        newChatButton.classList.toggle('show-button', !isWelcomeView);
     }
 }
 
@@ -53,10 +55,10 @@ function toggleChatUI(isNewChat) {
  * Clears the chat UI and resets session data for a new conversation.
  */
 export function startNewChat() {
-    const conversation = document.getElementById('conversation');
-    const responseOutput = document.getElementById('responseOutput');
-    const messageInput = document.getElementById('messageInput');
-    const newChatButton = document.querySelector('.new-chat-button');
+    const conversation = elements.conversation();
+    const responseOutput = elements.responseOutput();
+    const messageInput = elements.messageInput();
+    const newChatButton = elements.newChatButton();
 
     if (conversation) conversation.innerHTML = '';
     if (responseOutput) responseOutput.innerText = '';
@@ -65,7 +67,6 @@ export function startNewChat() {
     sessionStorage.clear();
     console.log("Chat and session data cleared.");
 
-    // Re-enable the new chat button if disabled during message generation
     if (newChatButton) newChatButton.disabled = false;
 
     toggleChatUI(true);
@@ -75,15 +76,15 @@ export function startNewChat() {
  * Sends a message, updates the conversation, and transitions the UI.
  */
 export async function sendMessage() {
-    const messageInput = document.getElementById('messageInput');
+    const messageInput = elements.messageInput();
     const message = messageInput.value.trim();
-    const sendButton = document.getElementById('sendButton');
-    const helpButtons = document.querySelectorAll('.help-button');
-    const newChatButton = document.querySelector('.new-chat-button');
+    const sendButton = elements.sendButton();
+    const helpButtons = elements.helpButtons();
+    const newChatButton = elements.newChatButton();
 
     if (!message) return;
 
-    // Disable send button, help buttons, and new chat button during processing
+    // Disable interactive elements during processing
     sendButton.disabled = true;
     helpButtons.forEach(button => (button.disabled = true));
     if (newChatButton) newChatButton.disabled = true;
@@ -96,48 +97,29 @@ export async function sendMessage() {
         const formattedMessage = formatMessageForServer(message);
         const responseText = await sendMessageToServers(formattedMessage);
 
-        if (responseText) {
-            updateWithBotResponse(responseText);
-        } else {
-            updateWithBotResponse('Error: No response received. Try again later.');
-        }
+        updateWithBotResponse(responseText || 'Error: No response received. Try again later.');
     } catch (error) {
         updateWithBotResponse('Error: Unable to send the message. Try again later.');
     } finally {
-        // Re-enable send button, help buttons, and new chat button after response
+        // Re-enable interactive elements
         sendButton.disabled = false;
         helpButtons.forEach(button => (button.disabled = false));
         if (newChatButton) newChatButton.disabled = false;
     }
 
-    toggleChatUI(false); // Switch to conversation mode
+    toggleChatUI(false);
 }
 
 /**
- * Initialize page behavior, including hiding the new chat button on load.
+ * Initialize page behavior, including setting up event listeners.
  */
 document.addEventListener('DOMContentLoaded', () => {
-    toggleChatUI(true); // Show the welcome section and hide the new chat button
+    toggleChatUI(true);
 
-    const newChatButton = document.querySelector('.new-chat-button');
+    const newChatButton = elements.newChatButton();
     if (newChatButton) {
         newChatButton.addEventListener('click', startNewChat);
-
-        // Optional hover event listeners
-        newChatButton.addEventListener('mouseenter', () => {
-            newChatButton.classList.add('hovered');
-            console.log('Hovering over New Chat button');
-        });
-
-        newChatButton.addEventListener('mouseleave', () => {
-            newChatButton.classList.remove('hovered');
-            console.log('Left New Chat button');
-        });
+        newChatButton.addEventListener('mouseenter', () => newChatButton.classList.add('hovered'));
+        newChatButton.addEventListener('mouseleave', () => newChatButton.classList.remove('hovered'));
     }
 });
-
-
-/**
- * Add an event listener to the new chat button to start a new session.
- */
-document.querySelector('.new-chat-button').addEventListener('click', startNewChat);

@@ -58,11 +58,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     addListener(elements.sendButton, 'click', sendCurrentMessage, "Botón de enviar mensaje configurado.");
     addListener(elements.attachButton, 'click', handleAttach, "Botón de adjuntar configurado.");
 
-    // 8. Prevent message sending with Enter
+    // 8. Prevent message sending with Enter and handle message sending on Enter without Shift
     addListener(elements.messageInput, 'keydown', (event) => {
         if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault();
-            console.log("Enter presionado sin enviar mensaje.");
+            event.preventDefault(); // Prevent default behavior (newline)
+            sendMessage(); // Trigger the sendMessage function
+            console.log("Enter presionado sin Shift: mensaje enviado.");
         }
     });
 

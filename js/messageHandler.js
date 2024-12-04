@@ -1,3 +1,5 @@
+// *messageHandler.js
+
 import {
     fetchUserIP,
     updateWithBotResponse,
@@ -12,7 +14,26 @@ import RateLimiter from './rateLimiter.js';
 const rateLimiter = new RateLimiter(5, 60000);
 
 /**
- * Toggles the visibility of elements based on the given state.
+ * Toggles the visibility and styles of UI elements.
+ * @param {HTMLElement} element - The DOM element to manipulate.
+ * @param {boolean} isVisible - Whether the element should be visible.
+ * @param {Object} [styles={}] - Optional styles to apply when visible.
+ */
+function toggleVisibility(element, isVisible, styles = {}) {
+    if (!element) return;
+
+    if (isVisible) {
+        element.classList.remove('hidden');
+        Object.assign(element.style, styles);
+    } else {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(-20px)';
+        setTimeout(() => element.classList.add('hidden'), 300); // Matches transition duration
+    }
+}
+
+/**
+ * Toggles the UI state.
  * @param {boolean} showWelcome - Whether to show the welcome section.
  * @param {boolean} showNewChatButton - Whether to show the new chat button.
  */
@@ -20,21 +41,17 @@ function toggleUI(showWelcome, showNewChatButton) {
     const welcomeSection = document.querySelector('.welcome-section');
     const newChatButton = document.querySelector('.new-chat-button');
 
-    if (welcomeSection) {
-        if (showWelcome) {
-            welcomeSection.classList.remove('hidden');
-            welcomeSection.style.opacity = '1';
-            welcomeSection.style.transform = 'translateY(0)';
-        } else {
-            welcomeSection.style.opacity = '0';
-            welcomeSection.style.transform = 'translateY(-20px)';
-            setTimeout(() => welcomeSection.classList.add('hidden'), 300); // Matches transition duration
-        }
-    }
+    toggleVisibility(welcomeSection, showWelcome, { opacity: '1', transform: 'translateY(0)' });
+    if (newChatButton) newChatButton.style.display = showNewChatButton ? 'block' : 'none';
+}
 
-    if (newChatButton) {
-        newChatButton.style.display = showNewChatButton ? 'block' : 'none';
-    }
+/**
+ * Enables or disables multiple buttons.
+ * @param {NodeListOf<HTMLElement>} buttons - A list of buttons to update.
+ * @param {boolean} isEnabled - Whether to enable the buttons.
+ */
+function toggleButtons(buttons, isEnabled) {
+    buttons.forEach(button => (button.disabled = !isEnabled));
 }
 
 /**
@@ -45,9 +62,9 @@ export function startNewChat() {
     const responseOutput = document.getElementById('responseOutput');
     const messageInput = document.getElementById('messageInput');
 
-    if (conversation) conversation.innerHTML = '';
-    if (responseOutput) responseOutput.innerText = '';
-    if (messageInput) messageInput.value = '';
+    [conversation, responseOutput, messageInput].forEach(el => {
+        if (el) el.innerHTML = el.nodeName === 'INPUT' ? '' : '';
+    });
 
     toggleUI(true, false); // Show welcome section, hide new chat button
     sessionStorage.clear(); // Clear session data
@@ -65,11 +82,13 @@ export async function sendMessage() {
     const sendButton = document.getElementById('sendButton');
     const helpButtons = document.querySelectorAll('.help-button');
 
-    sendButton.disabled = true;
-    helpButtons.forEach(button => (button.disabled = true));
+    // Disable input buttons
+    toggleButtons([sendButton, ...helpButtons], false);
 
+    // Clear the input field and transform newline characters (`\n`) to `<br>`
     messageInput.value = '';
-    addMessageToConversation(message, 'user');
+    const formattedMessage = message.replace(/\n/g, '<br>'); // Replace only newlines with `<br>`
+    addMessageToConversation(formattedMessage, 'user');
     showLoadingMessage();
 
     // Hide welcome section and show new chat button
@@ -82,13 +101,13 @@ export async function sendMessage() {
             return;
         }
 
-        const responseText = await sendMessageToServers(message);
+        const responseText = await sendMessageToServers(message); // Send raw message (without `<br>`)
         updateWithBotResponse(responseText || 'No response received. Try again later.');
     } catch (error) {
         updateWithBotResponse('Error: Could not send the message.');
     } finally {
-        sendButton.disabled = false;
-        helpButtons.forEach(button => (button.disabled = false));
+        // Re-enable input buttons
+        toggleButtons([sendButton, ...helpButtons], true);
     }
 }
 

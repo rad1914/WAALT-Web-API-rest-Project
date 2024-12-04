@@ -1,25 +1,188 @@
-/* Bot Image Styling */
-.bot-image {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    margin: 0 auto 10px;
-    background-color: #2C2C2C;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* Transiciones Generales */
+.transition-ease {
+    transition: background-color 0.3s var(--animation-ease), 
+                box-shadow 0.3s var(--animation-ease), 
+                transform 0.2s ease-in-out;
 }
 
-.bot-image img {
-    width: 60px;
-    height: auto;
+/* General Message Styles */
+.message {
+    animation: fadeIn var(--fade-duration) var(--animation-ease) forwards;
+    color: var(--text-color);
+    padding: 10px;
+    font-family: sans-serif;
 }
 
-/* Help Title and Buttons */
+.message.user {
+    text-align: right;
+    align-self: flex-end;
+    background-color: var(--background-color-user);
+}
+
+.message.bot {
+    align-self: flex-start;
+    background-color: var(--background-color-dark);
+}
+
+/* Hover Effects */
+.message.user:hover, 
+.message.bot:hover,
+.help-button:hover {
+    transform: scale(1.02);
+}
+
+.help-button:hover {
+    background-color: #fff;
+    transform: scale(1.05);
+}
+
+/* Text Decorations */
+.message strong {
+    font-family: 'Metropolis Bold', sans-serif;
+    font-weight: bold;
+}
+
+.message em {
+    font-style: italic;
+}
+
+.message del {
+    text-decoration: line-through;
+    color: #999;
+}
+
+.message u {
+    text-decoration: underline;
+}
+
+.message mark {
+    background-color: #FFFA8B;
+    color: #000;
+    padding: 0 4px;
+}
+
+/* Inline Text Color */
+.message span[style*="color: red"] {
+    color: red;
+}
+
+/* Code Blocks */
+.message code, pre {
+    background-color: #292929;
+    color: #E1E1E1;
+    border-radius: 4px;
+    font-family: monospace;
+    padding: 1.5px 3px;
+}
+
+pre {
+    overflow-x: auto;
+    margin: 10px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    max-width: 100%;
+}
+
+pre snippet {
+    color: var(--color-snippet);
+}
+
+/* Links */
+a {
+    text-decoration: none;
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: var(--color-hover);
+}
+
+a:focus {
+    outline: 2px dashed var(--color-hover);
+}
+
+/* Blockquotes */
+blockquote {
+    background-color: #F5F5F5;
+    border-left: 5px solid #DDD;
+    margin: 10px 0;
+    padding: 10px 15px;
+    font-style: italic;
+    color: #555;
+}
+
+/* Lists */
+.message li {
+    margin: 5px 0;
+    list-style: disc inside;
+}
+
+/* Headers */
+.message h1, .message h2, .message h3 {
+    margin: 0.5em 0;
+    font-weight: bold;
+}
+
+.message h1 {
+    font-size: 2em;
+    color: #333;
+}
+
+.message h2 {
+    font-size: 1.75em;
+    color: #444;
+}
+
+.message h3 {
+    font-size: 1.5em;
+    color: #555;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+
+table td {
+    border: 1px solid #DDD;
+    padding: 8px;
+    text-align: left;
+}
+
+table tr:nth-child(even) {
+    background-color: #F9F9F9;
+}
+
+table tr:nth-child(odd) {
+    background-color: #FFF;
+}
+
+/* Math Blocks */
+.message .mjx-chtml, .message .mjx-mrow, .message .mjx-mfrac {
+    font-size: 1em;
+    color: #333;
+}
+
+.math-block {
+    display: block;
+    text-align: center;
+    margin: 1em 0;
+    font-size: 1.2em;
+}
+
+.math-inline {
+    display: inline;
+    font-size: 1em;
+}
+
+/* Help Section */
 .help-title {
     font-size: 18px;
-    margin-bottom: 12px;
-    color: #ffffff;
+    color: #fff;
 }
 
 .help-buttons {
@@ -30,31 +193,21 @@
 }
 
 .help-button {
-    font-family: 'metropolis', sans-serif;
-    font-size: 14px;
-    color: #999999;
-    background-color: #1D1D1D;
+    font-family: 'Metropolis', sans-serif;
+    color: #999;
+    background-color: #191919;
     border: none;
-    border-radius: 25px;
-    padding: 8px 16px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.help-button:hover {
-    background-color: #fff;
-    transform: scale(1.05);
+.help-button.fadeInButton {
+    opacity: 1;
+    transform: scale(1);
 }
 
 .help-button:focus {
     outline: 2px dashed #fff;
     outline-offset: 4px;
-}
-
-code {
-    background-color: #000000;
-    color: #DBDBDB;
-    padding: 0.3px 3px;
-    border-radius: 2px;
-    font-family: monospace;
 }

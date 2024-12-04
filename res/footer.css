@@ -1,0 +1,90 @@
+/* Footer Animation */
+footer {
+    background-color: var(--background-color-dark);
+    opacity: 0;
+    transform: translateY(20px); /* Moves out of view downward */
+    transition: opacity 0.5s var(--animation-ease), transform 0.5s var(--animation-ease);
+}
+
+footer.footer-animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Input Container and Message Bar */
+.input-container,
+.message-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.input-container {
+    font-family: 'Metropolis', sans-serif;
+    justify-content: center;
+    width: 100%;
+}
+
+.message-bar {
+    flex: 1;
+    padding: 12px;
+    background-color: #191919;
+    border-radius: 23px;
+}
+
+/* Input Field */
+.input-field {
+    font-family: 'Metropolis', sans-serif;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+/* Icon Button */
+.icon-button {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: #fff;
+    z-index: 9999;
+}
+
+/* Send Bar */
+.send-bar {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #192417;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.send-bar:hover {
+    background-color: #151A15;
+}
+
+/* Caption */
+.caption {
+    text-align: center;
+    font-size: 0.75em;
+    color: #555;
+}
+
+.caption a {
+    color: #B1D6AA;
+    text-decoration: none;
+}
+
+/* Response Output */
+#responseOutput {
+    margin-top: 8px;
+    color: #FF5587;
+}
+
+/* Previous Message Upward Animation */
+#conversation {
+    transition: margin-top 0.3s ease, transform 0.3s ease;
+}
