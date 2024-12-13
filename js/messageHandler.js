@@ -1,59 +1,109 @@
+
 // *messageHandler.js
 
 import {
     fetchUserIP,
     updateWithBotResponse,
     showLoadingMessage,
+    removeLoadingMessage,
     resetUI,
+    formatText,
 } from './utilities.js';
 
 import { addMessageToConversation } from './uiService.js';
 import { sendMessageToServers } from './apiService.js';
 import RateLimiter from './rateLimiter.js';
 
-const rateLimiter = new RateLimiter(5, 60000);
+const rateLimiter = new RateLimiter(5, 60000); // 5 requests per minute
 
 /**
  * Toggles the visibility and styles of UI elements.
- * @param {HTMLElement} element - The DOM element to manipulate.
- * @param {boolean} isVisible - Whether the element should be visible.
+ * @param {HTMLElement[]} elements - Array of DOM elements to manipulate.
+ * @param {string} action - 'show' or 'hide' to control visibility.
  * @param {Object} [styles={}] - Optional styles to apply when visible.
  */
-function toggleVisibility(element, isVisible, styles = {}) {
-    if (!element) return;
-
-    if (isVisible) {
-        element.classList.remove('hidden');
-        Object.assign(element.style, styles);
-    } else {
-        element.style.opacity = '0';
-        element.style.transform = 'translateY(-20px)';
-        setTimeout(() => element.classList.add('hidden'), 300); // Matches transition duration
-    }
-}
-
-/**
- * Toggles the UI state.
- * @param {boolean} showWelcome - Whether to show the welcome section.
- * @param {boolean} showNewChatButton - Whether to show the new chat button.
- */
-function toggleUI(showWelcome, showNewChatButton) {
-    const welcomeSection = document.querySelector('.welcome-section');
-    const newChatButton = document.querySelector('.new-chat-button');
-
-    toggleVisibility(welcomeSection, showWelcome, { opacity: '1', transform: 'translateY(0)' });
-    if (newChatButton) newChatButton.style.display = showNewChatButton ? 'block' : 'none';
+function toggleVisibility(elements, action, styles = {}) {
+    elements.forEach(element => {
+        if (!element) return;
+        if (action === 'show') {
+            element.classList.remove('hidden');
+            Object.assign(element.style, styles);
+            element.style.display = '';
+        } else if (action === 'hide') {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(-20px)';
+            setTimeout(() => {
+                element.classList.add('hidden');
+                element.style.display = 'none';
+            }, 300); // Matches transition duration
+        }
+    });
 }
 
 /**
  * Enables or disables multiple buttons.
- * @param {NodeListOf<HTMLElement>} buttons - A list of buttons to update.
+ * @param {HTMLElement[]} buttons - A list of buttons to update.
  * @param {boolean} isEnabled - Whether to enable the buttons.
  */
-function toggleButtons(buttons, isEnabled) {
-    buttons.forEach(button => (button.disabled = !isEnabled));
+function toggleButtonState(buttons, isEnabled) {
+    buttons.forEach(button => button?.setAttribute('disabled', !isEnabled));
 }
 
+/**
+ * Handles sending a message and processing the server response.
+ * @param {string} message - The user's message.
+ * @returns {Promise<void>}
+ */
+async function processMessage(message) {
+    const userIP = await fetchUserIP(); // Replace with dynamic IP retrieval logic if unavailable
+
+    if (!rateLimiter.isAllowed(userIP)) {
+        const errorMsg = formatText('Too many requests. Please try again later.');
+        addMessageToConversation(errorMsg, 'bot');
+        return;
+    }
+
+    addMessageToConversation(formatText(message), 'user');
+    showLoadingMessage();
+
+    try {
+        const responseText = await sendMessageToServers(message);
+        const response = formatText(responseText || '✦ No response received. Try again later.');
+        addMessageToConversation(response, 'bot');
+    } catch (error) {
+        const errorMsg = formatText(`Error: ${error.message}`);
+        addMessageToConversation(errorMsg, 'bot');
+        updateWithBotResponse(errorMsg);
+    } finally {
+        removeLoadingMessage();
+    }
+}
+
+/**
+ * Sends a message and handles the UI interactions.
+ */
+export async function sendMessage() {
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+    const helpButtons = [...document.querySelectorAll('.help-button')];
+
+    const message = messageInput?.value.trim();
+    if (!message) return;
+
+    toggleButtonState([sendButton, ...helpButtons], false);
+    messageInput.value = '';
+
+    toggleVisibility([document.querySelector('.welcome-section')], 'hide');
+    toggleVisibility([document.querySelector('.new-chat-button')], 'show', { opacity: '1', transform: 'translateY(0)' });
+
+    await processMessage(message);
+
+    toggleButtonState([sendButton, ...helpButtons], true);
+}
+
+/**
+ * Clears the conversation and resets the UI for a new chat session.
+ */
 /**
  * Clears the conversation and resets the UI for a new chat session.
  */
@@ -62,59 +112,33 @@ export function startNewChat() {
     const responseOutput = document.getElementById('responseOutput');
     const messageInput = document.getElementById('messageInput');
 
+    // Clear the conversation and input fields
     [conversation, responseOutput, messageInput].forEach(el => {
         if (el) el.innerHTML = el.nodeName === 'INPUT' ? '' : '';
     });
 
-    toggleUI(true, false); // Show welcome section, hide new chat button
-    sessionStorage.clear(); // Clear session data
+    // Toggle visibility: show welcome section, hide the new chat button
+    toggleVisibility(
+        [document.querySelector('.welcome-section')],
+        'show',
+        { opacity: '1', transform: 'translateY(0)' }
+    );
+    toggleVisibility([document.querySelector('.new-chat-button')], 'hide');
+    
+    // Clear session storage
+    sessionStorage.clear();
     console.log('Chat cleared and session reset.');
 }
 
 /**
- * Sends a message, updates the UI, and handles server responses.
+ * Initialize event listeners and UI elements on page load.
  */
-export async function sendMessage() {
-    const messageInput = document.getElementById('messageInput');
-    const message = messageInput.value.trim();
-    if (!message) return;
-
-    const sendButton = document.getElementById('sendButton');
-    const helpButtons = document.querySelectorAll('.help-button');
-
-    // Disable input buttons
-    toggleButtons([sendButton, ...helpButtons], false);
-
-    // Clear the input field and transform newline characters (`\n`) to `<br>`
-    messageInput.value = '';
-    const formattedMessage = message.replace(/\n/g, '<br>'); // Replace only newlines with `<br>`
-    addMessageToConversation(formattedMessage, 'user');
-    showLoadingMessage();
-
-    // Hide welcome section and show new chat button
-    toggleUI(false, true);
-
-    try {
-        const userIP = await fetchUserIP();
-        if (!userIP || !rateLimiter.isAllowed(userIP)) {
-            updateWithBotResponse('Too many requests. Please wait.');
-            return;
-        }
-
-        const responseText = await sendMessageToServers(message); // Send raw message (without `<br>`)
-        updateWithBotResponse(responseText || 'No response received. Try again later.');
-    } catch (error) {
-        updateWithBotResponse('Error: Could not send the message.');
-    } finally {
-        // Re-enable input buttons
-        toggleButtons([sendButton, ...helpButtons], true);
-    }
-}
-
-// Initialize the page by hiding the new chat button
 document.addEventListener('DOMContentLoaded', () => {
-    toggleUI(true, false); // Show welcome section, hide new chat button
-});
+    // Hide the new chat button initially
+    toggleVisibility([document.querySelector('.new-chat-button')], 'hide');
 
-// Add click event for the "New Chat" button
-document.querySelector('.new-chat-button').addEventListener('click', startNewChat);
+    // Add click event for the "New Chat" button
+    document
+        .querySelector('.new-chat-button')
+        ?.addEventListener('click', startNewChat);
+});

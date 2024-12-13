@@ -96,7 +96,6 @@ body {
 
 .footer {
     display: flex;
-    justify-content: center; /* Center footer content */
     align-items: center;
     position: sticky; /* Changed to sticky to prevent footer overlap */
     bottom: 0;
@@ -106,9 +105,10 @@ body {
     opacity: 1;
     transform: translateY(0);
     transition: opacity 0.5s ease, transform 0.5s ease;
+    justify-content: space-between;
+    z-index: 10;
     padding: var(--padding-small);
     box-sizing: border-box;
-    z-index: 10;
 }
 
 /* Icon and new chat button */
@@ -127,20 +127,20 @@ body {
     border-radius: var(--border-radius-small);
     display: none;
 }
+    .help-buttons {
+        flex-direction: column;
+        gap: clamp(2px, 2%, 4px);
+        margin-top: -10px;
+    }
 
-.help-buttons {
-    flex-direction: column;
-    gap: clamp(2px, 2%, 4px);
-    margin-top: -10px;
-}
-
-.help-button {
-    margin: 2px;
-    font-size: var(--font-small);
-    padding: 4px 6px;
-    min-width: 48px;
-    min-height: 36px;
-    border-radius: var(--border-radius-small);
+    .help-button {
+        margin: 2px;
+        font-size: var(--font-small);
+        padding: 4px 6px;
+        min-width: 48px;
+        min-height: 36px;
+        border-radius: var(--border-radius-small);
+    }
 }
 
 /* Scrollbar styles */
@@ -178,11 +178,10 @@ body {
     }
 
     .bot-image {
-        display: block;
         width: 25%;
         max-width: 80px;
         height: auto;
-        margin: 0 auto; /* Center image */
+        margin: 0 auto;
     }
 
     .conversation {
@@ -194,11 +193,11 @@ body {
 @media (min-width: 601px) {
     .container {
         width: var(--container-width);
-        margin: 0 auto; /* Center container */
+        margin: 0 auto;
     }
 
     .main-content, .container, .conversation {
         width: var(--container-width);
-        margin: 0 auto; /* Center content */
     }
 }
+

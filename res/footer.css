@@ -28,7 +28,7 @@ footer.footer-animate {
 .message-bar {
     flex: 1;
     padding: 12px;
-    background-color: #191919;
+
     border-radius: 23px;
 }
 
@@ -39,6 +39,7 @@ footer.footer-animate {
     border: none;
     outline: none;
     font-size: 14px;
+    color: #999;
 }
 
 /* Icon Button */

@@ -10,7 +10,7 @@
     animation: fadeIn var(--fade-duration) var(--animation-ease) forwards;
     color: var(--text-color);
     padding: 10px;
-    font-family: sans-serif;
+    font-family: 'Metropolis', sans-serif;
 }
 
 .message.user {

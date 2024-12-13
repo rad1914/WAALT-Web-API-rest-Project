@@ -1,14 +1,14 @@
 // apiService.js
 
-const apiUrls = ['http://22.ip.gl.ply.gg:18880', '23.ip.gl.ply.gg:65329'];
+import { fetchUserIP, convertIPToJID } from './utilities.js';
 
-const TIMEOUTS = [15000, 20000, 30000];
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const apiUrl = 'http://22.ip.gl.ply.gg:18880';
+const TIMEOUT = 15000;
 
 /**
  * Fetch data with retries, timeout, and exponential backoff with jitter.
  */
-async function fetchWithRetries(url, options = {}, { timeout = 15000, retries = 3, backoff = 2000 } = {}) {
+async function fetchWithRetries(url, options = {}, { timeout = TIMEOUT, retries = 3, backoff = 2000 } = {}) {
     for (let attempt = 1; attempt <= retries; attempt++) {
         try {
             console.log(`Attempt ${attempt}/${retries} to ${url}`);
@@ -20,7 +20,7 @@ async function fetchWithRetries(url, options = {}, { timeout = 15000, retries = 
 
             if (response.ok) {
                 const data = await response.json();
-                console.log(`Successful response from ${url}:`, data);
+                console.log(`Successful response from ${url}:`, JSON.stringify(data, null, 2));
                 return data;
             } else {
                 console.error(`Server error ${url}: ${response.status}`);
@@ -34,7 +34,7 @@ async function fetchWithRetries(url, options = {}, { timeout = 15000, retries = 
             }
             if (attempt < retries) {
                 const jitter = Math.random() * 1000; // Adding jitter to avoid synchronized retries
-                await delay(backoff * attempt + jitter);
+                await new Promise((resolve) => setTimeout(resolve, backoff * attempt + jitter));
             }
         }
     }
@@ -42,34 +42,25 @@ async function fetchWithRetries(url, options = {}, { timeout = 15000, retries = 
 }
 
 /**
- * Send message to multiple servers with fallback.
+ * Send a message to the API server.
  */
-export async function sendMessageToServers(message, jid) {
-    const options = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message, jid }),
-    };
-
-    // Rotate servers for load balancing
-    const shuffledApiUrls = apiUrls.sort(() => Math.random() - 0.5);
-
-    const requests = shuffledApiUrls.map((url, index) =>
-        fetchWithRetries(`${url}/api/message`, options, { timeout: TIMEOUTS[index] || 30000 })
-    );
-
+export async function sendMessageToServers(message) {
     try {
-        const results = await Promise.allSettled(requests);
-        const successfulResponse = results.find(result => result.status === 'fulfilled');
+        const userIP = await fetchUserIP(); // Fetch the user's IP
+        if (!userIP) throw new Error('Failed to fetch user IP');
+        const jid = convertIPToJID(userIP); // Convert IP to JID
 
-        if (successfulResponse) {
-            const response = successfulResponse.value.response || '✦ No content response.';
-            console.log('Successful response:', response);
-            return response;
-        } else {
-            console.error('No server responded successfully.');
-            return '✦ No server could process the request.';
-        }
+        const options = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message, jid }),
+        };
+
+        const responseData = await fetchWithRetries(`${apiUrl}/api/message`, options, { timeout: TIMEOUT });
+
+        // Extract the message or provide a fallback
+        const responseMessage = responseData?.response || responseData?.message || '✦ No content response.';
+        return responseMessage;
     } catch (error) {
         console.error('Critical error during send:', error.message);
         return '✦ Unexpected error. Please try again.';

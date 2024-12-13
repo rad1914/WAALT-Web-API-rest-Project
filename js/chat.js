@@ -15,21 +15,23 @@ const elements = {
 
 /**
  * Fetches and caches the user's IP address.
- * @returns {Promise<void>}
+ * @returns {Promise<string>} The user's IP address.
  */
 export async function fetchUserIP() {
-    if (userIP) return;
+    if (userIP) return userIP;
 
     try {
         const response = await fetch('https://api.ipify.org?format=json');
-        if (!response.ok) throw new Error('Error fetching IP');
+        if (!response.ok) throw new Error(`Error fetching IP: ${response.statusText}`);
 
         const data = await response.json();
         userIP = data.ip;
         console.log("User IP:", userIP);
+        return userIP;
     } catch (error) {
         console.error('Failed to fetch IP address:', error);
         elements.responseOutput().innerText = 'Error: Unable to fetch IP address.';
+        throw error;
     }
 }
 
@@ -52,24 +54,30 @@ function toggleChatUI(isWelcomeView) {
 }
 
 /**
+ * Clears multiple fields (e.g., input or HTML content).
+ * @param {HTMLElement[]} fields - Fields to clear.
+ */
+function clearFields(...fields) {
+    fields.forEach(field => {
+        if (field) field.nodeName === 'INPUT' ? (field.value = '') : (field.innerHTML = '');
+    });
+}
+
+/**
  * Clears the chat UI and resets session data for a new conversation.
  */
 export function startNewChat() {
-    const conversation = elements.conversation();
-    const responseOutput = elements.responseOutput();
-    const messageInput = elements.messageInput();
-    const newChatButton = elements.newChatButton();
+    clearFields(elements.conversation(), elements.responseOutput(), elements.messageInput());
 
-    if (conversation) conversation.innerHTML = '';
-    if (responseOutput) responseOutput.innerText = '';
-    if (messageInput) messageInput.value = '';
+    toggleVisibility(
+        [elements.welcomeSection()],
+        'show',
+        { opacity: '1', transform: 'translateY(0)' }
+    );
+    toggleVisibility([elements.newChatButton()], 'hide');
 
     sessionStorage.clear();
-    console.log("Chat and session data cleared.");
-
-    if (newChatButton) newChatButton.disabled = false;
-
-    toggleChatUI(true);
+    console.log('Chat cleared and session reset.');
 }
 
 /**

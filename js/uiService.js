@@ -2,7 +2,10 @@
 
 export function addMessageToConversation(content, type = 'bot') {
     const conversation = document.getElementById('conversation');
-    if (!conversation) return;
+    if (!conversation) {
+        console.error('Conversation element not found');
+        return;
+    }
 
     const messageElem = document.createElement('div');
     messageElem.classList.add('message', type);
@@ -10,6 +13,8 @@ export function addMessageToConversation(content, type = 'bot') {
 
     conversation.appendChild(messageElem);
     conversation.scrollTop = conversation.scrollHeight;
+
+    console.log(`Added message: ${content}`);
 }
 
 function addEventListenerIfExists(element, event, handler) {
@@ -38,5 +43,7 @@ export function setupEventListeners(handleSendMessage) {
         }
     });
 
-    addEventListenerIfExists(messageInput, 'input', () => adjustTextareaHeight(messageInput));
+    addEventListenerIfExists(messageInput, 'input', () =>
+        adjustTextareaHeight(messageInput)
+    );
 }
