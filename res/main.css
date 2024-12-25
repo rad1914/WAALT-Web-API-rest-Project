@@ -6,7 +6,7 @@
     --hover-background-color: #444;
     --button-bg: #0056b3;
     --button-hover-color: #003d82;
-    --button-focus-color: #0056b3;
+    --button-focus-color: var(--button-bg); /* Avoid duplication */
     --icon-hover-color: #007bff;
 
     /* Dimensions */
