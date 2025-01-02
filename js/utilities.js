@@ -74,7 +74,7 @@ export async function fetchUserIP() {
         if (!response.ok) throw new Error('Error fetching IP');
         const data = await response.json();
         userIP = data.ip;
-        console.log("User IP:", userIP);
+        console.log('User IP:', userIP);
         return userIP;
     } catch (error) {
         console.error('Failed to fetch IP:', error);
@@ -88,41 +88,54 @@ export function convertIPToJID(ip) {
         return null;
     }
     const jid = `${ip.replace(/\./g, '')}@s.whatsapp.net`;
-    console.log("Formatted JID:", jid);
+    console.log('Formatted JID:', jid);
     return jid;
 }
 
 export function formatText(input) {
     if (!input) return '';
+    if (typeof input !== 'string') {
+        // Convert non-string input to a string if possible
+        try {
+            input = JSON.stringify(input, null, 2);
+        } catch (error) {
+            console.error('Failed to convert input to string:', error);
+            return '';
+        }
+    }
 
     input = input.replace(/```([a-z]*)\n([\s\S]*?)```/g, (_, lang, code) =>
-        `<pre><code class="${lang}">${code.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</code></pre>`
+        `<pre style="background-color: #121212; color: #ccc; padding: 1em; border-radius: 5px;">
+            <code class="${lang}">${code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code>
+        </pre>`
     );
 
-    input = input.replace(/`([^`]+)`/g, '<code>$1</code>');
+    input = input.replace(/`([^`]+)`/g, '<code style="background-color: #191919; color: #ccc; padding: 0.2em; border-radius: 3px;">$1</code>');
 
     return input
-        .replace(/\*(.*?)\*/g, '<strong>$1</strong>')
-        .replace(/_(.*?)_/g, '<em>$1</em>')
-        .replace(/~(.*?)~/g, '<del>$1</del>')
-        .replace(/__(.*?)__/g, '<u>$1</u>')
-        .replace(/^# (.*?)$/gm, '<h1>$1</h1>')
-        .replace(/^## (.*?)$/gm, '<h2>$1</h2>')
-        .replace(/^### (.*?)$/gm, '<h3>$1</h3>')
-        .replace(/^- (.*?)$/gm, '<li>$1</li>')
-        .replace(/^> (.*?)$/gm, '<blockquote>$1</blockquote>')
+        .replace(/\*(.*?)\*/g, '<strong style="color: #ccc;">$1</strong>')
+        .replace(/_(.*?)_/g, '<em style="color: #ccc;">$1</em>')
+        .replace(/~(.*?)~/g, '<del style="color: #ccc;">$1</del>')
+        .replace(/__(.*?)__/g, '<u style="color: #ccc;">$1</u>')
+        .replace(/^# (.*?)$/gm, '<h1 style="color: #ccc;">$1</h1>')
+        .replace(/^## (.*?)$/gm, '<h2 style="color: #ccc;">$1</h2>')
+        .replace(/^### (.*?)$/gm, '<h3 style="color: #ccc;">$1</h3>')
+        .replace(/^- (.*?)$/gm, '<li style="color: #ccc;">$1</li>')
+        .replace(/^> (.*?)$/gm, '<blockquote style="background-color: #121212; color: #ccc; padding: 1em; border-left: 4px solid #0056b3;">$1</blockquote>')
         .replace(/\^\^(.*?)\^\^/g, (_, text) => text.toUpperCase())
         .replace(/--(.*?)--/g, (_, text) => text.toLowerCase())
-        .replace(/==(.*?)==/g, '<mark>$1</mark>')
-        .replace(/@@(.*?)@@/g, '<span style="color: red;">$1</span>')
+        .replace(/==(.*?)==/g, '<mark style="background-color: #0056b3; color: #ccc;">$1</mark>')
+        .replace(/@@(.*?)@@/g, '<span style="color: #007bff;">$1</span>')
         .replace(/\|(.*?)\|/gm, (_, cells) => {
-            const rows = cells.split('|').map(cell => `<td>${cell.trim()}</td>`).join('');
-            return `<table><tr>${rows}</tr></table>`;
+            const rows = cells.split('|').map(cell => `<td style="color: #ccc;">${cell.trim()}</td>`).join('');
+            return `<table style="border-collapse: collapse; width: 100%; background-color: #121212;">
+                        <tr>${rows}</tr>
+                    </table>`;
         })
-        .replace(/\{([1-9])\}(.*?)\{\/\1\}/g, '<span style="font-size:$1em;">$2</span>')
-        .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
-        .replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1">')
-        .replace(/\$\$(.*?)\$\$/gs, '<div class="math-block">\\[$1\\]</div>')
-        .replace(/\$(.*?)\$/g, '<span class="math-inline">\\($1\\)</span>')
+        .replace(/\{([1-9])\}(.*?)\{\/\1\}/g, '<span style="font-size:$1em; color: #ccc;">$2</span>')
+        .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" style="color: #0056b3; text-decoration: none;">$1</a>')
+        .replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" style="max-width: 100%; border-radius: 5px;">')
+        .replace(/\$\$(.*?)\$\$/gs, '<div class="math-block" style="color: #ccc;">\\[$1\\]</div>')
+        .replace(/\$(.*?)\$/g, '<span class="math-inline" style="color: #ccc;">\\($1\\)</span>')
         .replace(/\n/g, '<br>');
 }

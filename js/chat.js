@@ -2,7 +2,6 @@
 
 let userIP = null;
 
-// Helper to fetch and cache UI elements
 const elements = {
     welcomeSection: () => document.getElementById('welcomeSection'),
     newChatButton: () => document.querySelector('.new-chat-button'),
@@ -13,10 +12,6 @@ const elements = {
     helpButtons: () => document.querySelectorAll('.help-button'),
 };
 
-/**
- * Fetches and caches the user's IP address.
- * @returns {Promise<string>} The user's IP address.
- */
 export async function fetchUserIP() {
     if (userIP) return userIP;
 
@@ -35,10 +30,6 @@ export async function fetchUserIP() {
     }
 }
 
-/**
- * Toggles the visibility of UI elements.
- * @param {boolean} isWelcomeView - Whether to show the welcome view.
- */
 function toggleChatUI(isWelcomeView) {
     const welcomeSection = elements.welcomeSection();
     const newChatButton = elements.newChatButton();
@@ -53,19 +44,12 @@ function toggleChatUI(isWelcomeView) {
     }
 }
 
-/**
- * Clears multiple fields (e.g., input or HTML content).
- * @param {HTMLElement[]} fields - Fields to clear.
- */
 function clearFields(...fields) {
     fields.forEach(field => {
         if (field) field.nodeName === 'INPUT' ? (field.value = '') : (field.innerHTML = '');
     });
 }
 
-/**
- * Clears the chat UI and resets session data for a new conversation.
- */
 export function startNewChat() {
     clearFields(elements.conversation(), elements.responseOutput(), elements.messageInput());
 
@@ -80,9 +64,6 @@ export function startNewChat() {
     console.log('Chat cleared and session reset.');
 }
 
-/**
- * Sends a message, updates the conversation, and transitions the UI.
- */
 export async function sendMessage() {
     const messageInput = elements.messageInput();
     const message = messageInput.value.trim();
@@ -92,7 +73,6 @@ export async function sendMessage() {
 
     if (!message) return;
 
-    // Disable interactive elements during processing
     sendButton.disabled = true;
     helpButtons.forEach(button => (button.disabled = true));
     if (newChatButton) newChatButton.disabled = true;
@@ -109,7 +89,6 @@ export async function sendMessage() {
     } catch (error) {
         updateWithBotResponse('Error: Unable to send the message. Try again later.');
     } finally {
-        // Re-enable interactive elements
         sendButton.disabled = false;
         helpButtons.forEach(button => (button.disabled = false));
         if (newChatButton) newChatButton.disabled = false;
@@ -118,9 +97,6 @@ export async function sendMessage() {
     toggleChatUI(false);
 }
 
-/**
- * Initialize page behavior, including setting up event listeners.
- */
 document.addEventListener('DOMContentLoaded', () => {
     toggleChatUI(true);
 
