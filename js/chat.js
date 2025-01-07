@@ -30,12 +30,6 @@ export async function fetchUserIP() {
     }
 }
 
-function clearFields(...fields) {
-    fields.forEach(field => {
-        if (field) field.nodeName === 'INPUT' ? (field.value = '') : (field.innerHTML = '');
-    });
-}
-
 function toggleChatUI(isWelcomeView) {
     const welcomeSection = elements.welcomeSection();
     const newChatButton = elements.newChatButton();
@@ -50,10 +44,22 @@ function toggleChatUI(isWelcomeView) {
     }
 }
 
+function clearFields(...fields) {
+    fields.forEach(field => {
+        if (field) field.nodeName === 'INPUT' ? (field.value = '') : (field.innerHTML = '');
+    });
+}
+
 export function startNewChat() {
     clearFields(elements.conversation(), elements.responseOutput(), elements.messageInput());
 
-    toggleChatUI(true);
+    toggleVisibility(
+        [elements.welcomeSection()],
+        'show',
+        { opacity: '1', transform: 'translateY(0)' }
+    );
+    toggleVisibility([elements.newChatButton()], 'hide');
+
     sessionStorage.clear();
     console.log('Chat cleared and session reset.');
 }
@@ -67,9 +73,9 @@ export async function sendMessage() {
 
     if (!message) return;
 
-    [sendButton, ...helpButtons, newChatButton].forEach(btn => {
-        if (btn) btn.disabled = true;
-    });
+    sendButton.disabled = true;
+    helpButtons.forEach(button => (button.disabled = true));
+    if (newChatButton) newChatButton.disabled = true;
 
     messageInput.value = '';
     addMessageToConversation(message, 'user');
@@ -83,9 +89,9 @@ export async function sendMessage() {
     } catch (error) {
         updateWithBotResponse('Error: Unable to send the message. Try again later.');
     } finally {
-        [sendButton, ...helpButtons, newChatButton].forEach(btn => {
-            if (btn) btn.disabled = false;
-        });
+        sendButton.disabled = false;
+        helpButtons.forEach(button => (button.disabled = false));
+        if (newChatButton) newChatButton.disabled = false;
     }
 
     toggleChatUI(false);

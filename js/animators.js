@@ -1,5 +1,7 @@
 // animators.js
 
+
+
 const titleText = "✦ ¿Qué tienes en mente?";
 let index = 0;
 let isAnimationRunning = false;
@@ -21,40 +23,42 @@ export function typeTitle(speed = 36, onComplete = null) {
     type();
 }
 
-async function animateElement(elements, { delay = 0, animationClass = 'fadeIn', exponential = false } = {}) {
-    if (!elements) return;
-    if (!Array.isArray(elements)) elements = [elements]; // Normalize single element to array
+function animateElement(element, { delay = 0, animationClass = 'fadeIn' } = {}) {
+    if (!element) return;
+    setTimeout(() => {
+        element.classList.add(animationClass);
+        element.style.opacity = '1';
+        element.style.transform = 'translateY(0)';
+    }, delay);
+}
 
-    for (const element of elements) {
-        if (!element) continue;
-        setTimeout(() => {
-            element.classList.add(animationClass);
-            element.style.opacity = '1';
-            element.style.transform = 'translateY(0)';
-        }, delay);
+async function animateButtonsWithExponentialDelay(buttons, baseDelay = 80) {
+    if (!buttons || buttons.length === 0) return;
 
-        if (exponential) {
-            await new Promise(resolve => setTimeout(resolve, delay));
-            delay *= 2; // Adjust the delay multiplier as needed
-        }
+    let delay = baseDelay;
+    for (const button of buttons) {
+        animateElement(button, { delay });
+        await new Promise(resolve => setTimeout(resolve, delay));
+        delay *= 1; // Exponential delay factor
     }
 }
 
 async function mainAnimationSequence() {
     const botImage = document.querySelector('.animate-image');
     const footer = document.querySelector('footer');
-    const buttons = Array.from(document.querySelectorAll('.help-button'));
 
-    await animateElement(botImage, { delay: 0 });
+    animateElement(botImage);
     await new Promise(resolve => setTimeout(resolve, 480));
 
     typeTitle(36, async () => {
-        await animateElement(buttons, { delay: 80, exponential: true });
+        const buttons = Array.from(document.querySelectorAll('.help-button'));
+        await animateButtonsWithExponentialDelay(buttons);
 
+        // Animar el footer completo después de los botones
         if (footer) {
             setTimeout(() => {
                 footer.classList.add('footer-animate');
-            }, 500);
+            }, 500); // Ajusta el retraso según lo necesario
         }
 
         isAnimationRunning = false;
@@ -65,12 +69,12 @@ async function mainAnimationSequence() {
 document.addEventListener("DOMContentLoaded", () => {
     if (isAnimationRunning) {
         console.log("Animation already running. Ignoring trigger.");
-        return;
+        return; // Prevent animation if it's already running
     }
     console.log("Animation sequence starting...");
-    isAnimationRunning = true;
+    isAnimationRunning = true; // Set flag to prevent re-triggering
     mainAnimationSequence().catch(err => {
         console.error("Error in animation sequence:", err);
-        isAnimationRunning = false;
+        isAnimationRunning = false; // Reset in case of errors
     });
 });
