@@ -10,22 +10,33 @@
     <link rel="stylesheet" href="./res/responsive.css?v=1.0">
 </head>
 <body>
+
     <div class="container">
-        <section class="welcome-section" id="welcomeSection" aria-labelledby="writingTitle">
-            <div class="bot-image animate-image">
-                <img src="bot.webp" alt="Bot">
-            </div>
-            <h2 class="help-title animate-title" id="writingTitle">✦</h2>
-            <div class="help-buttons">
-                <button class="help-button button-message animate-button" data-message="Integra la siguiente función paso a paso: ∫₀¹ [x² / e³] dx">
-                    🧮 <b>∫₀¹</b> [x² / e³] <i>dx</i>
+    <section class="welcome-section" id="welcomeSection" aria-labelledby="writingTitle">
+        <div class="bot-image animate-image">
+            <img src="bot.webp" alt="Bot">
+        </div>
+        <h2 class="help-title animate-title" id="writingTitle">✦</h2>
+        <div class="help-buttons">
+            <!-- WhatsApp Button -->
+<a href="https://wa.me/+523421037201?text=menu"</a>
+                <button 
+                    class="help-button button-message animate-button" 
+                    style="background-color: #25D366; color: #333;">
+                    🗨️ Hablar desde WhatsApp
                 </button>
-                <button class="help-button button-message animate-button" data-message="Viajes a Cranbrook">🧭 Viajes a Cranbrook</button>
-                <button class="help-button button-message animate-button" data-message="Ayúdame a programar">🧑‍💻 Coding Advice</button>
-                <button class="help-button button-message animate-button" data-message="¿Quién te creó?">🧐 ¿Quién te creó?</button>
-                <button class="help-button button-message animate-button" data-message="Juguemos a algo">🕹️ Juguemos a algo</button>
-                <button class="help-button button-message animate-button" data-message="¿Que puedes hacer?">💬 Más</button>
-            </div>
+            </a>
+
+            <!-- Other Buttons -->
+            <button class="help-button button-message animate-button" data-message="Viajes a Cranbrook">🧭 Viajes a Cranbrook</button>
+            <button class="help-button button-message animate-button" data-message="Ayúdame a programar">🧑‍💻 Coding Advice</button>
+            <button class="help-button button-message animate-button" data-message="¿Quién te creó?">🧐 ¿Quién te creó?</button>
+            <button class="help-button button-message animate-button" data-message="Juguemos a algo">🕹️ Juguemos a algo</button>
+            <button class="help-button button-message animate-button" data-message="¿Que puedes hacer?">💬 Más</button>
+        </div>
+    </section>
+</div>
+
         </section>
         <div class="conversation" id="conversation" aria-live="polite"></div>
         <button class="new-chat-button show-button" aria-label="Start a new chat">☉</button>
