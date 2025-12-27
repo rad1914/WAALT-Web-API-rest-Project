@@ -1,81 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>W.A.A.L.T Project</title>
-    <link rel="stylesheet" href="./res/main.css?v=1.0">
-    <link rel="stylesheet" href="./res/components.css?v=1.0">
-    <link rel="stylesheet" href="./res/footer.css?v=1.0">
-    <link rel="stylesheet" href="./res/responsive.css?v=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Chatbot</title>
+
+  <style>
+    @font-face {
+      font-family: "CustomFont";
+      src: url("./font.otf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    :root {
+      --bg: #000;
+      --fg: #fff;
+      --muted: #8a8a8a;
+      --card: #111;
+      --border: #2a2a2a;
+      --btn-main: #fff;
+      --btn-main-text: #000;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: "CustomFont", system-ui, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--fg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      padding: 36px 28px;
+      text-align: center;
+      background: var(--card);
+      border-radius: 18px;
+    }
+
+    .icon {
+      width: 88px;
+      height: 88px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 1.9rem;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+    }
+
+    p {
+      margin: 0 0 34px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .buttons {
+      display: grid;
+      gap: 16px;
+    }
+
+    a.button {
+      display: block;
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    a.primary {
+      background: var(--btn-main);
+      color: var(--btn-main-text);
+    }
+
+    a.secondary {
+      background: transparent;
+      color: var(--fg);
+      border: 1px solid var(--border);
+    }
+
+    a.button:hover {
+      transform: translateY(-1px);
+      opacity: 0.9;
+    }
+  </style>
 </head>
 <body>
-
-    <!-- Warning Message -->
-    <div style="background-color: #ffcc00; padding: 10px; text-align: center; font-weight: bold;">
-        ⚠️ Actualizamos el número del teléfono del bot. Puedes consultarlo desde el botón "Hablar desde WhatsApp".
+  <div class="container">
+    <div class="icon">
+      <img src="./bot.webp" alt="AI Bot Icon" />
     </div>
 
-    <div class="container">
-    <section class="welcome-section" id="welcomeSection" aria-labelledby="writingTitle">
-        <div class="bot-image animate-image">
-            <img src="bot.webp" alt="Bot">
-        </div>
-        <h2 class="help-title animate-title" id="writingTitle">✦</h2>
-        <div class="help-buttons">
-            <!-- WhatsApp Button -->
-            <a href="https://wa.me/+523421219439?text=.menu">
-                <button 
-                    class="help-button button-message animate-button" 
-                    style="background-color: #25D366; color: #333;">
-                    🗨️ Hablar desde WhatsApp
-                </button>
-            </a>
+    <h1>WAALT 𝗕𝗼𝘁</h1>
+    <p>Fast answers. Human fallback. No theatrics.</p>
 
-            <!-- Other Buttons -->
-            <button class="help-button button-message animate-button" data-message="Viajes a Cranbrook">🧭 Viajes a Cranbrook</button>
-            <button class="help-button button-message animate-button" data-message="Ayúdame a programar">🧑‍💻 Coding Advice</button>
-            <button class="help-button button-message animate-button" data-message="¿Quién te creó?">🧐 ¿Quién te creó?</button>
-            <button class="help-button button-message animate-button" data-message="Juguemos a algo">🕹️ Juguemos a algo</button>
-            <button class="help-button button-message animate-button" data-message="¿Que puedes hacer?">💬 Más</button>
-        </div>
-    </section>
-</div>
+    <div class="buttons">
+      <a
+        class="button primary"
+        href="https://chat.whatsapp.com/J7z1LpmpkgJ1uGuNCfN6LP?mode=wwt"
+        target="_blank"
+        rel="noopener"
+      >
+        Talk on WhatsApp
+      </a>
 
-        </section>
-        <div class="conversation" id="conversation" aria-live="polite"></div>
-        <button class="new-chat-button show-button" aria-label="Start a new chat">☉</button>
+      <a
+        class="button secondary"
+        href="mailto:wrldrad1@gmail.com?subject=Bot%20Help with the bot"
+      >
+        Get help
+      </a>
     </div>
-
-    <footer>
-        <div class="input-container">
-            <div class="message-bar">
-                <button class="icon-button attach-button" aria-label="Attach">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7 8.00092L7 17C7 17.5523 6.55228 18 6 18C5.44772 18 5.00001 17.4897 5 7 8.00092Z" fill="#e2e2e2"/>
-                    </svg>
-                </button>
-                <textarea id="messageInput" class="input-field" rows="3" placeholder="Escribe aquí..." aria-label="Message input"></textarea>
-            </div>
-            <div class="send-bar">
-                <button id="sendButton" class="icon-button send-button send-icon" aria-label="Send">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M2 21L23 12L2 3V10L17 12L2 14V21Z" fill="currentColor"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-        <div class="caption">
-            ⓘ Al enviar mensaje, aceptas nuestras 
-            <a href="disclaimer.html">condiciones de uso</a><br>
-            Created by Sr. RAD - TECNM
-        </div>
-        <div id="responseOutput" aria-live="polite"></div>
-    </footer>
-    <script type="text/javascript" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-    </script>
-
-    <script type="module" src="./main.js"></script>
+  </div>
 </body>
 </html>
